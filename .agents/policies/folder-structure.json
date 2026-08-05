@@ -17,6 +17,7 @@
   ],
   "expectedGovernanceFiles": [
     ".agents/manifest.json",
-    ".agents/pipeline.json"
+    ".agents/pipeline.json",
+    "README.md"
   ]
 }
