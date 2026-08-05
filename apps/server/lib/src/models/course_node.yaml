@@ -1,0 +1,15 @@
+class: CourseNode
+table: course_nodes
+fields:
+  courseId: UuidValue
+  parentId: UuidValue?
+  path: String?               # ltree path 'topic1.module2.session5'
+  nodeType: String            # 'TOPIC', 'MODULE', 'SESSION', 'SUBSESSION'
+  title: String
+  content: String?            # Dynamic JSON (Tiptap AST)
+  position: int
+  version: int                # OCC control
+  createdAt: DateTime?
+indexes:
+  course_parent_pos_idx:
+    fields: courseId, parentId, position

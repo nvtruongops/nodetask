@@ -1,0 +1,8 @@
+{
+  "id": "SERVICE_DOC_SCHEMA",
+  "enabled": true,
+  "category": "specification",
+  "severity": "warning",
+  "schema": ".agents/schemas/service-doc.yaml",
+  "targetDir": "docs/services"
+}

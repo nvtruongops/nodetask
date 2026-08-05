@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "registryVersion": "1.0.0",
+  "skills": {
+    "using-superpowers": {
+      "type": "builtin",
+      "provider": "ide-platform",
+      "description": "Establishes skill invocation workflows before any response."
+    },
+    "brainstorming": {
+      "type": "builtin",
+      "provider": "ide-platform",
+      "description": "Explores user intent, requirements, and design options."
+    },
+    "writing-plans": {
+      "type": "builtin",
+      "provider": "ide-platform",
+      "description": "Drafts multi-step execution plans."
+    },
+    "executing-plans": {
+      "type": "builtin",
+      "provider": "ide-platform",
+      "description": "Executes written implementation plans with checkpoints."
+    },
+    "codegraph": {
+      "type": "mcp",
+      "provider": "codegraph-mcp",
+      "description": "Queries monorepo AST dependency graph database (./.codegraph/graph.db)."
+    },
+    "ponytail": {
+      "type": "builtin",
+      "provider": "ide-platform",
+      "description": "Lazy senior developer mode for minimal code diffs and zero bloat."
+    },
+    "api-designer": {
+      "type": "local",
+      "path": ".agents/skills/api-designer/SKILL.md",
+      "description": "Serverpod REST/WebSocket API endpoints design contract."
+    },
+    "architecture-guardian": {
+      "type": "local",
+      "path": ".agents/skills/architecture-guardian/SKILL.md",
+      "description": "Enforces master stack and folder structure protection."
+    },
+    "db-schema-reviewer": {
+      "type": "local",
+      "path": ".agents/skills/db-schema-reviewer/SKILL.md",
+      "description": "Database schema, migrations, ltree, and OCC versioning check."
+    },
+    "flutter-ui": {
+      "type": "local",
+      "path": ".agents/skills/flutter-ui/SKILL.md",
+      "description": "Flutter Mobile UI development synced with Serverpod SDK."
+    },
+    "frontend-ui": {
+      "type": "local",
+      "path": ".agents/skills/frontend-ui/SKILL.md",
+      "description": "React Frontend UI development with Tiptap and dnd-kit."
+    },
+    "git-pr": {
+      "type": "local",
+      "path": ".agents/skills/git-pr/SKILL.md",
+      "description": "Pull Request code review, CHANGELOG generator, and summary."
+    },
+    "minimalist-no-icon-ui": {
+      "type": "local",
+      "path": ".agents/skills/minimalist-no-icon-ui/SKILL.md",
+      "description": "Zero-icon monochrome design rules."
+    },
+    "performance": {
+      "type": "local",
+      "path": ".agents/skills/performance/SKILL.md",
+      "description": "Frontend, API, and DB query performance optimization."
+    },
+    "security-review": {
+      "type": "local",
+      "path": ".agents/skills/security-review/SKILL.md",
+      "description": "Security audit, token lifecycle, CSRF, XSS, and RBAC review."
+    },
+    "testing": {
+      "type": "local",
+      "path": ".agents/skills/testing/SKILL.md",
+      "description": "Automated unit, integration, and widget tests generator."
+    }
+  }
+}

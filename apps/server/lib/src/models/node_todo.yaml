@@ -1,0 +1,13 @@
+class: NodeTodo
+table: node_todos
+fields:
+  nodeId: UuidValue
+  userId: UuidValue
+  title: String
+  isCompleted: bool
+  priority: String?           # 'LOW', 'MEDIUM', 'HIGH'
+  dueDate: DateTime?
+  createdAt: DateTime?
+indexes:
+  node_todos_idx:
+    fields: nodeId, isCompleted

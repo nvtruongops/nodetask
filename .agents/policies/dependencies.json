@@ -1,4 +1,7 @@
 {
+  "id": "WHITELIST_DEPENDENCIES",
+  "enabled": true,
+  "category": "architecture",
   "severity": "error",
   "web": {
     "allowedDependencies": [

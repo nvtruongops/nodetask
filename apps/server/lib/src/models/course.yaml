@@ -1,0 +1,11 @@
+class: Course
+table: courses
+fields:
+  userId: UuidValue
+  title: String
+  description: String?
+  isPublic: bool?
+  createdAt: DateTime?
+indexes:
+  user_courses_idx:
+    fields: userId

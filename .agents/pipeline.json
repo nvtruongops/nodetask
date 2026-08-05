@@ -1,49 +1,59 @@
 {
-  "version": "1.0.0",
+  "schemaVersion": 1,
+  "governanceVersion": "1.3.0",
   "pipelineName": "feature-development-pipeline",
-  "description": "Standard multi-stage execution pipeline for AI Agent task orchestration",
-  "stages": [
+  "description": "Standard multi-stage DAG workflow pipeline for AI Agent task orchestration",
+  "workflowStages": [
     {
-      "id": "1_architecture_guard",
-      "name": "Architecture & Guardrails Check",
-      "skill": "architecture-guardian",
-      "specDocument": "docs/architecture.md",
-      "description": "Ensure tech stack and folder structure adhere to Monorepo specification."
+      "step": 1,
+      "id": "using_superpowers",
+      "name": "Method & Skill Selection",
+      "skill": "using-superpowers",
+      "provider": "builtin",
+      "dependsOn": [],
+      "condition": ["always"],
+      "description": "Select appropriate approach (brainstorming for features, systematic-debugging for bugs)."
     },
     {
-      "id": "2_api_design",
-      "name": "API & Schema Contract Review",
-      "skill": "api-designer",
-      "specDocument": "docs/data_and_api.md",
-      "description": "Design or verify Serverpod endpoints, ltree hierarchy, and OCC versioning models."
+      "step": 2,
+      "id": "planning",
+      "name": "Planning & Scope Alignment",
+      "skill": "writing-plans",
+      "provider": "builtin",
+      "dependsOn": ["using_superpowers"],
+      "condition": ["new_feature", "architecture_change", "multi_step"],
+      "description": "Draft implementation plan detailing technical design and verification steps."
     },
     {
-      "id": "3_ui_implementation",
-      "name": "UI/UX & Component Implementation",
-      "skill": "frontend-ui",
-      "specDocument": "docs/frontend_and_ui.md",
-      "description": "Develop UI following Minimalist Zero-Icon rule, Zustand store, and TanStack Query."
+      "step": 3,
+      "id": "codegraph_impact",
+      "name": "Conditional CodeGraph Traversal",
+      "skill": "codegraph",
+      "provider": "mcp",
+      "dependsOn": ["planning"],
+      "condition": ["refactor", "rename", "move", "delete", "cross_file_impact"],
+      "description": "Query ./ .codegraph/graph.db to analyze cross-file call edges and impact scope."
     },
     {
-      "id": "4_testing",
-      "name": "Automated Testing",
-      "skill": "testing",
-      "specDocument": "docs/operations_and_quality.md",
-      "description": "Write concise unit & integration tests for tree hierarchy logic and Serverpod APIs."
+      "step": 4,
+      "id": "implementation",
+      "name": "Ponytail Guided Implementation",
+      "skill": "ponytail",
+      "provider": "builtin",
+      "dependsOn": ["planning"],
+      "condition": ["always"],
+      "description": "Execute minimal working diff, fixing root cause with zero bloat and zero icons."
     },
     {
-      "id": "5_security_review",
-      "name": "Security & Quality Inspection",
-      "skill": "security-review",
-      "specDocument": "docs/operations_and_quality.md",
-      "description": "Inspect CSRF, XSS HTML escaping, SQL injection, and auth session security."
-    },
-    {
-      "id": "6_rule_verification",
-      "name": "Rule Engine Automated Verification",
+      "step": 5,
+      "id": "automated_verification",
+      "name": "Rule Engine Verification",
       "script": "node .agents/scripts/verify.js --strict",
+      "provider": "local",
+      "dependsOn": ["implementation"],
+      "condition": ["always"],
       "gate": "Exit code 0 required",
-      "description": "Execute AST/pattern rule engine verification script in strict mode."
+      "description": "Run strict rule engine verification script. Task passes only when 0 errors and 0 warnings are output."
     }
   ]
 }

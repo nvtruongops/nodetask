@@ -1,77 +1,96 @@
 # Quy Chuẩn Dữ Liệu & API Backend (Data & API Specification)
 
+> **Specification Version**: `1.3.0`  
+> **Schema Version**: `1`  
+> **Last Updated**: `2026-08-06`  
+> **Status**: `APPROVED`  
+
 ---
 
-### 1. Serverpod API Endpoints
+> [!NOTE]
+> **Thư mục Đặc tả Dịch vụ Độc lập (`docs/services/`)**:
+> Chi tiết về API Endpoints, Database Schema, Logic nghiệp vụ và Ma trận Phân quyền của từng Dịch vụ được lưu trữ độc lập tại thư mục [docs/services/](file:///E:/Code/nodetask/docs/services) theo định dạng `docs/services/<service_name>.md`.
+> Khi khởi tạo hoặc mở rộng dịch vụ mới, chỉ cần tạo file mới trong `docs/services/` mà KHÔNG cần sửa đổi hay đăng ký lại tại các file Core Spec chung.
 
-Serverpod tự động sinh ra TypeScript Client SDK (Web) và Dart Client SDK (Mobile) từ các Endpoint class này.
+---
 
-#### 1.1. Authentication Endpoint (`AuthEndpoint`)
-- `POST /api/auth/register` - Đăng ký tài khoản mới.
-- `POST /api/auth/login` - Đăng nhập nhận Session Key.
-- `POST /api/auth/logout` - Đăng xuất & hủy Session Token.
-- `GET  /api/auth/me` - Lấy thông tin cá nhân hiện tại.
+### 1. Bản Đồ Dịch Vụ Backend & Serverpod RPC Endpoints (Services Index Map)
 
-#### 1.2. Course Endpoint (`CourseEndpoint`)
-- `GET  /api/courses` - Lấy danh sách khóa học của user.
-- `POST /api/courses` - Tạo khóa học mới.
-- `GET  /api/courses/:id/tree` - Lấy toàn bộ cây thư mục phân cấp của khóa học (Ưu tiên đọc từ Redis Cache `course:{id}:tree_json`).
+Serverpod định nghĩa API theo dạng các **Endpoint Classes & Methods**. Để loại bỏ lặp lại và đảm bảo nguyên tắc **Single Source of Truth**, tất cả Endpoint Method Signatures, Request/Response DTOs, Zod Validation, RBAC Matrix và Caching Rules chi tiết được quản lý độc lập tại thư mục `docs/services/`.
 
-#### 1.3. Node Endpoint (`NodeEndpoint`) - Quản lý Cây & Tài liệu
-- `POST /api/nodes` - Thêm nút mới (TOPIC/MODULE/SESSION/SUBSESSION). Auto invalidate Redis cache.
-- `PUT  /api/nodes/:id` - Cập nhật tiêu đề hoặc nội dung tài liệu (`content` JSON). Auto invalidate Redis cache.
-- `PUT  /api/nodes/:id/reorder` - **Kéo - Thả (Reorder/Re-parent):** Cập nhật `parent_id` và `position` mới. Auto invalidate Redis cache.
-- `DELETE /api/nodes/:id` - Xóa nút (tự động xóa toàn bộ nút con bên trong). Auto invalidate Redis cache.
+File Core Spec `data_and_api.md` đóng vai trò **Bản đồ Chỉ mục (Index Map)** và **Quy chuẩn hạ tầng dùng chung (Master Standards)**:
 
-#### 1.4. Todo Endpoint (`TodoEndpoint`) - Quản lý Task
-- `GET  /api/nodes/:nodeId/todos` - Lấy danh sách Todo của node.
-- `POST /api/todos` - Tạo Todo task mới. Kích hoạt Background Job `CalculateCourseProgressCall`.
-- `PUT  /api/todos/:id/toggle` - Đổi trạng thái Hoàn thành / Chưa hoàn thành. Kích hoạt Background Job `CalculateCourseProgressCall`.
-- `DELETE /api/todos/:id` - Xóa Todo task. Kích hoạt Background Job `CalculateCourseProgressCall`.
+| Dịch vụ (Service Domain) | Serverpod Endpoint Class | File Đặc tả Chi tiết (Single Source of Truth) | Phạm vi & Chức năng Dịch vụ |
+| :--- | :--- | :--- | :--- |
+| **Authentication & Access Control** | `AuthEndpoint` | [docs/services/auth.md](file:///E:/Code/nodetask/docs/services/auth.md) | Đăng ký (Email OTP), Đăng nhập, Quên/Đổi mật khẩu, Session & Ma trận RBAC. |
+| **Course & Learning Workspace** | `CourseEndpoint` | [docs/services/course.md](file:///E:/Code/nodetask/docs/services/course.md) | Quản lý Không gian tri thức, Cây thư mục học tập phân cấp & Workspace resources. |
+| **Node Structure & AST Document** | `NodeEndpoint` | [docs/services/node.md](file:///E:/Code/nodetask/docs/services/node.md) | Cấu trúc cây `ltree`, Kéo-Thả (Reorder) & Nội dung ghi chú Tiptap AST JSON. |
+| **Todo & Task Management** | `TodoEndpoint` | [docs/services/todo.md](file:///E:/Code/nodetask/docs/services/todo.md) | Quản lý công việc (Todo) đính kèm nút & Tính toán phần trăm tiến độ học tập. |
+| **Background Jobs & Export** | `JobEndpoint` | [docs/services/job.md](file:///E:/Code/nodetask/docs/services/job.md) | Xuất dữ liệu PDF/Markdown ngầm và theo dõi trạng thái background job. |
+| **AI Semantic Search & RAG** | `AiEndpoint` | [docs/services/ai.md](file:///E:/Code/nodetask/docs/services/ai.md) | Tìm kiếm ngữ nghĩa bằng `pgvector` & Trợ lý AI RAG giải đáp dữ liệu tri thức. |
 
-#### 1.5. Export & Async Jobs Endpoint (`JobEndpoint`)
-- `POST /api/jobs/export-course` - Yêu cầu xuất dữ liệu khóa học ra PDF/Markdown (Khởi tạo `ExportCourseDataCall`). Trả về `jobId`.
-- `GET  /api/jobs/:jobId/status` - Lấy trạng thái xử lý ngầm của Job (`[PENDING]`, `[PROCESSING]`, `[COMPLETED]`, `[FAILED]`).
+---
 
-#### 1.6. AI Semantic Search & RAG Assistant Endpoint (`AiEndpoint`)
-- `POST /api/ai/search` - Tìm kiếm ngữ nghĩa bài học bằng Vector Embeddings (`{ query: string, topK?: number }`). Trả về danh sách bài học liên quan nhất kèm score tương đồng.
-- `POST /api/ai/ask` - Trợ lý AI RAG giải đáp thắc mắc dựa trên toàn bộ tài liệu khóa học (`{ question: string, courseId?: string }`). Trả về câu trả lời tổng hợp kèm liên kết dẫn đến `node_id`.
+### 2. Định dạng Response & Ma Trận Chuẩn Lỗi (Error Contract Standard)
 
-#### 1.7. Định dạng Response & Error Standard
+#### 2.1. Standard Response Payload Format
 ```json
 // Success Response
 {
   "success": true,
-  "data": { "id": "uuid-v4", "title": "Dart Fundamentals", "position": 1 }
+  "data": { "id": "uuid-v4", "title": "Dart Fundamentals", "position": 1, "version": 2 }
 }
 
-// AI RAG Response
-{
-  "success": true,
-  "data": {
-    "answer": "Trong Dart Serverpod, xung đột OCC được xử lý bằng trường version...",
-    "sources": [
-      { "nodeId": "node-123", "title": "Serverpod Architecture", "score": 0.92 }
-    ]
-  }
-}
-
-// Error Response
+// Error Response Format
 {
   "success": false,
   "error": {
     "code": "VERSION_CONFLICT",
-    "message": "Node has been updated by another session.",
-    "currentVersion": 3
+    "message": "Node has been updated by another user/session.",
+    "details": { "currentVersion": 4, "providedVersion": 3 }
   }
 }
 ```
 
+#### 2.2. Error Code Matrix
+
+| Error Code | HTTP Status | Nguyên nhân | Hành động xử lý client |
+| :--- | :--- | :--- | :--- |
+| `INVALID_INPUT` | `400 Bad Request` | Dữ liệu gửi lên vi phạm Zod validation / Trust Boundary. | Hiển thị thông báo lỗi form tại client. |
+| `UNAUTHORIZED` | `401 Unauthorized` | Thao tác yêu cầu Session Key hợp lệ nhưng token hết hạn/thiếu. | Redirect về trang Đăng nhập. |
+| `FORBIDDEN` | `403 Forbidden` | User không có quyền trên tài nguyên (RBAC violation). | Hiển thị thông báo "Không có quyền thực hiện". |
+| `NOT_FOUND` | `404 Not Found` | Tài nguyên `course_id`, `node_id`, `todo_id` không tồn tại. | Trở về danh sách trang chính. |
+| `VERSION_CONFLICT` | `409 Conflict` | Xung đột ghi đồng thời (OCC version mismatch). | Rollback UI local, fetch lại cây node mới nhất. |
+| `INTERNAL_ERROR` | `500 Internal Error` | Lỗi không xác định tại backend server. | Hiển thị "Lỗi hệ thống, thử lại sau". |
+
+#### 2.3. Luồng Xử Lý Lỗi OCC Version Conflict (Sequence Diagram)
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor ClientA as Web Client A
+    actor ClientB as Web Client B
+    participant API as Serverpod Node Endpoint
+    participant DB as Postgres DB (course_nodes)
+
+    ClientA->>API: updateNode(nodeId, title: "Title A", version: 1)
+    ClientB->>API: updateNode(nodeId, title: "Title B", version: 1)
+    
+    API->>DB: UPDATE course_nodes SET title="Title A", version=2 WHERE id=nodeId AND version=1
+    DB-->>API: 1 row updated (Success)
+    API-->>ClientA: HTTP 200 { success: true, data: { version: 2 } }
+
+    API->>DB: UPDATE course_nodes SET title="Title B", version=2 WHERE id=nodeId AND version=1
+    DB-->>API: 0 rows updated (Version mismatch!)
+    API-->>ClientB: HTTP 409 { success: false, error: { code: "VERSION_CONFLICT", currentVersion: 2 } }
+    ClientB->>ClientB: Rollback Optimistic UI & Refetch Tree
+```
+
 ---
 
-### 2. Thiết Kế Database PostgreSQL (`ltree` + `JSONB` + `pgvector`)
+### 3. Thiết Kế Database PostgreSQL (`ltree` + `JSONB` + `pgvector`)
 
-#### 2.1. Dynamic Model YAML mẫu (`models/course_node.yaml`)
+#### 3.1. Dynamic Model YAML mẫu (`models/course_node.yaml`)
 ```yaml
 class: CourseNode
 table: course_nodes
@@ -90,13 +109,13 @@ indexes:
     fields: courseId, parentId, position
 ```
 
-#### 2.2. Generated DDL SQL
+#### 3.2. Generated DDL SQL
 ```sql
 -- 1. Kích hoạt PostgreSQL Extensions
 CREATE EXTENSION IF NOT EXISTS ltree;
 CREATE EXTENSION IF NOT EXISTS vector;
 
--- 2. Bảng Khóa học
+-- 2. Bảng Cây Tri thức Học tập / Workspace (courses)
 CREATE TABLE courses (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL,
@@ -152,32 +171,9 @@ USING hnsw (embedding vector_cosine_ops);
 
 ---
 
-### 3. Xác Thực Auth & Realtime WebSocket Events
+### 4. Quy Chuẩn Cache Keys Standard
 
-#### 3.1. Authentication (Serverpod Auth Session Key)
-- Client truyền Session Token trong Header: `Authorization: Bearer <session_key>`.
-- Mọi endpoint ngoại trừ `/auth/login` và `/auth/register` bắt buộc phải được bảo vệ bằng Auth Guard.
-
-#### 3.2. Realtime WebSocket Events
-Serverpod Streaming Connection gửi và nhận các sự kiện realtime đồng bộ dữ liệu giữa các tab Web và Mobile App:
-- `node_reordered`: Phát khi 1 user kéo thả vị trí node trong cây.
-- `content_updated`: Phát khi 1 user chỉnh sửa nội dung bài viết.
-- `todo_toggled`: Phát khi 1 task Todo được tick chọn.
-
----
-
-### 4. Quy Chuẩn Cache Keys & Hợp Đồng Async Queue Jobs
-
-#### 4.1. Cache Key Patterns Standard
 Tất cả Redis cache key phải tuân thủ chuẩn `snake_case` phân cấp bằng dấu hai chấm `:`:
-- `auth:session:{session_token}` -> Data: User Session Json (TTL 24h).
-- `course:{course_id}:tree_json` -> Data: Complete Tree Structure Json (TTL 1h).
-- `user:{user_id}:course_list` -> Data: Summary User Courses Array (TTL 30m).
-
-#### 4.2. Job Queue Execution Lifecycle
-Các tác vụ ngầm đi qua lifecycle chuẩn:
-1. `POST /api/jobs/export-course` -> Backend đăng ký `FutureCall('exportCourseDataCall', payload)`.
-2. Trả về `jobId` ngay lập tức cho Client dưới dạng HTTP 202 Accepted.
-3. Serverpod Worker thực thi tác vụ ở Background Thread.
-4. Trạng thái Job cập nhật trong Redis Key `job:status:{job_id}` (`PROCESSING` -> `COMPLETED`).
-5. Kết thúc: Gửi sự kiện WebSocket `job_completed` cho Client kèm URL tải xuống.
+- `auth:session:{session_token}` -> User Session Data (TTL 24h).
+- `course:{course_id}:tree_json` -> Complete Tree Structure Json (TTL 1h).
+- `user:{user_id}:course_list` -> Summary User Courses Array (TTL 30m).

@@ -1,0 +1,16 @@
+{
+  "id": "PAGE_ROUTE_DOC_SCHEMA",
+  "enabled": true,
+  "category": "specification",
+  "severity": "warning",
+  "targetDir": "docs/page_routes",
+  "schemaFile": ".agents/schemas/page-route-doc.yaml",
+  "requiredSections": [
+    "Overview",
+    "Route Config",
+    "Component Tree",
+    "State & Data Flow",
+    "Interactions",
+    "Accessibility"
+  ]
+}

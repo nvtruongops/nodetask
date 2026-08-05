@@ -1,4 +1,7 @@
 {
+  "id": "ZERO_ICON",
+  "enabled": true,
+  "category": "ui",
   "severity": "warning",
   "disallowedPackages": [
     "lucide-react",

@@ -1,4 +1,7 @@
 {
+  "id": "IMPORT_ORDER",
+  "enabled": true,
+  "category": "style",
   "severity": "info",
   "importOrder": [
     "1. Third-party Libraries",

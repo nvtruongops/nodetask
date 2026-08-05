@@ -1,21 +1,26 @@
 # Quy Chuẩn Kiến Trúc Dự Án (Architecture Specification)
 
+> **Specification Version**: `1.3.0`  
+> **Schema Version**: `1`  
+> **Last Updated**: `2026-08-06`  
+> **Status**: `APPROVED`  
+
 ---
 
 ### 1. Master Tech Stack
 
 | Tầng (Layer) | Công nghệ / Framework | Lý do & Vai trò |
 | :--- | :--- | :--- |
-| **Web Frontend (FE)** | **React (Vite)** | Tốc độ build cực nhanh, hệ sinh thái Tiptap & dnd-kit tốt nhất. |
+| **Web Frontend (FE)** | **React (Vite)** | Tốc độ build cực nhanh, hệ sinh thái Tiptap & dnd-kit tốt nhất. Tương tác với Backend qua Serverpod Client / REST RPC HTTP Gateway. |
 | **Styling & UI Kit** | **Tailwind CSS + Shadcn UI** | UI hiện đại, responsive, hỗ trợ Dark/Light mode Monochrome. |
 | **State & Caching** | **Zustand + TanStack Query** | Phản hồi kéo-thả dưới 16ms (Optimistic UI updates). |
 | **Rich Text Editor** | **Tiptap Editor** | Soạn thảo dạng block (Notion-like), lưu dạng JSON AST. |
 | **Drag & Drop Engine**| **`@dnd-kit/core` & `@dnd-kit/sortable`** | Engine kéo thả mượt nhất trên Web DOM. |
-| **Backend (BE)** | **Dart (Serverpod Framework)** | Ngôn ngữ Dart mạnh mẽ, tự động sinh Client SDK cho Web & Mobile. |
+| **Backend (BE)** | **Dart (Serverpod Framework)** | Ngôn ngữ Dart mạnh mẽ. Tự động sinh **Dart Client SDK** cho Flutter Mobile & Dart Apps; Expose **REST RPC Client / Gateway** cho React TS Web. |
 | **Database (DB)** | **PostgreSQL + pgvector** | ORM Code-First, extension `ltree` (cây), `JSONB` và `pgvector` (RAG Search). |
 | **Distributed Cache** | **Redis (Serverpod Redis Cache)** | Caching Session Auth & Cây bài học (Read-heavy) giảm tải DB. |
 | **Async Task Queue** | **Serverpod FutureCalls Engine** | Engine native xử lý ngầm (Background jobs & Scheduled Tasks). |
-| **Mobile App** | **Flutter (Dart)** | Tái sử dụng 100% Data Models và API Client SDK từ Backend Dart. |
+| **Mobile App** | **Flutter (Dart)** | Tái sử dụng 100% Data Models và Dart Client SDK tự động sinh từ Backend Dart Serverpod. |
 
 ---
 
@@ -23,12 +28,17 @@
 
 ```text
 ./
-├── .agents/                      # AI Agent Governance & Rules (AGENTS.md, skills, prompts, scripts)
-├── docs/                         # Bộ tài liệu quy chuẩn cốt lõi (architecture, data_and_api, frontend_and_ui, operations_and_quality)
+├── .agents/                      # AI Agent Governance System (AGENTS.md, manifest v1.3.0, registry, pipeline, rules)
+├── docs/                         # Bộ tài liệu quy chuẩn cốt lõi
+│   ├── architecture.md           # Master Tech Stack, ADRs & DDD Invariants Spec
+│   ├── data_and_api.md           # Serverpod RPC Endpoints, DB Schemas & Error Contract Index
+│   ├── frontend_and_ui.md        # Master UI/UX & Zero-Icon Spec
+│   ├── operations_and_quality.md # Master Ops, Testing & Quality Budget Spec
+│   └── services/                 # Thư mục chứa đặc tả chi tiết độc lập theo từng Dịch vụ (<service_name>.md)
 ├── apps/                         # Các ứng dụng client & server
-│   ├── web/                      # React (Vite) Frontend
-│   ├── server/                   # Dart Serverpod Backend
-│   └── mobile/                   # Flutter Mobile App
+│   ├── web/                      # React (Vite) Frontend + Zustand + TanStack Query
+│   ├── server/                   # Dart Serverpod Backend + PostgreSQL + Redis
+│   └── mobile/                   # Flutter Mobile App (Dart Client SDK)
 ├── packages/                     # Dynamic Shared packages/models
 └── docker-compose.yml            # Docker cấu hình PostgreSQL (pgvector) & Redis
 ```
@@ -50,10 +60,10 @@ apps/web/src/
 #### 2.2. Cấu trúc Backend Serverpod (`apps/server/`)
 ```text
 apps/server/
-├── config/                       # Passwords & Server Configuration
+├── config/                       # Passwords & Server Configuration (development.yaml, passwords.yaml)
 ├── lib/
 │   ├── src/
-│   │   ├── endpoints/            # API Endpoints (auth_endpoint, course_endpoint, node_endpoint, todo_endpoint, ai_endpoint)
+│   │   ├── endpoints/            # API Endpoints (auth_endpoint.dart, course_endpoint.dart, node_endpoint.dart, todo_endpoint.dart, ai_endpoint.dart)
 │   │   ├── generated/            # Code tự sinh bởi Serverpod (DO NOT EDIT)
 │   │   ├── models/               # Declarative YAML Models (course.yaml, course_node.yaml, node_todo.yaml, node_embedding.yaml)
 │   │   ├── future_calls/         # Serverpod Native Async Job Handlers
@@ -85,13 +95,13 @@ Chỉ sử dụng các thư viện đã được duyệt dưới đây. **Không
 
 ### 4. Quyết định Kiến trúc Bắt buộc (Architecture Decisions - ADR)
 
-1. **ADR-01: Serverpod Code-First YAML Models & Auto-Generated SDK**
-   * Tất cả data model đều được định nghĩa tại `apps/server/lib/src/models/*.yaml`. Dùng `serverpod generate` để tự tạo TypeScript SDK và Dart SDK. KHÔNG bao giờ viết thủ công API client code.
+1. **ADR-01: Serverpod Declarative YAML Models & SDK Generation**
+   * Tất cả data model đều được định nghĩa tại `apps/server/lib/src/models/*.yaml`. Dùng `serverpod generate` để tự động tạo Dart Client SDK cho Flutter Mobile và TypeScript interfaces cho React Web. KHÔNG bao giờ viết thủ công API client code.
 2. **ADR-02: PostgreSQL `ltree` cho Cây bài học phân cấp**
    * Quản lý cây bài học (Topic -> Module -> Session -> Subsession) bằng `ltree` extension trên Postgres. Giúp query nhanh toàn bộ cây con bằng 1 câu lệnh duy nhất mà không tốn công đệ quy.
 3. **ADR-03: Optimistic Concurrency Control (OCC)**
-   * Dùng trường `version` trong bảng `course_nodes`. Cập nhật dữ liệu luôn kiểm tra `WHERE id = $1 AND version = $2`. Nếu không trùng version, báo lỗi xung đột đồng thời để client rollback.
-4. **ADR-04: Serverpod Native Cache & FutureCalls**
+   * Dùng trường `version` trong bảng `course_nodes`. Cập nhật dữ liệu luôn kiểm tra `WHERE id = $1 AND version = $2`. Nếu không trùng version, báo lỗi `VERSION_CONFLICT` để client rollback.
+4. **ADR-04: Serverpod Native Cache & FutureCalls Engine**
    * Sử dụng `session.caches` (In-memory & Redis distributed cache) để cache dữ liệu đọc nhiều. Sử dụng `FutureCalls` làm Task Queue native chạy ngầm mà không cài thêm BullMQ hay RabbitMQ.
 5. **ADR-05: PostgreSQL Native Vector Extension (`pgvector`) cho AI Search & RAG**
    * Tận dụng extension `pgvector` ngay trong PostgreSQL database chính với chỉ mục HNSW. KHÔNG cài thêm Vector DB độc lập như Chroma hay Qdrant để tối giản hạ tầng (Zero Extra Infrastructure Bloat).
@@ -101,34 +111,67 @@ Chỉ sử dụng các thư viện đã được duyệt dưới đây. **Không
 ### 5. Đặc Tả Kiến Trúc Cache, Task Queue & Vector Search Specification
 
 #### 5.1. Kiến trúc Caching Service (`session.caches`)
-- **Layer 1: Local In-Memory Cache (`session.caches.local`)**:
-  - Dùng cho dữ liệu ngắn hạn của single server instance (e.g. Rate Limiting counters, Temporary Tokens).
+- **Layer 1: Local In-Memory Cache (`session.caches.local`)**: Rate Limiting counters & Temporary Tokens.
 - **Layer 2: Distributed Redis Cache (`session.caches.global`)**:
-  - **Auth Session Cache**: Key `auth:session:{session_key}` (TTL 24 giờ). Xác thực nhanh request mà không query DB.
-  - **Course Tree Cache**: Key `course:{course_id}:tree_json` (TTL 1 giờ). Phục vụ hàng ngàn request đọc cây bài học cùng lúc.
-- **Cache Invalidation Rules**:
-  - Tự động xóa (Purge/Invalidate) Redis Key `course:{course_id}:tree_json` ngay khi thực hiện bất kỳ mutation API nào: `POST /api/nodes`, `PUT /api/nodes/:id`, `PUT /api/nodes/:id/reorder`, `DELETE /api/nodes/:id`.
+  - `auth:session:{session_key}` (TTL 24h).
+  - `course:{course_id}:tree_json` (TTL 1h).
+- **Cache Invalidation Flow**: Purge Redis Key `course:{course_id}:tree_json` ngay khi có mutation trên cây node.
 
-#### 5.2. Kiến trúc Async Task Queue (`Serverpod FutureCalls Engine`)
-Tất cả các tác vụ xử lý ngầm (Background Tasks) đều được đăng ký dưới dạng `FutureCall` handler tại `apps/server/lib/src/future_calls/`:
+#### 5.2. Luồng Xử Lý Async Task Queue & Dynamic Invalidation (Sequence Diagram)
 
-1. **`CalculateCourseProgressCall`**:
-   - Tác vụ tính toán lại phần trăm hoàn thành khóa học dựa trên tổng số `node_todos` đã tick chọn. Đăng ký chạy ngầm khi user hoàn thành task.
-2. **`ExportCourseDataCall`**:
-   - Tác vụ xuất dữ liệu bài học ra định dạng PDF hoặc Markdown AST. Trả về cho client `job_id` và thông báo khi hoàn tất.
-3. **`DailyCleanupCall`**:
-   - Scheduled Cron Job đăng ký chạy lúc 00:00 hàng ngày: Xóa các node đã bị soft-delete quá 30 ngày và thu hồi expired auth sessions.
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Client as Web / Mobile Client
+    participant API as Serverpod Node Endpoint
+    participant DB as Postgres DB (LTREE)
+    participant Redis as Redis Cache
+    participant Queue as FutureCalls Worker
+    participant WS as WebSocket Stream
+
+    Client->>API: NodeEndpoint.reorder(nodeId, newParentId, newPos)
+    API->>DB: UPDATE course_nodes SET path, position, version = version + 1
+    DB-->>API: 1 row updated (OCC Success)
+    API->>Redis: Invalidate Key "course:{course_id}:tree_json"
+    API->>Queue: Schedule FutureCall("CalculateCourseProgressCall", courseId)
+    API->>WS: Broadcast Event "node_reordered" to Course Channel
+    API-->>Client: Return { success: true, data: updatedNode }
+    
+    Queue->>DB: Query total todos & completed todos
+    Queue->>DB: Update course progress percentage
+```
 
 #### 5.3. Kiến trúc AI Semantic Search & RAG Engine (`pgvector`)
-Hỗ trợ tính năng học viên nhập câu hỏi / từ khóa ngẫu nhiên -> Hệ thống tự động truy xuất các đoạn bài học phù hợp nhất xuyên suốt các mạng lưới khóa học:
 
-- **Data Chunking & Embedding**:
-  - Khi nội dung bài học được lưu/cập nhật (`content` JSONB), tự động chia nhỏ bài viết thành các đoạn (chunks ~500 tokens).
-  - Khởi tạo Vector Embedding 1536 chiều bằng Embedding Model (Gemini / OpenAI).
-- **Indexing & Retrieval Performance**:
-  - Lưu trữ trong bảng PostgreSQL `node_embeddings`.
-  - Sử dụng chỉ mục **HNSW (Hierarchical Navigable Small World)** với Cosine Distance (`vector_cosine_ops`), cho tốc độ tìm kiếm dưới **10ms** trên hàng chục nghìn đoạn văn.
-- **RAG Course Assistant Flow**:
-  - **Step 1**: User gửi câu hỏi qua `POST /api/ai/ask`.
-  - **Step 2**: Backend sinh Query Vector -> Query top 3-5 đoạn bài học tương đồng nhất từ `node_embeddings`.
-  - **Step 3**: Ghép context bài học vào Prompt -> Trợ lý AI tổng hợp câu trả lời kèm link dẫn trực tiếp tới `node_id` tương ứng.
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Learner as Student / Learner
+    participant AIAPI as Serverpod AiEndpoint
+    participant Embedder as Embedding API (Gemini/OpenAI)
+    participant VectorDB as Postgres pgvector (HNSW Index)
+    participant LLM as LLM Provider
+
+    Learner->>AIAPI: AiEndpoint.ask(question, courseId)
+    AIAPI->>Embedder: Generate Vector Embedding (1536 dims)
+    Embedder-->>AIAPI: Return Query Vector
+    AIAPI->>VectorDB: Query Top 3 Chunks (Cosine Distance < 10ms)
+    VectorDB-->>AIAPI: Return Chunks & Node IDs
+    AIAPI->>LLM: Synthesize Answer (Prompt + Retrieved Chunks Context)
+    LLM-->>AIAPI: Return Synthesized Response
+    AIAPI-->>Learner: Return Answer + Direct Node Links
+```
+
+---
+
+### 6. Lớp Nghiệp Vụ Domain (Domain-Driven Design - DDD Invariants)
+
+Hệ thống định nghĩa các quy tắc nghiệp vụ cố định (Business Invariants) bắt buộc phải thỏa mãn tại Domain Layer trước khi ghi dữ liệu:
+
+1. **Tree Hierarchy Invariants**:
+   - Vòng lặp đệ quy (Circular Dependency): Nút con không bao giờ được phép làm nút cha của chính nút tổ tiên của nó.
+   - Loại Nút phân cấp chuẩn: `TOPIC` -> `MODULE` -> `SESSION` -> `SUBSESSION`. Nút loại `SUBSESSION` không được chứa nút con.
+2. **Optimistic Concurrency Invariant**:
+   - Mọi thao tác Mutation trên `course_nodes` bắt buộc phải tăng `version = version + 1`. Nếu `version` gửi lên khác `version` hiện tại trong DB, hệ thống từ chối cập nhật và trả về lỗi `VERSION_CONFLICT`.
+3. **Progress Calculation Invariant**:
+   - Phần trăm hoàn thành cây bài học / tài liệu $\text{Progress} = \left(\frac{\text{Completed Todos}}{\text{Total Todos}}\right) \times 100$. Nếu `Total Todos == 0`, `Progress = 0%`.

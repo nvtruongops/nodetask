@@ -22,12 +22,15 @@ module.exports = {
       }
     });
 
-    // Check .agents directory
-    const agentsDir = path.join(ctx.rootDir, '.agents');
-    if (!fs.existsSync(agentsDir)) {
-      ctx.logFail('Thiếu thư mục quản trị .agents');
-      violations++;
-    }
+    // Check Required Directories (docs, docs/services, .agents)
+    const requiredDirs = policy.requiredDirectories || [];
+    requiredDirs.forEach(dirRelative => {
+      const dirPath = path.join(ctx.rootDir, dirRelative);
+      if (!fs.existsSync(dirPath)) {
+        ctx.logFail(`Thiếu thư mục bắt buộc: ${dirRelative}`);
+        violations++;
+      }
+    });
 
     // Check AGENTS.md
     const agentsMd = path.join(ctx.rootDir, '.agents/AGENTS.md');

@@ -1,0 +1,10 @@
+class: NodeEmbedding
+table: node_embeddings
+fields:
+  nodeId: UuidValue
+  chunkContent: String
+  embedding: String           # pgvector 1536 dimension representation
+  createdAt: DateTime?
+indexes:
+  node_embedding_idx:
+    fields: nodeId

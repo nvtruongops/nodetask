@@ -1,7 +1,12 @@
 {
+  "id": "FOLDER_STRUCTURE",
+  "enabled": true,
+  "category": "architecture",
   "severity": "error",
   "requiredDirectories": [
     "docs",
+    "docs/services",
+    "docs/page_routes",
     ".agents"
   ],
   "expectedAppDirectories": [

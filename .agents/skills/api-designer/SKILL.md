@@ -5,11 +5,11 @@ description: Skill thiết kế và kiểm tra API Endpoints chuẩn Serverpod R
 
 # API Designer Skill
 
-Mục đích: Đảm bảo các API Endpoint tuân thủ chuẩn [docs/data_and_api.md](docs/data_and_api.md).
+Mục đích: Đảm bảo các API Endpoint tuân thủ chuẩn [docs/data_and_api.md](docs/data_and_api.md) hoặc đặc tả dịch vụ độc lập tương ứng tại `docs/services/<service_name>.md`.
 
 ## 📋 CHECKLIST KIỂM TRA API
 
 - [ ] Status Code & Payload tuân thủ định dạng response chuẩn `{ "success": boolean, "data": ... }`.
 - [ ] Xử lý lỗi trả về `ServerpodException` với mã error code rõ ràng.
 - [ ] Validate dữ liệu đầu vào tại Trust Boundary.
-- [ ] Cấu hình WebSocket events đúng chuẩn payload hợp đồng tại [docs/data_and_api.md](docs/data_and_api.md).
+- [ ] Cấu hình WebSocket events đúng chuẩn payload hợp đồng tại [docs/data_and_api.md](docs/data_and_api.md) hoặc `docs/services/<service_name>.md`.

@@ -1,0 +1,46 @@
+# ==============================================================================
+# Service Document Specification Contract Schema (.agents/schemas/service-doc.yaml)
+# Defines the mandatory structure and section contracts for all docs/services/*.md files
+# ==============================================================================
+
+kind: service-doc-spec
+version: 1
+
+# Mandatory sections required in every service documentation file
+requiredSections:
+  - name: "Overview"
+    description: "High-level summary of the service purpose and boundaries."
+    minOccurrences: 1
+  - name: "Endpoints"
+    description: "Serverpod RPC Endpoint Class and Method signatures."
+    minOccurrences: 1
+  - name: "Request"
+    description: "Request DTOs, parameters, and input schemas."
+    minOccurrences: 1
+  - name: "Response"
+    description: "Response payload contracts and data structures."
+    minOccurrences: 1
+  - name: "Validation"
+    description: "Input validation constraints (Zod/Dart boundary rules)."
+    minOccurrences: 1
+  - name: "Permissions"
+    description: "Role-Based Access Control (RBAC) and resource ownership matrix."
+    minOccurrences: 1
+  - name: "Errors"
+    description: "Standardized error code constants and failure scenarios."
+    minOccurrences: 1
+  - name: "Events"
+    description: "WebSocket and system events published by this service."
+    minOccurrences: 1
+  - name: "Cache"
+    description: "Redis cache keys, TTL, and invalidation rules."
+    minOccurrences: 1
+  - name: "Examples"
+    description: "Concrete Request and Response code examples."
+    minOccurrences: 1
+
+# Optional extra sections for complex services
+optionalSections:
+  - "Sequence Diagram"
+  - "ADR"
+  - "Database Schema"

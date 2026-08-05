@@ -1,5 +1,10 @@
 # Quy Chuẩn Vận Hành, Chất Lượng & Quy Trình (Operations & Quality Specification)
 
+> **Specification Version**: `1.3.0`  
+> **Schema Version**: `1`  
+> **Last Updated**: `2026-08-06`  
+> **Status**: `APPROVED`  
+
 ---
 
 ### 1. Coding Conventions & Clean Code Rules
@@ -10,6 +15,8 @@
 * **Dart Files**: `snake_case` (e.g. `course_endpoint.dart`, `node_todo.yaml`).
 * **Class / Interface**: `PascalCase` (e.g. `CourseNode`, `UserProfile`).
 * **DB Table & Column**: `snake_case` (e.g. `course_nodes`, `parent_id`).
+* **Service Spec Files**: `snake_case` hoặc `kebab-case` trong `docs/services/` (e.g. `docs/services/auth.md`, `docs/services/course.md`).
+* **Page Route Spec Files**: `snake_case` hoặc `kebab-case` trong `docs/page_routes/` (e.g. `docs/page_routes/landing.md`, `docs/page_routes/dashboard.md`).
 
 #### 1.2. Import Order Standard
 1. External Third-party Libraries -> 2. Internal UI Components -> 3. Stores & Hooks -> 4. Types & Utils.

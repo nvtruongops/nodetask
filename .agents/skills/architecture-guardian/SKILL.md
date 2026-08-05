@@ -9,7 +9,7 @@ Mục đích của skill này là bảo vệ tính toàn vẹn của hệ thốn
 
 ## 🚨 QUY TẮC CỐ ĐỊNH
 
-Tất cả các quy tắc bắt buộc tuân thủ được định nghĩa tại [AGENTS.md](.agents/AGENTS.md) và tài liệu kiến trúc [docs/architecture.md](docs/architecture.md).
+Tất cả các quy tắc bắt buộc tuân thủ được định nghĩa tại [AGENTS.md](.agents/AGENTS.md), các tài liệu quy chuẩn tại [docs/architecture.md](docs/architecture.md), đặc tả dịch vụ độc lập tại `docs/services/<service_name>.md` và đặc tả trang/route tại `docs/page_routes/<route_name>.md`.
 
 1. **KHÔNG ĐỔI STACK:** FE: React + Vite, BE: Serverpod (Dart), Mobile: Flutter.
 2. **KHÔNG ĐỔI THƯ VIỆN:** Chỉ dùng package trong `docs/architecture.md`.

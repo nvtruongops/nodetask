@@ -1,0 +1,34 @@
+# ==============================================================================
+# Page Route Document Specification Contract Schema (.agents/schemas/page-route-doc.yaml)
+# Defines the mandatory structure and section contracts for all docs/page_routes/*.md files
+# ==============================================================================
+
+kind: page-route-doc-spec
+version: 1
+
+# Mandatory sections required in every frontend page route documentation file
+requiredSections:
+  - name: "Overview"
+    description: "High-level summary of the page purpose, target audience, and primary URL path."
+    minOccurrences: 1
+  - name: "Route Config"
+    description: "URL Route path, Route Access Type (Public/Guest/Protected), Layout Shell, and Auth Guard rules."
+    minOccurrences: 1
+  - name: "Component Tree"
+    description: "Zero-Icon UI Layout breakdown, visual component hierarchy, and responsive layout grid."
+    minOccurrences: 1
+  - name: "State & Data Flow"
+    description: "Zustand global stores, TanStack Query hooks, Form validation schemas, and linked Backend RPC Services."
+    minOccurrences: 1
+  - name: "Interactions"
+    description: "User interaction flows, form submissions, keyboard shortcuts (hotkeys), and modal/drawer events."
+    minOccurrences: 1
+  - name: "Accessibility"
+    description: "Web accessibility (a11y) rules, screen reader support, keyboard focus navigation, and ARIA contracts."
+    minOccurrences: 1
+
+# Optional extra sections for complex page routes
+optionalSections:
+  - "User Sequence Flow"
+  - "Performance & Bundle Targets"
+  - "SEO Meta Tags"

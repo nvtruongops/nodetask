@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;       /* #ffffff */
+    --foreground: 0 0% 0%;          /* #000000 */
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 0%;
+    --primary: 0 0% 0%;            /* Black button bg */
+    --primary-foreground: 0 0% 100%;/* White text on button */
+    --secondary: 0 0% 96.1%;       /* #f4f4f5 */
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 40%;  /* #666666 */
+    --border: 0 0% 89.8%;          /* #e4e4e7 */
+    --radius: 0.25rem;
+  }
+
+  .dark {
+    --background: 0 0% 0%;         /* #000000 */
+    --foreground: 0 0% 100%;       /* #ffffff */
+    --card: 0 0% 4%;
+    --card-foreground: 0 0% 100%;
+    --primary: 0 0% 100%;          /* White button bg */
+    --primary-foreground: 0 0% 0%; /* Black text on button */
+    --secondary: 0 0% 14.9%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --border: 0 0% 18%;            /* #2e2e2e */
+  }
+}
+
+body {
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+/* Custom scrollbars for high-contrast monochrome design */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--foreground));
+}

@@ -1,5 +1,10 @@
 # Quy Chuẩn Frontend, UI & UX (Frontend & UI Specification)
 
+> **Specification Version**: `1.3.0`  
+> **Schema Version**: `1`  
+> **Last Updated**: `2026-08-06`  
+> **Status**: `APPROVED`  
+
 ---
 
 ### 1. Quy Tắc Thiết Kế UI Tối Giản Tuyệt Đối (Minimalist Zero-Icon Rule)
@@ -68,3 +73,16 @@
 - **Keyboard Navigation:** Mọi thao tác chọn Node, Toggle Todo, Điều hướng Cây bài học bắt buộc hỗ trợ phím mũi tên (`Up`, `Down`, `Left`, `Right`, `Space`, `Enter`).
 - **Focus Indicators:** Border Focus tương phản cao trong cả 2 mode (`ring-1 ring-foreground`).
 - **Screen Reader Support:** Dùng đúng thẻ HTML5 Semantic (`<header>`, `<main>`, `<nav>`, `<article>`, `<button>`) kèm thuộc tính `aria-expanded`, `aria-selected` rõ ràng.
+
+---
+
+### 5. Mô Hình Kiến Trúc Đặc Tả Trang & Route (`docs/page_routes/<route_name>.md`)
+
+Tương tự như cấu trúc đặc tả Dịch vụ Backend tại `docs/services/<service_name>.md`, toàn bộ Giao diện, Route Matrix, Layout Shell và Cấu trúc Component của từng màn hình Frontend được quản lý theo mô hình thư mục **`docs/page_routes/<route_name>.md`**.
+
+- **Quy tắc Khởi tạo**: Thư mục `docs/page_routes/` được giữ sẵn. Các file đặc tả trang (`<route_name>.md`) không tạo sẵn tràn lan mà được tạo theo nhu cầu phát triển (on-demand) khi bắt đầu xây dựng từng màn hình/tuyến đường tương ứng.
+- **Quy chuẩn Cấu trúc file `docs/page_routes/<route_name>.md`**:
+  1. **Route Metadata**: Đường dẫn URL, loại route (`Public` | `Guest Only` | `Protected`), Layout Shell sử dụng, Auth Guard & Redirect Rules.
+  2. **Page Content & Component Structure**: Danh sách các Section, Bố cục hiển thị (Hero, Card Grid, Form, Editor...), trạng thái State (Zustand, React Query).
+  3. **User Flow & Interactions**: Luồng tương tác của người dùng trên trang (Click, Submit, Hotkeys, Modal/Drawer).
+  4. **Zero-Icon UI Compliance**: Đảm bảo 100% không dùng Icon, tuân thủ Monochrome Theme Tokens.

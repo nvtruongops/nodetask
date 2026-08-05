@@ -26,3 +26,7 @@ Thumbs.db
 .env
 .env.local
 config/passwords.yaml
+
+# CodeGraph & AI Index Caches
+.codegraph/
+

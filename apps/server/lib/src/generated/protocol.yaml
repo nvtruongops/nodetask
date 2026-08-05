@@ -1,0 +1,18 @@
+ai:
+  - search:
+  - ask:
+auth:
+  - login:
+  - register:
+course:
+  - getCourses:
+  - createCourse:
+  - getCourseTree:
+node:
+  - createNode:
+  - updateNode:
+  - deleteNode:
+todo:
+  - getTodos:
+  - addTodo:
+  - toggleTodo:
