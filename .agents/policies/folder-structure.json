@@ -1,0 +1,22 @@
+{
+  "severity": "error",
+  "requiredDirectories": [
+    "docs",
+    ".agents"
+  ],
+  "expectedAppDirectories": [
+    "apps/web",
+    "apps/server",
+    "apps/mobile"
+  ],
+  "expectedDocs": [
+    "docs/architecture.md",
+    "docs/data_and_api.md",
+    "docs/frontend_and_ui.md",
+    "docs/operations_and_quality.md"
+  ],
+  "expectedGovernanceFiles": [
+    ".agents/manifest.json",
+    ".agents/pipeline.json"
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "version": "1.0.0",
+  "pipelineName": "feature-development-pipeline",
+  "description": "Standard multi-stage execution pipeline for AI Agent task orchestration",
+  "stages": [
+    {
+      "id": "1_architecture_guard",
+      "name": "Architecture & Guardrails Check",
+      "skill": "architecture-guardian",
+      "specDocument": "docs/architecture.md",
+      "description": "Ensure tech stack and folder structure adhere to Monorepo specification."
+    },
+    {
+      "id": "2_api_design",
+      "name": "API & Schema Contract Review",
+      "skill": "api-designer",
+      "specDocument": "docs/data_and_api.md",
+      "description": "Design or verify Serverpod endpoints, ltree hierarchy, and OCC versioning models."
+    },
+    {
+      "id": "3_ui_implementation",
+      "name": "UI/UX & Component Implementation",
+      "skill": "frontend-ui",
+      "specDocument": "docs/frontend_and_ui.md",
+      "description": "Develop UI following Minimalist Zero-Icon rule, Zustand store, and TanStack Query."
+    },
+    {
+      "id": "4_testing",
+      "name": "Automated Testing",
+      "skill": "testing",
+      "specDocument": "docs/operations_and_quality.md",
+      "description": "Write concise unit & integration tests for tree hierarchy logic and Serverpod APIs."
+    },
+    {
+      "id": "5_security_review",
+      "name": "Security & Quality Inspection",
+      "skill": "security-review",
+      "specDocument": "docs/operations_and_quality.md",
+      "description": "Inspect CSRF, XSS HTML escaping, SQL injection, and auth session security."
+    },
+    {
+      "id": "6_rule_verification",
+      "name": "Rule Engine Automated Verification",
+      "script": "node .agents/scripts/verify.js --strict",
+      "gate": "Exit code 0 required",
+      "description": "Execute AST/pattern rule engine verification script in strict mode."
+    }
+  ]
+}

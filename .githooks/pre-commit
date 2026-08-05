@@ -1,0 +1,4 @@
+#!/bin/sh
+# Git Pre-commit Hook for AI Agent Rule Verification
+echo "🛡️ Running AI Agent Rule Engine Verification..."
+node .agents/scripts/verify.js --strict

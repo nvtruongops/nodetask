@@ -1,0 +1,9 @@
+{
+  "severity": "info",
+  "importOrder": [
+    "1. Third-party Libraries",
+    "2. Internal UI Components",
+    "3. Stores & Hooks",
+    "4. Types & Utils"
+  ]
+}

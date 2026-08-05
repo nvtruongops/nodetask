@@ -1,0 +1,28 @@
+# Node & Web
+node_modules/
+dist/
+build/
+.cache/
+*.log
+
+# Dart & Serverpod
+.dart_tool/
+.packages
+build/
+
+# Flutter
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# OS & IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.suo
+*.user
+
+# Environment & Secrets
+.env
+.env.local
+config/passwords.yaml

@@ -1,0 +1,44 @@
+{
+  "severity": "error",
+  "web": {
+    "allowedDependencies": [
+      "react",
+      "react-dom",
+      "tailwindcss",
+      "next-themes",
+      "shadcn-ui",
+      "zod",
+      "react-hook-form",
+      "zustand",
+      "@tanstack/react-query",
+      "@dnd-kit/core",
+      "@dnd-kit/sortable",
+      "@tiptap/react",
+      "@tiptap/starter-kit",
+      "@tiptap/extension-task-list"
+    ],
+    "forbiddenStateManagers": [
+      "redux",
+      "@reduxjs/toolkit",
+      "mobx",
+      "recoil",
+      "jotai"
+    ]
+  },
+  "server": {
+    "allowedPackages": [
+      "serverpod",
+      "serverpod_postgres",
+      "serverpod_redis",
+      "serverpod_auth_server"
+    ]
+  },
+  "mobile": {
+    "allowedPackages": [
+      "flutter_riverpod",
+      "serverpod_auth_shared_flutter",
+      "flex_color_scheme",
+      "go_router"
+    ]
+  }
+}

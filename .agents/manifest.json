@@ -1,0 +1,13 @@
+{
+  "name": "nodetask AI Agent Governance System",
+  "governanceVersion": "1.2.0",
+  "compatibility": {
+    "minRepositoryVersion": "1.0.0",
+    "targetStack": [
+      "react-vite",
+      "dart-serverpod",
+      "flutter"
+    ]
+  },
+  "description": "Rulesets, Guardrails, Policies, and Execution Pipelines for AI Agent Pair Programming."
+}
