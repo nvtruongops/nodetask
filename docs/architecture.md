@@ -19,10 +19,10 @@
 
 ---
 
-### 2. Cấu trúc Tổng quan Monorepo (`e:/Code/nodetask/`)
+### 2. Cấu trúc Tổng quan Monorepo (`./`)
 
 ```text
-e:/Code/nodetask/
+./
 ├── .agents/                      # AI Agent Governance & Rules (AGENTS.md, skills, prompts, scripts)
 ├── docs/                         # Bộ tài liệu quy chuẩn cốt lõi (architecture, data_and_api, frontend_and_ui, operations_and_quality)
 ├── apps/                         # Các ứng dụng client & server

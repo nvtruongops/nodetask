@@ -31,7 +31,7 @@ Mọi thiết kế phải theo sát tài liệu quy chuẩn UI cốt lõi:
 
 ## 🎨 2. QUY CHUẨN MÀU SẮC & THEME (MONOCHROME COLOR TOKENS)
 
-Theo sát [docs/frontend_and_ui.md](file:///e:/Code/nodetask/docs/frontend_and_ui.md):
+Theo sát [docs/frontend_and_ui.md](docs/frontend_and_ui.md):
 
 - **Light Mode:**
   - Nền (`--background`): `#FFFFFF` (Trắng tinh)

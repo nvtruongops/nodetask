@@ -5,7 +5,7 @@ description: Skill phát triển giao diện Mobile Flutter đồng bộ 100% Da
 
 # Flutter UI Skill
 
-Mục đích: Đảm bảo mã nguồn Flutter Mobile tuân thủ [docs/frontend_and_ui.md](file:///e:/Code/nodetask/docs/frontend_and_ui.md).
+Mục đích: Đảm bảo mã nguồn Flutter Mobile tuân thủ [docs/frontend_and_ui.md](docs/frontend_and_ui.md).
 
 ## 📋 CHECKLIST KIỂM TRA FLUTTER
 

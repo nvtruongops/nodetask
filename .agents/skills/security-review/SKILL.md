@@ -5,7 +5,7 @@ description: Skill kiểm tra an toàn thông tin, bảo mật Token, CSRF, XSS,
 
 # Security Review Skill
 
-Mục đích: Đảm bảo mã nguồn tuân thủ tiêu chuẩn bảo mật tại [docs/operations_and_quality.md](file:///e:/Code/nodetask/docs/operations_and_quality.md).
+Mục đích: Đảm bảo mã nguồn tuân thủ tiêu chuẩn bảo mật tại [docs/operations_and_quality.md](docs/operations_and_quality.md).
 
 ## 📋 CHECKLIST BẢO MẬT
 

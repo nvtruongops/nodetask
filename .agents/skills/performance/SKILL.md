@@ -5,7 +5,7 @@ description: Skill kiểm tra và tối ưu hiệu năng Frontend, Backend API v
 
 # Performance Skill
 
-Mục đích: Giám sát và đảm bảo không vượt ngân sách hiệu năng tại [docs/operations_and_quality.md](file:///e:/Code/nodetask/docs/operations_and_quality.md).
+Mục đích: Giám sát và đảm bảo không vượt ngân sách hiệu năng tại [docs/operations_and_quality.md](docs/operations_and_quality.md).
 
 ## 📋 CHECKLIST HIỆU NĂNG
 

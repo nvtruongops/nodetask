@@ -5,7 +5,7 @@ description: Skill kiểm tra và đánh giá thiết kế Schema Database, Migr
 
 # DB Schema Reviewer Skill
 
-Mục đích: Đảm bảo thiết kế Database tuân thủ quy chuẩn [docs/data_and_api.md](file:///e:/Code/nodetask/docs/data_and_api.md).
+Mục đích: Đảm bảo thiết kế Database tuân thủ quy chuẩn [docs/data_and_api.md](docs/data_and_api.md).
 
 ## 📋 CHECKLIST KIỂM TRA DATABASE
 
