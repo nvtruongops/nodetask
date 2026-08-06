@@ -1,3 +1,6 @@
+<!-- Target FE Component: apps/web/src/features/contact/ContactPage.tsx -->
+<!-- Target Runtime URL: http://localhost:5173/#/contact -->
+
 # Contact Page Route Specification (`contact.md`)
 
 > **Route ID**: `CONTACT_MAIN`  
@@ -37,11 +40,12 @@
 - **Title Tag**: `<title>Contact Us - nodetask Support & Feedback</title>`
 - **Meta Description**: `Gửi phản hồi, yêu cầu hỗ trợ hoặc câu hỏi hợp tác cho đội ngũ nodetask.`
 - **Keywords**: `nodetask contact, support, feedback, enquiry`
-- **Canonical URL**: `https://nodetask.io/contact`
+- **Canonical URL**: `/#/contact`
 - **OpenGraph Specification**:
-  - `og:title`: `Contact Us - nodetask`
-  - `og:description`: `Liên hệ hỗ trợ kỹ thuật và phản hồi nodetask.`
-  - `og:image`: `https://nodetask.io/og-contact.png`
+  - `og:title`: `Contact Support - nodetask`
+  - `og:description`: `Gửi thắc mắc hoặc yêu cầu hỗ trợ kỹ thuật nodetask.`
+  - `og:image`: `/og-contact.png`
+  - `og:type`: `website`
 - **Twitter Card Specification**:
   - `twitter:card`: `summary`
   - `twitter:title`: `Contact Us - nodetask`

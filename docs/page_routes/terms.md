@@ -1,3 +1,6 @@
+<!-- Target FE Component: apps/web/src/features/terms/TermsPage.tsx -->
+<!-- Target Runtime URL: http://localhost:5173/#/terms -->
+
 # Terms of Service Page Route Specification (`terms.md`)
 
 > **Route ID**: `TERMS_MAIN`  
@@ -37,11 +40,12 @@
 - **Title Tag**: `<title>Terms of Service - nodetask</title>`
 - **Meta Description**: `Điều khoản dịch vụ và quy định sử dụng nền tảng nodetask.`
 - **Keywords**: `nodetask terms, terms of service, user agreement`
-- **Canonical URL**: `https://nodetask.io/terms`
+- **Canonical URL**: `/#/terms`
 - **OpenGraph Specification**:
   - `og:title`: `Terms of Service - nodetask`
-  - `og:description`: `Điều khoản dịch vụ nodetask.`
-  - `og:image`: `https://nodetask.io/og-legal.png`
+  - `og:description`: `Điều khoản sử dụng và thỏa thuận dịch vụ nodetask.`
+  - `og:image`: `/og-legal.png`
+  - `og:type`: `website`
 - **Twitter Card Specification**:
   - `twitter:card`: `summary`
   - `twitter:title`: `Terms of Service - nodetask`
@@ -84,6 +88,14 @@
 ---
 
 ## 8. Component Inventory & Tree
+
+### Required Pattern Components (MUST)
+- `Hero` + `BentoGrid` (3 Pillars) + `InteractiveTabSwitcher` + `TechnicalCard` Grid + `SpecificationPanel`
+
+### Route Anti-Patterns (MUST NOT)
+- ❌ Bài viết dài dằng dặc không có Tab chuyển đổi lọc nội dung.
+- ❌ Thiếu 3 thẻ trụ cột điều khoản `BentoGrid`.
+- ❌ Thiếu khối thông báo ràng buộc `SpecificationPanel`.
 
 ### Component Inventory List
 - `PublicLayoutShell`: Organism bọc Header/Footer.

@@ -1,6 +1,30 @@
 const path = require('path');
 const meta = require('./meta.json');
 
+function extractSectionContent(fullContent, sectionName) {
+  const lines = fullContent.split('\n');
+  let inSection = false;
+  let sectionLines = [];
+
+  for (const line of lines) {
+    const isHeading = /^#{1,4}\s+(.+)$/.test(line);
+    if (isHeading) {
+      const headingText = line.replace(/^#{1,4}\s+/, '').trim();
+      if (headingText.toLowerCase().includes(sectionName.toLowerCase())) {
+        inSection = true;
+        continue;
+      } else if (inSection) {
+        break;
+      }
+    }
+    if (inSection) {
+      sectionLines.push(line);
+    }
+  }
+
+  return sectionLines.join('\n');
+}
+
 module.exports = {
   meta,
   async execute(ctx) {
@@ -13,18 +37,18 @@ module.exports = {
       return { passed: true };
     }
 
-    const requiredSections = [
-      'Overview',
-      'Endpoints',
-      'Request',
-      'Response',
-      'Validation',
-      'Permissions',
-      'Errors',
-      'Events',
-      'Cache',
-      'Examples'
-    ];
+    const sectionRules = {
+      Overview: { mustContain: [] },
+      Endpoints: { mustContain: ['Session session'], regex: [/[A-Z][a-zA-Z0-9]+Endpoint\.[a-zA-Z0-9]+\(/] },
+      Request: { mustContain: ['interface'] },
+      Response: { mustContain: ['interface'] },
+      Validation: { mustContain: [] },
+      Permissions: { mustContain: ['GUEST', 'USER', 'ORG_MEMBER', 'ORG_ADMIN', 'SYSTEM_ADMIN'] },
+      Errors: { mustContain: ['HTTP Status'], regex: [/`[A-Z0-9_]+`/] },
+      Events: { regex: [/[a-z0-9_]+\.[a-z0-9_]+/] },
+      Cache: { mustContain: ['TTL', 'Invalidation'] },
+      Examples: { mustContain: ['```typescript'] }
+    };
 
     const files = ctx.fs.readdirSync(targetDir).filter(f => f.endsWith('.md'));
     if (files.length === 0) {
@@ -37,19 +61,46 @@ module.exports = {
     for (const file of files) {
       const filePath = path.join(targetDir, file);
       const content = ctx.fs.readFileSync(filePath, 'utf8');
+      const headings = (content.match(/^#{1,4}\s+(.+)$/gm) || []).map(h => h.replace(/^#{1,4}\s+/, '').trim());
 
-      const headings = (content.match(/^#{1,4}\s+(.+)$/gm) || [])
-        .map(h => h.replace(/^#{1,4}\s+/, '').trim());
+      let fileViolations = [];
 
-      const missingSections = requiredSections.filter(sec => {
-        return !headings.some(h => h.toLowerCase().includes(sec.toLowerCase()));
-      });
+      for (const [secName, rules] of Object.entries(sectionRules)) {
+        const hasHeading = headings.some(h => h.toLowerCase().includes(secName.toLowerCase()));
+        if (!hasHeading) {
+          fileViolations.push(`Thiếu Section [${secName}]`);
+          continue;
+        }
 
-      if (missingSections.length > 0) {
-        ctx.logger.warn(`File docs/services/${file} thiếu ${missingSections.length} sections bắt buộc: ${missingSections.join(', ')}`);
-        totalViolations++;
+        const secContent = extractSectionContent(content, secName);
+        if (!secContent || secContent.trim().length === 0 || secContent.trim() === 'TODO' || secContent.trim() === 'later') {
+          fileViolations.push(`Section [${secName}] rỗng hoặc chỉ chứa placeholder TODO/later`);
+          continue;
+        }
+
+        // Check mustContain keywords
+        if (rules.mustContain) {
+          const missingKeywords = rules.mustContain.filter(kw => !secContent.includes(kw));
+          if (missingKeywords.length > 0) {
+            fileViolations.push(`Section [${secName}] thiếu các từ khóa/roles bắt buộc: ${missingKeywords.map(k => `'${k}'`).join(', ')}`);
+          }
+        }
+
+        // Check regex patterns
+        if (rules.regex) {
+          for (const reg of rules.regex) {
+            if (!reg.test(secContent)) {
+              fileViolations.push(`Section [${secName}] không đúng định dạng mẫu (Regex: ${reg.toString()})`);
+            }
+          }
+        }
+      }
+
+      if (fileViolations.length > 0) {
+        ctx.logger.warn(`File docs/services/${file} phát hiện ${fileViolations.length} lỗi vi phạm Contract:\n  - ${fileViolations.join('\n  - ')}`);
+        totalViolations += fileViolations.length;
       } else {
-        ctx.logger.pass(`File docs/services/${file} tuân thủ 100% 10 Sections Specification Contract.`);
+        ctx.logger.pass(`File docs/services/${file} tuân thủ 100% Schema Validation Contract.`);
       }
     }
 

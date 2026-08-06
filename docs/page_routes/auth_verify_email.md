@@ -1,3 +1,6 @@
+<!-- Target FE Component: apps/web/src/features/auth/VerifyEmailPage.tsx -->
+<!-- Target Runtime URL: http://localhost:5173/#/auth/verify-email -->
+
 # Auth Verify Email Page Route Specification (`auth_verify_email.md`)
 
 > **Route ID**: `AUTH_VERIFY_EMAIL`  
@@ -37,11 +40,12 @@
 - **Title Tag**: `<title>Verify Email - nodetask</title>`
 - **Meta Description**: `Xác minh địa chỉ email của bạn để kích hoạt tài khoản nodetask.`
 - **Keywords**: `nodetask verify email, email confirmation, otp code`
-- **Canonical URL**: `https://nodetask.io/auth/verify-email`
+- **Canonical URL**: `/#/auth/verify-email`
 - **OpenGraph Specification**:
   - `og:title`: `Verify Email - nodetask`
-  - `og:description`: `Xác minh tài khoản nodetask.`
-  - `og:image`: `https://nodetask.io/og-auth.png`
+  - `og:description`: `Xác thực email kích hoạt tài khoản nodetask.`
+  - `og:image`: `/og-auth.png`
+  - `og:type`: `website`
 - **Twitter Card Specification**:
   - `twitter:card`: `summary`
   - `twitter:title`: `Verify Email - nodetask`

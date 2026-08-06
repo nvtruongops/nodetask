@@ -1,50 +1,83 @@
 # ==============================================================================
 # Page Route Document Specification Contract Schema (.agents/schemas/page-route-doc.yaml)
-# Defines the mandatory structure and section contracts for all docs/page_routes/*.md files
+# Defines the mandatory structure and section validation contracts for all docs/page_routes/*.md files
 # ==============================================================================
 
 kind: page-route-doc-spec
 version: 2
 
-# Mandatory sections required in every frontend page route documentation file
-requiredSections:
-  - name: "Overview & Route ID"
-    description: "Summary of page purpose, target audience, Route ID (e.g. AUTH_LOGIN), and route_name."
+sections:
+  "Overview & Route ID":
     minOccurrences: 1
-  - name: "Route Config & Navigation Metadata"
-    description: "URL path, access type, layout shell, auth guard, and navigation flags (sidebar, header, footer, breadcrumb, searchable)."
+    description: "Summary of page purpose, target audience, Route ID, and route_name."
+    mustContain:
+      - "Route ID"
+
+  "Route Config & Navigation Metadata":
     minOccurrences: 1
-  - name: "SEO & Social Meta Specification"
+    description: "URL path, access type, page archetype, layout shell, auth guard, and navigation flags."
+    mustContain:
+      - "Page Archetype"
+
+  "SEO & Social Meta Specification":
+    minOccurrences: 1
     description: "Page Title, Meta Description, Keywords, Canonical URL, OpenGraph, and Twitter Card specifications."
+    mustContain:
+      - "Title Tag"
+
+  "Loading Strategy & Code Splitting":
     minOccurrences: 1
-  - name: "Loading Strategy & Code Splitting"
     description: "React Router loading strategy, lazy load, preload conditions, chunk name, and bundle priority."
+    mustContain:
+      - "Lazy Load"
+
+  "Permission Matrix & RBAC":
     minOccurrences: 1
-  - name: "Permission Matrix & RBAC"
     description: "Explicit role-based access matrix mapping System Roles (GUEST, USER, ORG_MEMBER, ORG_ADMIN, SYSTEM_ADMIN)."
+    mustContain:
+      - "GUEST"
+      - "USER"
+      - "ORG_MEMBER"
+      - "ORG_ADMIN"
+      - "SYSTEM_ADMIN"
+
+  "API Dependency & Serverpod RPC":
     minOccurrences: 1
-  - name: "API Dependency & Serverpod RPC"
     description: "Explicit Serverpod RPC signatures, endpoints called, cache TTL, and data flow."
+    mustContain:
+      - "Serverpod"
+
+  "Page State Machine & UI Transitions":
     minOccurrences: 1
-  - name: "Page State Machine & UI Transitions"
-    description: "UI state diagram and transitions (IDLE -> TYPING -> SUBMITTING -> SUCCESS / ERROR -> RETRY)."
+    description: "UI state diagram and transitions."
+    mustContain:
+      - "IDLE"
+
+  "Component Inventory & Tree":
     minOccurrences: 1
-  - name: "Component Inventory & Tree"
     description: "List of atomic/molecule components and visual component tree hierarchy."
+    mustContain:
+      - "Required Pattern Components"
+      - "Route Anti-Patterns"
+
+  "Error Mapping & Handling":
     minOccurrences: 1
-  - name: "Error Mapping & Handling"
-    description: "HTTP/RPC error status codes (401, 403, 404, 409, 422, 429, 500) mapped to UI error keys and recovery flows."
+    description: "HTTP/RPC error status codes (401, 403, 404, 409, 422, 429, 500) mapped to UI error keys."
+    mustContain:
+      - "401"
+      - "500"
+
+  "Acceptance Criteria & QA Scenarios":
     minOccurrences: 1
-  - name: "Acceptance Criteria & QA Scenarios"
     description: "Structured Given-When-Then Gherkin scenarios for QA testing."
+    mustContain:
+      - "Scenario:"
+      - "Given"
+      - "When"
+      - "Then"
+
+  "Accessibility":
     minOccurrences: 1
-  - name: "Accessibility"
     description: "Web accessibility (a11y) rules, WAI-ARIA roles, focus management, and keyboard navigation."
-    minOccurrences: 1
-
-# Optional extra sections for complex page routes
-optionalSections:
-  - "Performance Budget Matrix"
-  - "Security Headers & Policy Specification"
-  - "Motion & Animation Spec"
-
+    mustContain:
+      - "WAI-ARIA"

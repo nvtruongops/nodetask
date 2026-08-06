@@ -1,46 +1,79 @@
 # ==============================================================================
 # Service Document Specification Contract Schema (.agents/schemas/service-doc.yaml)
-# Defines the mandatory structure and section contracts for all docs/services/*.md files
+# Defines the mandatory structure and validation rules for all docs/services/*.md files
 # ==============================================================================
 
 kind: service-doc-spec
-version: 1
+version: 2
 
-# Mandatory sections required in every service documentation file
-requiredSections:
-  - name: "Overview"
-    description: "High-level summary of the service purpose and boundaries."
+# Declarative section validation rules
+sections:
+  Overview:
     minOccurrences: 1
-  - name: "Endpoints"
+    description: "High-level summary of service purpose and boundaries."
+    mustContain: []
+
+  Endpoints:
+    minOccurrences: 1
     description: "Serverpod RPC Endpoint Class and Method signatures."
-    minOccurrences: 1
-  - name: "Request"
-    description: "Request DTOs, parameters, and input schemas."
-    minOccurrences: 1
-  - name: "Response"
-    description: "Response payload contracts and data structures."
-    minOccurrences: 1
-  - name: "Validation"
-    description: "Input validation constraints (Zod/Dart boundary rules)."
-    minOccurrences: 1
-  - name: "Permissions"
-    description: "Role-Based Access Control (RBAC) and resource ownership matrix."
-    minOccurrences: 1
-  - name: "Errors"
-    description: "Standardized error code constants and failure scenarios."
-    minOccurrences: 1
-  - name: "Events"
-    description: "WebSocket and system events published by this service."
-    minOccurrences: 1
-  - name: "Cache"
-    description: "Redis cache keys, TTL, and invalidation rules."
-    minOccurrences: 1
-  - name: "Examples"
-    description: "Concrete Request and Response code examples."
-    minOccurrences: 1
+    mustContain:
+      - "Session session"
+    regexPatterns:
+      - pattern: "[A-Z][a-Za-z0-9]+Endpoint\\.[a-zA-Z0-9]+\\(Session session"
+        message: "Chữ ký Endpoint phải theo cú pháp Serverpod Dart: EndpointClass.method(Session session, Input input)"
 
-# Optional extra sections for complex services
-optionalSections:
-  - "Sequence Diagram"
-  - "ADR"
-  - "Database Schema"
+  Request:
+    minOccurrences: 1
+    description: "Request DTOs, parameters, and input schemas."
+    mustContain:
+      - "interface"
+
+  Response:
+    minOccurrences: 1
+    description: "Response payload contracts and data structures."
+    mustContain:
+      - "interface"
+
+  Validation:
+    minOccurrences: 1
+    description: "Input validation constraints (Zod/Dart boundary rules)."
+    mustContain: []
+
+  Permissions:
+    minOccurrences: 1
+    description: "Role-Based Access Control (RBAC) and resource ownership matrix."
+    mustContain:
+      - "GUEST"
+      - "USER"
+      - "ORG_MEMBER"
+      - "ORG_ADMIN"
+      - "SYSTEM_ADMIN"
+
+  Errors:
+    minOccurrences: 1
+    description: "Standardized error code constants and failure scenarios."
+    mustContain:
+      - "HTTP Status"
+    regexPatterns:
+      - pattern: "`[A-Z0-9_]+`"
+        message: "Mã lỗi phải dạng hằng số viết hoa bọc trong backticks (ví dụ: `AUTH_INVALID_CREDENTIALS`)"
+
+  Events:
+    minOccurrences: 1
+    description: "WebSocket and system events published by this service."
+    regexPatterns:
+      - pattern: "[a-z0-9_]+\\.[a-z0-9_]+"
+        message: "Tên sự kiện Realtime phải có cấu trúc namespace.event_name (ví dụ: `auth.otp_sent`)"
+
+  Cache:
+    minOccurrences: 1
+    description: "Redis cache keys, TTL, and invalidation rules."
+    mustContain:
+      - "TTL"
+      - "Invalidation"
+
+  Examples:
+    minOccurrences: 1
+    description: "Concrete Request and Response code examples."
+    mustContain:
+      - "```typescript"

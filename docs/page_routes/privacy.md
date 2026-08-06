@@ -1,3 +1,6 @@
+<!-- Target FE Component: apps/web/src/features/privacy/PrivacyPage.tsx -->
+<!-- Target Runtime URL: http://localhost:5173/#/privacy -->
+
 # Privacy Policy Page Route Specification (`privacy.md`)
 
 > **Route ID**: `PRIVACY_MAIN`  
@@ -37,11 +40,12 @@
 - **Title Tag**: `<title>Privacy Policy - nodetask</title>`
 - **Meta Description**: `Chính sách bảo mật và cam kết bảo vệ dữ liệu người dùng tại nền tảng nodetask.`
 - **Keywords**: `nodetask privacy, privacy policy, data security, encryption`
-- **Canonical URL**: `https://nodetask.io/privacy`
+- **Canonical URL**: `/#/privacy`
 - **OpenGraph Specification**:
   - `og:title`: `Privacy Policy - nodetask`
-  - `og:description`: `Chính sách bảo mật dữ liệu tri thức.`
-  - `og:image`: `https://nodetask.io/og-legal.png`
+  - `og:description`: `Chính sách bảo mật thông tin người dùng nodetask.`
+  - `og:image`: `/og-legal.png`
+  - `og:type`: `website`
 - **Twitter Card Specification**:
   - `twitter:card`: `summary`
   - `twitter:title`: `Privacy Policy - nodetask`
@@ -84,6 +88,14 @@
 ---
 
 ## 8. Component Inventory & Tree
+
+### Required Pattern Components (MUST)
+- `Hero` + `MetricsGrid` + `EditorialGrid` + `StickySidebar` + `SpecificationPanel`
+
+### Route Anti-Patterns (MUST NOT)
+- ❌ 1 cột cuộn dọc đơn điệu không có Sidebar điều hướng.
+- ❌ Thiếu thẻ chỉ số bảo mật `MetricsGrid`.
+- ❌ Thiếu hộp cam kết bảo vệ dữ liệu `SpecificationPanel`.
 
 ### Component Inventory List
 - `PublicLayoutShell`: Organism bọc Header/Footer.

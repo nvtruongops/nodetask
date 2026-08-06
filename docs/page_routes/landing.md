@@ -1,3 +1,6 @@
+<!-- Target FE Component: apps/web/src/features/landing/LandingPage.tsx -->
+<!-- Target Runtime URL: http://localhost:5173/#/ -->
+
 # Landing Page Route Specification (`landing.md`)
 
 > **Route ID**: `LANDING_MAIN`  
@@ -13,7 +16,7 @@
 ## 1. Overview & Route ID
 - **Route ID**: `LANDING_MAIN` (Dùng cho Analytics, Breadcrumb, Logging, Event Tracking, RBAC)
 - **Route Name**: `landing.main`
-- **Description**: Trang chủ (`/`) là điểm tiếp cận đầu tiên của người dùng vãng lai (`GUEST`) tới nền tảng **`nodetask`** — Monorepo Quản lý Không gian Tài liệu & Tri thức Cá nhân / Tổ chức. Trang chủ giới thiệu các tính năng cốt lõi: Cấu trúc cây tài liệu phân cấp (`ltree`), Trình soạn thảo AST Tiptap, Giao diện tối giản Monochrome Zero-Icon, Bộ chuyển đổi Theme (Dark/Light/System) và Đa ngôn ngữ (`i18n`), cùng Trợ lý AI Tìm kiếm Ngữ nghĩa RAG (`pgvector`).
+- **Description**: Trang chủ (`/`) là điểm tiếp cận đầu tiên của người dùng vãng lai (`GUEST`) tới nền tảng **`nodetask`** — Không gian Quản lý Tri thức & Tài liệu Không giới hạn cho Cá nhân và Đội ngũ. Trang chủ tuân thủ tuyệt đối quy tắc **Value-First Product Hierarchy**, tập trung truyền tải giá trị cốt lõi giải quyết vấn đề người dùng: Quản lý cây tài liệu lồng nhau không giới hạn, Trình soạn thảo tập trung cao độ mượt như Notion, AI Tìm kiếm theo ngữ nghĩa tức thì và Giao diện Monochrome 100% Zero-Icon loại bỏ hoàn toàn xao nhãng. Thuật ngữ công nghệ (`ltree`, `pgvector`, `Serverpod`, `Tiptap AST`) đóng vai trò minh chứng kỹ thuật (Proof Points) ở tầng dưới.
 
 ---
 
@@ -34,22 +37,22 @@
 ---
 
 ## 3. SEO & Social Meta Specification
-- **Title Tag**: `<title>nodetask - Monorepo Document & Knowledge Space Management</title>`
-- **Meta Description**: `nodetask là nền tảng quản lý tài liệu và tri thức tối giản Monochrome Zero-Icon, hỗ trợ cây tài liệu ltree, trình soạn thảo Tiptap AST và AI Search pgvector.`
-- **Keywords**: `nodetask, document management, knowledge base, ltree, tiptap, serverpod, zero-icon, monochrome`
-- **Canonical URL**: `https://nodetask.io/`
+- **Title Tag**: `<title>nodetask - Unlimited Nested Notes & Instant AI Knowledge Search</title>`
+- **Meta Description**: `Quản lý cây tài liệu phân cấp không giới hạn và tìm kiếm AI ngữ nghĩa tức thì với giao diện Monochrome 100% Zero-Icon tập trung tuyệt đối.`
+- **Keywords**: `nodetask, knowledge management, document workspace, zero-icon, distraction-free notes, ai knowledge search`
+- **Canonical URL**: `/#/`
 - **OpenGraph Specification**:
-  - `og:title`: `nodetask - Monorepo Document & Knowledge Space Management`
-  - `og:description`: `Quản lý không gian tài liệu & tri thức cá nhân/tổ chức với kiến trúc Monochrome Zero-Icon tối giản.`
-  - `og:image`: `https://nodetask.io/og-landing.png`
+  - `og:title`: `nodetask - Unlimited Nested Notes & Instant AI Knowledge Search`
+  - `og:description`: `Không gian quản lý tri thức & tài liệu đội ngũ tối giản Monochrome Zero-Icon.`
+  - `og:image`: `/og-landing.png`
   - `og:type`: `website`
-  - `og:url`: `https://nodetask.io/`
+  - `og:url`: `/#/`
 - **Twitter Card Specification**:
   - `twitter:card`: `summary_large_image`
   - `twitter:site`: `@nodetask`
-  - `twitter:title`: `nodetask - Knowledge Space Management`
-  - `twitter:description`: `Monochrome Zero-Icon Knowledge Management Platform.`
-  - `twitter:image`: `https://nodetask.io/og-landing.png`
+  - `twitter:title`: `nodetask - Distraction-Free Knowledge Workspace`
+  - `twitter:description`: `Monochrome Zero-Icon Knowledge Management Platform for Teams.`
+  - `twitter:image`: `/og-landing.png`
 
 ---
 
@@ -95,6 +98,15 @@
 ---
 
 ## 8. Component Inventory & Tree
+
+### Required Pattern Components (MUST)
+- `Hero` (Value Headline) + `MetricsGrid` + `ValueComparisonTable` (User Benefits Mapped to Technical Proofs) + `BentoGrid` + `SectionDivider` + `CTA` + `Footer`
+
+### Route Anti-Patterns (MUST NOT)
+- ❌ Hero nhồi nhét tên thuật ngữ backend thô.
+- ❌ Single centered column stack cuộn dọc.
+- ❌ Khoảng trắng chết >30vh lãng phí.
+- ❌ Thiếu bảng so sánh ma trận giá trị người dùng `ValueComparisonTable`.
 
 ### Component Inventory List
 - `PublicLayoutShell`: Organism bọc Header & Footer công khai.
@@ -147,7 +159,7 @@
 
 ```gherkin
 Scenario: Guest accesses Landing Page successfully
-  Given a Guest user navigates to "https://nodetask.io/"
+  Given a Guest user navigates to "/#/"
   When the page finishes hydration in <100ms
   Then the Hero Section, Features Grid, and Header CTA Buttons ("Sign In", "Get Started") are displayed
   And 0 icons or emojis are rendered on the UI

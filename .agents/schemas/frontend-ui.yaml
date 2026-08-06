@@ -1,0 +1,30 @@
+# ==============================================================================
+# Frontend UI Implementation Contract Schema (.agents/schemas/frontend-ui.yaml)
+# Defines the mandatory UI governance constraints for apps/web/src/ components
+# ==============================================================================
+
+kind: frontend-ui-spec
+version: 1
+
+rules:
+  noHardcodedMaxW7xl:
+    enabled: true
+    description: "Cấm hardcode max-w-7xl rải rác trong JSX. Phải dùng Container Tokens hoặc clamp()."
+    forbiddenClasses:
+      - "max-w-7xl"
+
+  zeroIconEnforcement:
+    enabled: true
+    description: "Cấm import biểu tượng icon SVG hoặc icon font từ third-party libraries."
+    forbiddenImports:
+      - "lucide-react"
+      - "react-icons"
+      - "@heroicons"
+      - "@tabler/icons-react"
+
+  a11yMainLandmark:
+    enabled: true
+    description: "Main content container bắt buộc có id='main-content' và role='main'."
+    requiredAttributes:
+      - "id=\"main-content\""
+      - "role=\"main\""

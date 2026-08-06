@@ -1,0 +1,12 @@
+{
+  "id": "FRONTEND_UI_SCHEMA",
+  "name": "Frontend UI Implementation Schema Validation",
+  "category": "UI",
+  "severity": "WARNING",
+  "version": "1.0.0",
+  "dependsOn": ["FOLDER_STRUCTURE"],
+  "parallelizable": true,
+  "supportsFix": false,
+  "estimatedCost": "low",
+  "description": "Validates that web components in apps/web/src/ adhere to container tokens, zero-icon, and a11y schema rules."
+}

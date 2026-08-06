@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { getLandingContent } from '../../features/landing/content';
 import { useThemeStore } from '../../store/useThemeStore';
 import { useLanguageStore } from '../../store/useLanguageStore';
@@ -6,20 +6,51 @@ import { useLanguageStore } from '../../store/useLanguageStore';
 interface PublicLayoutShellProps {
   children: ReactNode;
   onNavigate?: (path: string) => void;
+  currentPath?: string;
 }
 
-export function PublicLayoutShell({ children, onNavigate }: PublicLayoutShellProps) {
+export function PublicLayoutShell({ children, onNavigate, currentPath }: PublicLayoutShellProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { theme, toggleTheme } = useThemeStore();
   const { locale, toggleLocale } = useLanguageStore();
 
+  const [activePath, setActivePath] = useState<string>(() => {
+    if (currentPath) return currentPath;
+    if (typeof window !== 'undefined') {
+      return window.location.hash.replace('#', '') || '/';
+    }
+    return '/';
+  });
+
+  useEffect(() => {
+    if (currentPath) {
+      setActivePath(currentPath);
+      return;
+    }
+    const handleHashChange = () => {
+      const path = window.location.hash.replace('#', '') || '/';
+      setActivePath(path);
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, [currentPath]);
+
   const handleNavClick = (path: string) => {
+    setActivePath(path);
     if (onNavigate) {
       onNavigate(path);
     } else {
       window.location.hash = path;
     }
     setIsMobileMenuOpen(false);
+  };
+
+  const isNavActive = (path: string) => {
+    if (path === '/') {
+      return activePath === '/' || activePath === '';
+    }
+    return activePath === path;
   };
 
   const getThemeLabel = () => {
@@ -46,7 +77,7 @@ export function PublicLayoutShell({ children, onNavigate }: PublicLayoutShellPro
 
       {/* Public Header Navigation */}
       <header className="sticky top-0 z-40 w-full border-b border-border bg-background/95 backdrop-blur backdrop-filter">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <div className="max-w-[clamp(1000px,92vw,1400px)] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           {/* Brand Logo Link */}
           <button
             onClick={() => handleNavClick('/')}
@@ -61,28 +92,44 @@ export function PublicLayoutShell({ children, onNavigate }: PublicLayoutShellPro
           <nav className="hidden md:flex items-center space-x-5 text-xs uppercase tracking-wider">
             <button
               onClick={() => handleNavClick('/')}
-              className="hover:underline font-semibold"
+              className={`transition-colors ${
+                isNavActive('/')
+                  ? 'font-bold text-foreground border-b-2 border-foreground pb-0.5'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
             >
               {getLandingContent('nav.landing', locale)}
             </button>
             <button
               onClick={() => handleNavClick('/about')}
               aria-label="About page"
-              className="text-muted-foreground hover:text-foreground transition-colors"
+              className={`transition-colors ${
+                isNavActive('/about')
+                  ? 'font-bold text-foreground border-b-2 border-foreground pb-0.5'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
             >
               {getLandingContent('nav.about', locale)}
             </button>
             <button
               onClick={() => handleNavClick('/privacy')}
               aria-label="Privacy page"
-              className="text-muted-foreground hover:text-foreground transition-colors"
+              className={`transition-colors ${
+                isNavActive('/privacy')
+                  ? 'font-bold text-foreground border-b-2 border-foreground pb-0.5'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
             >
               {getLandingContent('nav.privacy', locale)}
             </button>
             <button
               onClick={() => handleNavClick('/terms')}
               aria-label="Terms page"
-              className="text-muted-foreground hover:text-foreground transition-colors"
+              className={`transition-colors ${
+                isNavActive('/terms')
+                  ? 'font-bold text-foreground border-b-2 border-foreground pb-0.5'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
             >
               {getLandingContent('nav.terms', locale)}
             </button>
@@ -156,28 +203,36 @@ export function PublicLayoutShell({ children, onNavigate }: PublicLayoutShellPro
           <div className="md:hidden border-b border-border bg-background px-4 pt-2 pb-4 space-y-3 text-xs uppercase tracking-wider">
             <button
               onClick={() => handleNavClick('/')}
-              className="block w-full text-left py-2 font-bold"
+              className={`block w-full text-left py-2 font-bold ${
+                isNavActive('/') ? 'text-foreground underline' : 'text-muted-foreground'
+              }`}
             >
               {getLandingContent('nav.landing', locale)}
             </button>
             <button
               onClick={() => handleNavClick('/about')}
               aria-label="About page mobile"
-              className="block w-full text-left py-2 text-muted-foreground hover:text-foreground"
+              className={`block w-full text-left py-2 font-bold ${
+                isNavActive('/about') ? 'text-foreground underline' : 'text-muted-foreground'
+              }`}
             >
               {getLandingContent('nav.about', locale)}
             </button>
             <button
               onClick={() => handleNavClick('/privacy')}
               aria-label="Privacy page mobile"
-              className="block w-full text-left py-2 text-muted-foreground hover:text-foreground"
+              className={`block w-full text-left py-2 font-bold ${
+                isNavActive('/privacy') ? 'text-foreground underline' : 'text-muted-foreground'
+              }`}
             >
               {getLandingContent('nav.privacy', locale)}
             </button>
             <button
               onClick={() => handleNavClick('/terms')}
               aria-label="Terms page mobile"
-              className="block w-full text-left py-2 text-muted-foreground hover:text-foreground"
+              className={`block w-full text-left py-2 font-bold ${
+                isNavActive('/terms') ? 'text-foreground underline' : 'text-muted-foreground'
+              }`}
             >
               {getLandingContent('nav.terms', locale)}
             </button>
@@ -206,7 +261,7 @@ export function PublicLayoutShell({ children, onNavigate }: PublicLayoutShellPro
 
       {/* Public Footer */}
       <footer className="border-t border-border bg-background py-8 text-xs text-muted-foreground font-mono">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="max-w-[clamp(1000px,92vw,1400px)] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="flex flex-col space-y-1 text-center md:text-left">
             <p className="font-bold text-foreground">{getLandingContent('brand.logo.text', locale)}</p>
             <p>{getLandingContent('footer.copyright', locale)}</p>
@@ -262,3 +317,5 @@ export function PublicLayoutShell({ children, onNavigate }: PublicLayoutShellPro
     </div>
   );
 }
+
+export default PublicLayoutShell;

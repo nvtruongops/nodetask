@@ -19,7 +19,55 @@
 
 ---
 
-### 2. Bộ Quy Chuẩn CSS Theme Tokens (`globals.css`)
+### 1.1. Quy Tắc Xuống Hàng & Trình Bày Typography Chuyên Nghiệp (Professional Line Wrapping Rules)
+
+Để tránh việc xuống hàng ngắt đoạn thiếu thẩm mỹ hoặc từ bị mồ côi (Orphan words) trên tiêu đề và đoạn văn, toàn bộ UI Components BẮT BỘC tuân thủ:
+
+1. **Tiêu đề Hero & Headings (`h1`, `h2`, `h3`)**:
+   - **Bắt buộc dùng `[text-wrap:balance]`**: Tự động cân bằng chiều dài các dòng tiêu đề, triệt tiêu hoàn toàn hiện tượng 1 từ đơn độc bị rơi xuống dòng mới.
+   - **Giới hạn chiều rộng Tiêu đề**: Sử dụng `max-w-4xl` hoặc `max-w-5xl` để tiêu đề ngắt dòng tự nhiên thành 2-3 dòng cân đối trên màn hình lớn.
+   - **Line-height tiêu đề**: Dùng `leading-[1.15]` hoặc `leading-tight` tạo độ nén thẩm mỹ cho tiêu đề chữ lớn.
+
+2. **Văn bản Đoạn văn & Mô tả (`p`, `article`)**:
+   - **Bắt buộc dùng `[text-wrap:pretty]`**: Giúp trình duyệt ngắt dòng thông minh, tránh từ mồ côi ở cuối đoạn văn.
+   - **Độ dài dòng đọc chuẩn Ergonomic (`readingWidth`)**: Giới hạn tối đa `65ch` đến `80ch` (chuẩn `container.content` / `container.article`), CẤM để đoạn văn tràn full-width >1200px gây mỏi mắt.
+   - **Bảo tồn xuống hàng ngữ nghĩa (`whitespace-pre-line`)**: Khi hiển thị nội dung i18n có chứa ký tự xuống hàng `\n`, dùng `whitespace-pre-line` để ngắt ý tự nhiên.
+
+3. **Cơ Chế Rà Soát Ngắt Dòng Ngữ Nghĩa Đa Ngôn Ngữ (Multi-Language i18n Line Calibration)**:
+   - **Độ dài & Cấu trúc Từ vựng Đa ngôn ngữ**: Mỗi ngôn ngữ (Locale Dictionaries `<locale>.json`) có độ dài câu, số lượng âm tiết và cấu trúc ngữ pháp khác nhau.
+   - **Kỹ thuật Ngắt Dòng Ngữ Nghĩa (`\n`)**: Trong các tệp từ điển ngôn ngữ (`<locale>.json`), chủ động chèn ký tự `\n` tại các vị trí ngắt cụm từ / ngắt nhịp ngữ nghĩa tự nhiên của ngôn ngữ đó.
+   - **Kết hợp `whitespace-pre-line` + `[text-wrap:balance]`**: Component React BẮT BỘC tích hợp cặp utility này để vừa bảo tồn điểm ngắt dòng `\n` ngữ nghĩa từ dictionary, vừa tự động cân bằng dòng thị giác qua CSS engine.
+
+4. **Cấm (Anti-Patterns cho Line Wrapping)**:
+   - ❌ Tiêu đề chính bị rơi 1 từ cô độc (Orphan word) xuống dòng dưới.
+   - ❌ Bản dịch ngôn ngữ bị ngắt dòng giữa chừng cụm từ do không được hiệu chỉnh ký tự `\n` ngữ nghĩa trong dictionary.
+   - ❌ Đoạn văn bản mô tả tràn rộng >1000px trên 1 dòng duy nhất.
+   - ❌ Khoảng cách giữa các dòng quá dính (`leading-none` trên đoạn văn dài).
+
+---
+
+### 2. Bộ Quy Chuẩn Design Preferences Engine (`design_preferences.md`)
+
+Giao diện trong hệ thống `nodetask` bảo tốn tuyệt đối triết lý **Monochrome Zero-Icon**, không sử dụng màu sắc sặc sỡ mà quản lý dưới dạng **Hệ thống Tùy chọn Thiết kế Kỹ thuật (User Design Preferences Engine)** gồm 5 nhóm cấu hình (Grouped DTOs):
+
+1. **Appearance**: `light` | `dark` | `system` (Theme Monochrome Trắng/Đen).
+2. **Typography**: `mono` (Font monospace IBM Plex / JetBrains) | `sans` (Font Inter) | `serif` (Font Georgia).
+3. **Layout**:
+   - `density`: `compact` (Button 32px, Row 32px) | `comfortable` (Button 40px, Row 44px) | `relaxed` (Button 48px, Row 56px).
+   - `radius`: `sharp` (`0px`) | `small` (`4px`) | `medium` (`8px`) | `large` (`12px`).
+   - `border`: `none` | `thin` (`1px`) | `medium` (`1.5px`) | `heavy` (`2px`).
+   - `readingWidth`: `72ch` | `80ch` | `90ch` | `full`.
+4. **Accessibility**:
+   - `motion`: `off` | `reduced` | `normal` | `fast`.
+   - `contrast`: `normal` | `high` (Tương phản cao).
+   - `fontScale`: `small` | `normal` | `large` | `xl`.
+5. **Code Theme**: `github` | `vscodedark` | `monokai` | `onedark`.
+
+#### Preset Profiles Động (System & Custom Presets):
+- **`Developer System Preset`**: `dark`, `mono`, `compact`, `sharp`, `thin`, `full`, `normal`, `onedark`.
+- **`Writer System Preset`**: `light`, `sans`, `comfortable`, `medium`, `thin`, `72ch`, `normal`, `github`.
+- **`Researcher System Preset`**: `light`, `serif`, `comfortable`, `sharp`, `heavy`, `80ch`, `reduced`, `github`.
+- **`Custom User Presets`**: Người dùng có thể tạo, chỉnh sửa và quản lý các Preset cá nhân qua API `createCustomPreset()`.
 
 ```css
 @layer base {
@@ -58,10 +106,10 @@
 
 | Loại State | Giải pháp Công nghệ | Phạm vi & Trường hợp Sử dụng |
 | :--- | :--- | :--- |
-| **Global UI State** | **Zustand (`useTreeStore`, `useThemeStore`, `useLanguageStore`)** | Active Node ID, Sidebar Collapse, Selected Filter, Theme Mode (`dark`/`light`/`system`), Locale (`en`/`vi`). |
+| **Global UI State** | **Zustand (`useTreeStore`, `useThemeStore`, `useLanguageStore`)** | Active Node ID, Sidebar Collapse, Selected Filter, Design Preferences (`appearance`, `typography`, `density`, `radius`, `border`, `motion`), Locale (`en`/`vi`). |
 | **Server Data & Cache** | **TanStack Query** | Cached Tree Nodes, Todo Lists, Automatic Invalidation. |
 | **Local Form State** | **React Hook Form + Zod** | Form nhập liệu, Search Input. |
-| **Realtime Stream** | **WebSockets + React Query** | Đồng bộ sự kiện kéo thả & tick todo tức thì. |
+| **Realtime Stream** | **WebSockets + React Query** | Đồng bộ sự kiện kéo thả & theme preferences tức thì. |
 
 #### Quy tắc Optimistic UI Update (<16ms)
 1. **Cancel Queries** -> 2. **Snapshot Previous State** -> 3. **Mutate Local Cache Tức thì** -> 4. **Gửi API Request** -> 5. **Rollback nếu lỗi / Settled Refetch**.
@@ -112,4 +160,124 @@ Toàn bộ 13 file đặc tả trang bắt buộc phải đáp ứng **Bộ Quy 
 8. **Component Inventory & Tree**: Danh sách Component nguyên tử (Atoms/Molecules/Organisms) và Cây Component Zero-Icon.
 9. **Error Mapping & Handling**: Bảng tra cứu mã lỗi HTTP/RPC (401, 403, 404, 409, 422, 429, 500), UI Content Key và luồng khôi phục lỗi.
 10. **Acceptance Criteria & QA Scenarios**: Kịch bản kiểm thử chất lượng chuẩn Gherkin (`Given-When-Then`).
+
+---
+
+### 6. Hệ Thống Layout System & Container Tokens (Fluid & Clamped Layout Architecture)
+
+Hệ thống UI không sử dụng hardcode `max-w-7xl` tràn lan, mà quản lý theo **Layout Classification Matrix** và **Container Tokens** với CSS `clamp()` / `min()` linh hoạt:
+
+#### 6.1. Phân loại Loại Layout (Layout Types)
+```text
+Layout System
+├── Marketing     (Landing Page: clamp(1000px, 92vw, 1400px))
+├── Content       (Blog, Story, About Page: 80ch)
+├── Documentation (Privacy, Terms, Spec Docs: 72ch)
+├── Dashboard     (Analytics, System Matrix: clamp(1200px, 94vw, 1600px))
+├── Workspace     (IDE Canvas, Node Graph: Canvas flex-1, Form panel max-900px)
+└── Modal         (Form Overlays: max-w-lg / max-w-2xl)
+```
+
+#### 6.2. Bộ Container Tokens & CSS Rules
+| Token Name | Cấu hình Max Width | Trường hợp Sử dụng |
+| :--- | :--- | :--- |
+| `container.content` | `72ch` (~65-80 ký tự/dòng) | Văn bản điều khoản, bảo mật, tài liệu đọc dài |
+| `container.article` | `80ch` | Trang Giới thiệu, Blog, Bài viết câu chuyện |
+| `container.marketing` | `clamp(1000px, 92vw, 1400px)` | Hero & Feature Matrix trang Landing |
+| `container.wide` | `clamp(1200px, 94vw, 1600px)` | Trang Dashboard, Bảng thông số kỹ thuật rộng |
+| `container.workspace_form` | `max-w-[900px] mx-auto` | Form khởi tạo Project/Settings nằm giữa Workspace Canvas |
+
+#### 6.3. Quy chuẩn Kích thước Sidebar & Layout Workspace (IDE Pattern)
+- Tuyệt đối **KHÔNG** chia % màn hình cứng cho Sidebar (tránh 4K bị phình quá 700px).
+- **Sidebar Navigation**: Cố định / Clamped `280px` (`min: 220px`, `max: 360px`).
+- **Property Panel**: Cố định / Resizable `340px`.
+- **Main Canvas / AST Editor**: Sử dụng `flex-1` chiếm toàn bộ phần diện tích còn lại.
+
+---
+
+### 7. Thư Viện Layout & High-Level Pattern Components (Layout & Pattern System)
+
+Thay vì chỉ định nghĩa các Component nguyên tử cấp thấp (`Button`, `Input`, `Dialog`), hệ thống Design System của nodetask quy định bộ thư viện **Layout & Pattern Components cấp cao** tạo sự khác biệt lớn về trải nghiệm (UX) và bản sắc thị giác (Brand Identity):
+
+| Layout Component | Vai trò & Mục đích Trải nghiệm (UX Impact) | Trang Sử dụng Nòng cốt |
+| :--- | :--- | :--- |
+| `Hero` | Khối tiêu đề mở đầu tạo ấn tượng thị giác (Above-the-fold thesis), chứa Badge, Value Headline, Subheading & CTAs | Landing, About, Privacy, Terms |
+| `EditorialGrid` | Bố cục 2 cột biên tập kỹ thuật kết hợp Sticky Sidebar & bài viết chính cuộn tự nhiên | Privacy, Documentation Specs |
+| `MetricsGrid` | Lưới 4 card thông số giá trị / chỉ số hệ thống nhanh | Privacy, Dashboard, Terms |
+| `SpecificationPanel` | Khối thông số điều khoản/kỹ thuật bọc trong viền monochrome sắc nét | Terms, About, System Docs |
+| `ValueComparisonTable` | Bảng so sánh giá trị người dùng quan tâm (User Value Needs) mapped với công nghệ phía sau | Landing Page |
+| `StickySidebar` | Thanh mục lục cố định tự động highlight `[▸]` vị trí cuộn trang qua `IntersectionObserver` | Privacy, Architecture Specs |
+| `Timeline` | Trình diễn dòng thời gian cột mốc phát triển hoặc tiến trình khôi phục sự cố | About, Release Notes |
+| `SplitShowcase` | Bố cục chia đôi 50/50 giữa khối mô tả giá trị và khối minh họa tính năng | Feature Matrix, Demo Page |
+| `BentoGrid` | Lưới bento bất đối xứng làm nổi bật các tính năng lợi ích trụ cột | Terms, Landing Features |
+
+---
+
+### 7.1. Khung Nguyên Tắc Phân Cấp Thông Điệp Sản Phẩm (Value-First Product Hierarchy Framework)
+
+Mọi trang trong hệ thống **KHÔNG CỐ ĐỊNH THEO TÊN NGUYÊN THỦY CỤ THỂ**, mà bắt buộc phân định trật tự nội dung và intent theo **5 Page Archetypes tổng quát**:
+
+1. **`Marketing & Showcase` Archetype (Ví dụ: Trang Chủ, Bảng Giá, Demo Sản Phẩm, Giới Thiệu Tính Năng)**:
+   - **Độc giả chính**: Khách hàng, Người dùng cuối, Khách vãng lai.
+   - **Trật tự thông điệp BẮT BỘC**: **Giá trị Sản phẩm (Product Value) → Vấn đề & Giải pháp (Problem & Solution) → Tính năng & Lợi ích (User Benefits) → Bằng chứng Kỹ thuật (Technical Proof Points)**.
+   - **Quy tắc Hero**: Hero BẮT BỘC tập trung trả lời 5 câu hỏi cốt lõi (*Sản phẩm là gì? Giải quyết vấn đề gì? Tại sao nên dùng? Khác biệt gì? Bắt đầu như thế nào?*). CẤM đưa tên thuật ngữ công nghệ backend thô (`ltree`, `pgvector`, `Serverpod`, `OCC`) làm Tiêu đề Hero chính.
+   - **Quy tắc So sánh**: Bảng so sánh (`ValueComparisonTable`) phải so sánh **Giá trị Người dùng quan tâm** (mapped với công nghệ phía dưới), CẤM so sánh thô các xâu công nghệ.
+
+2. **`Story & Organization` Archetype (Ví dụ: Trang Giới Thiệu, Sứ Mệnh Đội Ngũ, Engineering Story, Release Notes)**:
+   - **Độc giả chính**: Developers, Nhà đầu tư, Cộng đồng công nghệ, Nhân sự.
+   - **Trật tự thông điệp BẮT BỘC**: **Sứ mệnh & Tầm nhìn → Câu chuyện Sản phẩm → Quyết định Kiến trúc Kỹ thuật (Why Tech X?) → Cột mốc & Roadmap**.
+
+3. **`Documentation & Legal Spec` Archetype (Ví dụ: Chính Sách Bảo Mật, Điều Khoản Dịch Vụ, Trung Tâm Tin Cậy, API Specs)**:
+   - **Độc giả chính**: Đội ngũ Pháp lý, Enterprise Security Auditors, Người dùng tra cứu.
+   - **Trật tự thông điệp BẮT BỘC**: **Metadata Control Bar → Executive Summary → Granular Clauses/Specifications → Compliance Commitments**.
+   - **Quy tắc Bố cục**: Bắt buộc sử dụng `EditorialGrid` kết hợp `StickySidebar` / `InteractiveTabSwitcher` cho khả năng định vị nội dung mượt mà.
+
+4. **`Auth & Form Focus` Archetype (Ví dụ: Đăng Nhập, Đăng Ký, Quên Mật Khẩu, Chấp Nhận Lời Mời, Tài Khoản Vô Hiệu)**:
+   - **Độc giả chính**: Người dùng đang Onboarding hoặc Đăng nhập lại.
+   - **Trật tự thông điệp BẮT BỘC**: **Brand Logo/Badge → Main Form Action → Real-time Inline Validation / Status → Secondary Recovery Navigation**.
+   - **Quy tắc Bố cục**: Container card cố định `max-w-[480px]`, 100% Zero-Icon form, focus rings tương phản cao.
+
+5. **`Workspace & IDE Canvas` Archetype (Ví dụ: Workspace Chính, Cây Tài Liệu Canvas, Bảng Cấu Hình Settings)**:
+   - **Độc giả chính**: Thành viên Workspace active, Người tạo nội dung.
+   - **Trật tự thông điệp BẮT BỘC**: **Navigation Tree Hierarchy → Main Document Canvas → Contextual Inspector Panel**.
+   - **Quy tắc Bố cục**: Clamped sidebar (`280px`), Main canvas (`flex-1`), Optimistic UI updates <16ms.
+
+---
+
+### 8. Ma Trận Pattern Bắt Buộc & Anti-Patterns Theo Archetype Trang (Archetype -> Pattern Matrix)
+
+Mọi trang trong hệ thống (hiện tại và tương lai) BẮT BỘC phải tự định danh thuộc 1 trong các **Page Archetypes** dưới đây trong file đặc tả `docs/page_routes/<route_name>.md` và tuân thủ Ma trận Pattern tương ứng:
+
+| Page Archetype | Required Pattern Components (MUST) | Archetype Anti-Patterns (MUST NOT) |
+| :--- | :--- | :--- |
+| **`Marketing & Showcase`** | `Hero` (Value Headline) + `MetricsGrid` + `ValueComparisonTable` + `BentoGrid` + `SectionDivider` + `CTA` + `Footer` | ❌ Hero nhồi nhét tên công nghệ backend, ❌ Single centered column, ❌ Khoảng trắng chết >30vh |
+| **`Documentation & Legal Spec`** | `Hero` + `MetricsGrid` / `BentoGrid` + `EditorialGrid` / `InteractiveTabSwitcher` + `StickySidebar` + `SpecificationPanel` | ❌ 1 cột cuộn dọc đơn điệu không Sidebar/Tab, ❌ Thiếu thẻ chỉ số, ❌ Thiếu hộp cam kết |
+| **`Story & Organization`** | `Hero` + `Timeline` + `SplitShowcase` + `TechnicalCard` + `SpecificationPanel` | ❌ Chỉ có văn bản thuần túy, ❌ Thiếu vạch thời gian cột mốc (`Timeline`), ❌ Thiếu sơ đồ kiến trúc |
+| **`Auth & Form Focus`** | `AuthCard` + `CenterContainer` (`max-w-[480px]`) + `ZeroIconForm` + `BrandLogo` | ❌ Form dãn tràn full-width >600px, ❌ Thiếu focus ring, ❌ Dán icon bên trong input |
+| **`Workspace & IDE Canvas`** | `ClampedSidebar` (`280px`) + `ResizablePropertyPanel` (`340px`) + `MainCanvas` (`flex-1`) + `CenterFormPanel` (`max-w-[900px]`) | ❌ Chia % màn hình cứng cho Sidebar (700px trên 4K), ❌ Form cài đặt tràn 4000px |
+
+
+
+---
+
+### 9. Quyền Hạn Tái Cấu Trúc Bố Cục (Refactor Permission & Creative Authority)
+
+Khi thực thi hoặc bảo trì giao diện:
+1. **AI Agent CÓ TOÀN QUYỀN VÀ BẮT BỘC Refactor Layout**: Nếu trang hiện tại chưa đáp ứng Ma trận Pattern (`Route -> Required Pattern Matrix`), Agent **KHÔNG ĐƯỢC CHỈ SỬA VỤN VẶT VĂN BẢN/COLOR**. Agent phải chủ động tái cấu trúc lại toàn bộ Layout để đạt tiêu chuẩn Pattern Matrix.
+2. **Quyền linh hoạt mở rộng**: AI Agent được phép tự do chia lại cột, thêm Section, đổi dạng Grid và thiết kế mới Hero nếu điều đó giúp tăng thẩm mỹ và trải nghiệm UI/UX.
+
+---
+
+### 10. Tiêu Chí Duyệt Giao Diện (UI Review Checklist)
+
+Trước khi công bố hoàn tất task Frontend, AI Agent BẮT BỘC thực hiện kiểm tra tự duyệt UI:
+
+- [ ] **Pattern Matrix**: Trang đã chứa đủ 100% các Pattern Component bắt buộc theo Route Matrix chưa?
+- [ ] **Visual Rhythm**: Có nhịp điệu thị giác (xen kẽ giữa Grid, Bento, Table, Callout) thay vì 1 cột phẳng lặp đi lặp lại không?
+- [ ] **No Dead Space**: Có khoảng trắng chết (>30vh) nào bị lãng phí không?
+- [ ] **Anti-Pattern Check**: Trang có vi phạm bất kỳ cờ MUST NOT nào trong Route Anti-Pattern không?
+- [ ] **Governance Verification**: Đã chạy `node .agents/scripts/verify.js --strict` và đạt PASS (0 Errors)?
+
+
+
 

@@ -1,3 +1,6 @@
+<!-- Target FE Component: apps/web/src/features/auth/ForgotPasswordPage.tsx -->
+<!-- Target Runtime URL: http://localhost:5173/#/auth/forgot-password -->
+
 # Auth Forgot Password Page Route Specification (`auth_forgot_password.md`)
 
 > **Route ID**: `AUTH_FORGOT_PASSWORD`  
@@ -37,12 +40,13 @@
 - **Title Tag**: `<title>Reset Password Request - nodetask</title>`
 - **Meta Description**: `Yêu cầu đặt lại mật khẩu cho tài khoản nodetask.`
 - **Keywords**: `nodetask forgot password, reset password request`
-- **Canonical URL**: `https://nodetask.io/auth/forgot-password`
+- **Canonical URL**: `/#/auth/forgot-password`
 - **OpenGraph Specification**:
-  - `og:title`: `Reset Password Request - nodetask`
-  - `og:description`: `Đặt lại mật khẩu tài khoản nodetask.`
-  - `og:image`: `https://nodetask.io/og-auth.png`
+  - `og:title`: `Forgot Password - nodetask`
+  - `og:description`: `Yêu cầu cấp lại mật khẩu đăng nhập nodetask.`
+  - `og:image`: `/og-auth.png`
   - `og:type`: `website`
+  - `og:url`: `/#/auth/forgot-password`
 - **Twitter Card Specification**:
   - `twitter:card`: `summary`
   - `twitter:title`: `Reset Password - nodetask`

@@ -1,6 +1,35 @@
 const path = require('path');
 const meta = require('./meta.json');
 
+function extractSectionContent(fullContent, sectionName) {
+  const lines = fullContent.split('\n');
+  let inSection = false;
+  let sectionLines = [];
+
+  const mainKeyword = sectionName.split('&')[0].trim().toLowerCase();
+
+  for (const line of lines) {
+    const isHeading = /^#{1,4}\s+(.+)$/.test(line);
+    if (isHeading) {
+      const headingText = line.replace(/^#{1,4}\s+/, '').trim();
+      const headingLevel = (line.match(/^#{1,4}/) || ['#'])[0].length;
+
+      if (headingText.toLowerCase().includes(mainKeyword)) {
+        inSection = true;
+        continue;
+      } else if (inSection && headingLevel <= 2) {
+        // Only terminate if we hit another level 1 or level 2 heading
+        break;
+      }
+    }
+    if (inSection) {
+      sectionLines.push(line);
+    }
+  }
+
+  return sectionLines.join('\n');
+}
+
 module.exports = {
   meta,
   async execute(ctx) {
@@ -13,19 +42,19 @@ module.exports = {
       return { passed: true };
     }
 
-    const requiredSections = policy.requiredSections || [
-      'Overview & Route ID',
-      'Route Config & Navigation Metadata',
-      'SEO & Social Meta Specification',
-      'Loading Strategy & Code Splitting',
-      'Permission Matrix & RBAC',
-      'API Dependency & Serverpod RPC',
-      'Page State Machine & UI Transitions',
-      'Component Inventory & Tree',
-      'Error Mapping & Handling',
-      'Acceptance Criteria & QA Scenarios',
-      'Accessibility'
-    ];
+    const sectionRules = {
+      'Overview & Route ID': { mustContain: ['Route ID'] },
+      'Route Config & Navigation Metadata': { mustContain: ['URL Path'] },
+      'SEO & Social Meta Specification': { mustContain: ['Title'] },
+      'Loading Strategy & Code Splitting': { mustContain: ['Lazy Load'] },
+      'Permission Matrix & RBAC': { mustContain: ['GUEST', 'USER'] },
+      'API Dependency & Serverpod RPC': { mustContain: ['RPC'] },
+      'Page State Machine & UI Transitions': { mustContain: ['IDLE'] },
+      'Component Inventory & Tree': { mustContain: ['Component'] },
+      'Error Mapping & Handling': { mustContain: ['Error'] },
+      'Acceptance Criteria & QA Scenarios': { mustContain: ['Scenario:'] },
+      'Accessibility': { mustContain: ['a11y'] }
+    };
 
     const files = ctx.fs.readdirSync(targetDir).filter(f => f.endsWith('.md'));
     if (files.length === 0) {
@@ -38,21 +67,38 @@ module.exports = {
     for (const file of files) {
       const filePath = path.join(targetDir, file);
       const content = ctx.fs.readFileSync(filePath, 'utf8');
+      const headings = (content.match(/^#{1,4}\s+(.+)$/gm) || []).map(h => h.replace(/^#{1,4}\s+/, '').trim());
 
-      const headings = (content.match(/^#{1,4}\s+(.+)$/gm) || [])
-        .map(h => h.replace(/^#{1,4}\s+/, '').trim());
+      let fileViolations = [];
 
-      const missingSections = requiredSections.filter(sec => {
-        // Extract key search terms for flexible section matching
-        const keywords = sec.split('&')[0].trim().toLowerCase();
-        return !headings.some(h => h.toLowerCase().includes(keywords));
-      });
+      for (const [secName, rules] of Object.entries(sectionRules)) {
+        const keywords = secName.split('&')[0].trim().toLowerCase();
+        const hasHeading = headings.some(h => h.toLowerCase().includes(keywords));
 
-      if (missingSections.length > 0) {
-        ctx.logger.warn(`File docs/page_routes/${file} thiếu ${missingSections.length} sections bắt buộc: ${missingSections.join(', ')}`);
-        totalViolations++;
+        if (!hasHeading) {
+          fileViolations.push(`Thiếu Section [${secName}]`);
+          continue;
+        }
+
+        const secContent = extractSectionContent(content, secName);
+        if (!secContent || secContent.trim().length === 0 || secContent.trim() === 'TODO' || secContent.trim() === 'later') {
+          fileViolations.push(`Section [${secName}] rỗng hoặc chỉ chứa placeholder TODO/later`);
+          continue;
+        }
+
+        if (rules.mustContain) {
+          const missingKeywords = rules.mustContain.filter(kw => !secContent.includes(kw));
+          if (missingKeywords.length > 0) {
+            fileViolations.push(`Section [${secName}] thiếu từ khóa/contract bắt buộc: ${missingKeywords.map(k => `'${k}'`).join(', ')}`);
+          }
+        }
+      }
+
+      if (fileViolations.length > 0) {
+        ctx.logger.warn(`File docs/page_routes/${file} phát hiện ${fileViolations.length} lỗi vi phạm Contract:\n  - ${fileViolations.join('\n  - ')}`);
+        totalViolations += fileViolations.length;
       } else {
-        ctx.logger.pass(`File docs/page_routes/${file} tuân thủ 100% 10-Point Specification Contract Schema.`);
+        ctx.logger.pass(`File docs/page_routes/${file} tuân thủ 100% Specification Contract Schema.`);
       }
     }
 
@@ -63,4 +109,3 @@ module.exports = {
     return { passed: totalViolations === 0 };
   }
 };
-

@@ -1,3 +1,6 @@
+<!-- Target FE Component: apps/web/src/features/auth/ResetPasswordPage.tsx -->
+<!-- Target Runtime URL: http://localhost:5173/#/auth/reset-password -->
+
 # Auth Reset Password Page Route Specification (`auth_reset_password.md`)
 
 > **Route ID**: `AUTH_RESET_PASSWORD`  
@@ -37,11 +40,12 @@
 - **Title Tag**: `<title>Set New Password - nodetask</title>`
 - **Meta Description**: `Thiết lập mật khẩu mới cho tài khoản nodetask.`
 - **Keywords**: `nodetask reset password, confirm reset token`
-- **Canonical URL**: `https://nodetask.io/auth/reset-password`
+- **Canonical URL**: `/#/auth/reset-password`
 - **OpenGraph Specification**:
-  - `og:title`: `Set New Password - nodetask`
-  - `og:description`: `Cập nhật mật khẩu mới.`
-  - `og:image`: `https://nodetask.io/og-auth.png`
+  - `og:title`: `Reset Password - nodetask`
+  - `og:description`: `Thiết lập mật khẩu mới cho tài khoản nodetask.`
+  - `og:image`: `/og-auth.png`
+  - `og:type`: `website`
 - **Twitter Card Specification**:
   - `twitter:card`: `summary`
   - `twitter:title`: `Set New Password - nodetask`
@@ -78,8 +82,9 @@
 
 ## 7. Page State Machine & UI Transitions
 - **State Machine Flow**:
-  `VALIDATING_TOKEN` → `TOKEN_VALID` (Show Form) → `SUBMITTING` → `SUCCESS` (Redirect `/auth/login`) | `TOKEN_INVALID`
+  `IDLE` → `VALIDATING_TOKEN` → `TOKEN_VALID` (Show Form) → `SUBMITTING` → `SUCCESS` (Redirect `/auth/login`) | `TOKEN_INVALID`
 - **UI State Breakdown**:
+  - `IDLE`: Khởi tạo state machine.
   - `VALIDATING_TOKEN`: Đang kiểm tra token trên URL.
   - `TOKEN_VALID`: Token hợp lệ, hiển thị Form nhập mật khẩu mới.
   - `TOKEN_INVALID`: Token đã hết hạn hoặc không hợp lệ, hiển thị nút yêu cầu gửi lại link.

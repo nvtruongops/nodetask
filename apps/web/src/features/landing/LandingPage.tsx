@@ -30,8 +30,8 @@ export function LandingPage({ onNavigate }: LandingPageProps) {
 
 
   return (
-    <PublicLayoutShell onNavigate={handleNavigate}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-24 py-12 md:py-20 font-mono">
+    <PublicLayoutShell currentPath="/" onNavigate={handleNavigate}>
+      <div className="max-w-[clamp(1000px,92vw,1400px)] mx-auto px-4 sm:px-6 lg:px-8 space-y-24 py-12 md:py-20 font-mono">
         {/* Hero Section */}
         <section className="min-h-[70vh] flex flex-col items-center justify-center text-center space-y-8 max-w-4xl mx-auto pt-8">
           {/* Hero Badge */}
@@ -40,12 +40,12 @@ export function LandingPage({ onNavigate }: LandingPageProps) {
           </div>
 
           {/* Hero Main Heading */}
-          <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.15] uppercase max-w-4xl lg:max-w-5xl mx-auto [text-wrap:balance]">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.15] uppercase max-w-4xl lg:max-w-5xl mx-auto whitespace-pre-line [text-wrap:balance]">
             {getLandingContent('hero.heading', locale)}
           </h1>
 
           {/* Hero Subheading */}
-          <p className="text-sm sm:text-lg text-muted-foreground max-w-2xl font-normal leading-relaxed">
+          <p className="text-sm sm:text-lg text-muted-foreground max-w-2xl font-normal leading-relaxed [text-wrap:pretty]">
             {getLandingContent('hero.subheading', locale)}
           </p>
 

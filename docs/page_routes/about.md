@@ -1,3 +1,6 @@
+<!-- Target FE Component: apps/web/src/features/about/AboutPage.tsx -->
+<!-- Target Runtime URL: http://localhost:5173/#/about -->
+
 # About Page Route Specification (`about.md`)
 
 > **Route ID**: `ABOUT_MAIN`  
@@ -13,7 +16,7 @@
 ## 1. Overview & Route ID
 - **Route ID**: `ABOUT_MAIN` (Dùng cho Analytics, Breadcrumb, Logging, Event Tracking, RBAC)
 - **Route Name**: `about.main`
-- **Description**: Trang Giới thiệu (`/about`) trình bày sứ mệnh, kiến trúc kỹ thuật (ltree, Serverpod, Tiptap, Zero-Icon UI, pgvector), và tầm nhìn của nodetask đến cộng đồng developer và tổ chức.
+- **Description**: Trang Giới thiệu (`/about`) dành cho Developer, Nhà đầu tư và Cộng đồng công nghệ, đóng vai trò trình bày **Sứ mệnh Sản phẩm, Tầm nhìn và Các Quyết định Kiến trúc Kỹ thuật (Engineering Story & Tech Decisions)**: Lý do lựa chọn Dart Serverpod RPC, thuật toán cây PostgreSQL `ltree`, định dạng Tiptap JSON AST, công nghệ AI RAG `pgvector` HNSW và triết lý thiết kế giao diện tối giản Monochrome Zero-Icon.
 
 ---
 
@@ -37,12 +40,13 @@
 - **Title Tag**: `<title>About nodetask - Architecture & Core Principles</title>`
 - **Meta Description**: `Tìm hiểu sứ mệnh, triết lý thiết kế Monochrome Zero-Icon và kiến trúc Monorepo nodetask.`
 - **Keywords**: `about nodetask, nodetask architecture, zero-icon design, ltree hierarchy`
-- **Canonical URL**: `https://nodetask.io/about`
+- **Canonical URL**: `/#/about`
 - **OpenGraph Specification**:
-  - `og:title`: `About nodetask - Architecture & Vision`
-  - `og:description`: `Kiến trúc và triết lý sản phẩm nodetask.`
-  - `og:image`: `https://nodetask.io/og-about.png`
+  - `og:title`: `About Us - nodetask`
+  - `og:description`: `Tầm nhìn, sứ mệnh và câu chuyện phát triển nền tảng nodetask.`
+  - `og:image`: `/og-about.png`
   - `og:type`: `website`
+  - `og:url`: `/#/about`
 - **Twitter Card Specification**:
   - `twitter:card`: `summary_large_image`
   - `twitter:title`: `About nodetask`
@@ -87,6 +91,14 @@
 ---
 
 ## 8. Component Inventory & Tree
+
+### Required Pattern Components (MUST)
+- `Hero` + `Timeline` + `SplitShowcase` + `TechnicalCard` + `SpecificationPanel`
+
+### Route Anti-Patterns (MUST NOT)
+- ❌ Chỉ có văn bản thuần túy thiếu phân cấp thị giác.
+- ❌ Thiếu vạch thời gian cột mốc kiến trúc `Timeline`.
+- ❌ Thiếu sơ đồ luồng dữ liệu kiến trúc `SpecificationPanel`.
 
 ### Component Inventory List
 - `PublicLayoutShell`: Organism bọc Header/Footer.

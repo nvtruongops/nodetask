@@ -1,3 +1,6 @@
+<!-- Target FE Component: apps/web/src/features/demo/DemoPage.tsx -->
+<!-- Target Runtime URL: http://localhost:5173/#/demo -->
+
 # Demo Page Route Specification (`demo.md`)
 
 > **Route ID**: `DEMO_MAIN`  
@@ -37,11 +40,12 @@
 - **Title Tag**: `<title>Interactive Demo - Try nodetask Sandbox</title>`
 - **Meta Description**: `Dùng thử môi trường quản lý cây tài liệu và trình soạn thảo Tiptap nodetask ngay trên trình duyệt.`
 - **Keywords**: `nodetask demo, interactive sandbox, zero-icon editor, tiptap demo`
-- **Canonical URL**: `https://nodetask.io/demo`
+- **Canonical URL**: `/#/demo`
 - **OpenGraph Specification**:
-  - `og:title`: `Interactive Demo - nodetask Sandbox`
-  - `og:description`: `Dùng thử giao diện Monochrome Zero-Icon không cần tạo tài khoản.`
-  - `og:image`: `https://nodetask.io/og-demo.png`
+  - `og:title`: `Interactive Demo - nodetask`
+  - `og:description`: `Trải nghiệm tính năng quản lý tri thức nodetask.`
+  - `og:image`: `/og-demo.png`
+  - `og:type`: `website`
 - **Twitter Card Specification**:
   - `twitter:card`: `summary_large_image`
   - `twitter:title`: `nodetask Interactive Demo`

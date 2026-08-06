@@ -1,3 +1,6 @@
+<!-- Target FE Component: apps/web/src/features/auth/RegisterPage.tsx -->
+<!-- Target Runtime URL: http://localhost:5173/#/auth/register -->
+
 # Auth Register Page Route Specification (`auth_register.md`)
 
 > **Route ID**: `AUTH_REGISTER`  
@@ -37,13 +40,13 @@
 - **Title Tag**: `<title>Create Account - nodetask</title>`
 - **Meta Description**: `Đăng ký tài khoản nodetask để trải nghiệm không gian quản lý tài liệu tối giản Monochrome.`
 - **Keywords**: `nodetask register, create account, sign up, zero-icon workspace`
-- **Canonical URL**: `https://nodetask.io/auth/register`
+- **Canonical URL**: `/#/auth/register`
 - **OpenGraph Specification**:
   - `og:title`: `Create Account - nodetask`
-  - `og:description`: `Khởi tạo không gian tài liệu nodetask.`
-  - `og:image`: `https://nodetask.io/og-auth.png`
+  - `og:description`: `Đăng ký tài khoản không gian tri thức nodetask.`
+  - `og:image`: `/og-auth.png`
   - `og:type`: `website`
-  - `og:url`: `https://nodetask.io/auth/register`
+  - `og:url`: `/#/auth/register`
 - **Twitter Card Specification**:
   - `twitter:card`: `summary`
   - `twitter:title`: `Create Account - nodetask`

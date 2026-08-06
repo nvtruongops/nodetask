@@ -1,3 +1,6 @@
+<!-- Target FE Component: apps/web/src/features/auth/LoginPage.tsx -->
+<!-- Target Runtime URL: http://localhost:5173/#/auth/login -->
+
 # Auth Login Page Route Specification (`auth_login.md`)
 
 > **Route ID**: `AUTH_LOGIN`  
@@ -37,13 +40,13 @@
 - **Title Tag**: `<title>Sign In - nodetask</title>`
 - **Meta Description**: `Đăng nhập vào nodetask để quản lý không gian tài liệu và tri thức cá nhân/tổ chức.`
 - **Keywords**: `nodetask login, sign in, authentication, zero-icon auth`
-- **Canonical URL**: `https://nodetask.io/auth/login`
+- **Canonical URL**: `/#/auth/login`
 - **OpenGraph Specification**:
   - `og:title`: `Sign In - nodetask`
   - `og:description`: `Đăng nhập vào không gian tri thức nodetask.`
-  - `og:image`: `https://nodetask.io/og-auth.png`
+  - `og:image`: `/og-auth.png`
   - `og:type`: `website`
-  - `og:url`: `https://nodetask.io/auth/login`
+  - `og:url`: `/#/auth/login`
 - **Twitter Card Specification**:
   - `twitter:card`: `summary`
   - `twitter:title`: `Sign In - nodetask`
