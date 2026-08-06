@@ -1,0 +1,18 @@
+name: testing
+version: 1.0.0
+description: Skill tự động sinh Unit Test, Integration Test và Widget Test cho hệ thống.
+minGovernanceVersion: 1.4.0
+priority: 70
+capabilities:
+  - test:unit
+  - test:integration
+  - test:widget
+executionMode: sequential
+parameters:
+  target_file:
+    type: string
+input_schema:
+  source_code: string
+output_schema:
+  test_file_path: string
+  test_cases_count: integer

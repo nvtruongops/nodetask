@@ -1,0 +1,10 @@
+{
+  "id": "LINT_ISSUES",
+  "enabled": true,
+  "category": "STYLE",
+  "severity": "WARNING",
+  "checkUnusedImports": true,
+  "checkUnreachableCode": true,
+  "checkEmptyCatch": true,
+  "checkFloatingPromises": true
+}

@@ -1,0 +1,17 @@
+name: minimalist-no-icon-ui
+version: 1.0.0
+description: Nguyên tắc thiết kế giao diện UI/UX tối giản tuyệt đối, KHÔNG DÙNG ICON, tuân thủ Monochrome.
+minGovernanceVersion: 1.4.0
+priority: 95
+capabilities:
+  - ui:zero-icon
+  - ui:monochrome
+  - ui:text-labels
+executionMode: exclusive
+parameters: {}
+input_schema:
+  component_code: string
+output_schema:
+  icon_count: integer
+  emoji_count: integer
+  is_valid: boolean

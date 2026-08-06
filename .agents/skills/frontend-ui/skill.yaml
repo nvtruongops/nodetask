@@ -1,0 +1,21 @@
+name: frontend-ui
+version: 1.0.0
+description: Skill thực thi mã nguồn Web Frontend với React, Vite, Tailwind CSS tuân thủ Design System & Container Tokens.
+minGovernanceVersion: 1.4.0
+priority: 75
+capabilities:
+  - fe:react
+  - fe:vite
+  - fe:tailwind
+  - fe:tiptap
+  - fe:dnd-kit
+  - fe:shadcn-ui
+executionMode: sequential
+parameters:
+  component_name:
+    type: string
+input_schema:
+  component_path: string
+output_schema:
+  uses_container_token: boolean
+  has_no_hardcoded_maxw: boolean

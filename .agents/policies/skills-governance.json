@@ -1,0 +1,17 @@
+{
+  "id": "SKILLS_GOVERNANCE",
+  "enabled": true,
+  "category": "ARCHITECTURE",
+  "severity": "ERROR",
+  "description": "Validates that all local skills have a valid skill.yaml manifest, valid Semantic Versioning, capabilities matrix, and priority score matching registry.json.",
+  "expectedMinGovernanceVersion": "1.4.0",
+  "requiredManifestFields": [
+    "name",
+    "version",
+    "description",
+    "minGovernanceVersion",
+    "priority",
+    "capabilities",
+    "executionMode"
+  ]
+}

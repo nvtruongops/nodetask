@@ -18,6 +18,18 @@ class RuleLoader {
     return { schemaVersion: 1, governanceVersion: '2.0.0' };
   }
 
+  static loadRegistry(rootDir) {
+    const registryPath = path.join(rootDir, '.agents/registry.json');
+    if (fs.existsSync(registryPath)) {
+      try {
+        return JSON.parse(fs.readFileSync(registryPath, 'utf8'));
+      } catch (err) {
+        console.error(`⚠️ Unable to parse registry.json: ${err.message}`);
+      }
+    }
+    return { schemaVersion: 1, registryVersion: '1.4.0', skills: {} };
+  }
+
   static loadPolicies(rootDir) {
     const policiesDir = path.join(rootDir, '.agents/policies');
     const policies = {};

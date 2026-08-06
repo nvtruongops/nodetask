@@ -1,0 +1,17 @@
+name: git-pr
+version: 1.0.0
+description: Skill hỗ trợ review Pull Request, tự động tạo CHANGELOG và tóm tắt file thay đổi.
+minGovernanceVersion: 1.4.0
+priority: 50
+capabilities:
+  - git:pr-review
+  - git:changelog
+  - git:diff-summary
+executionMode: sequential
+parameters:
+  branch_name:
+    type: string
+input_schema:
+  diff_content: string
+output_schema:
+  changelog_markdown: string

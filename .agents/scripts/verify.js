@@ -23,6 +23,7 @@ const ruleFilter = (args.find(a => a.startsWith('--rule=')) || '').split('=')[1]
 
 async function run() {
   const manifest = RuleLoader.loadManifest(ROOT_DIR);
+  const registry = RuleLoader.loadRegistry(ROOT_DIR);
   const policies = RuleLoader.loadPolicies(ROOT_DIR);
   let rules = RuleLoader.discoverRules(ROOT_DIR);
 
@@ -42,6 +43,7 @@ async function run() {
   const context = new RuleContext({
     workspaceRoot: ROOT_DIR,
     manifest,
+    registry,
     policies
   });
 

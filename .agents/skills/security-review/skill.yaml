@@ -1,0 +1,19 @@
+name: security-review
+version: 1.0.0
+description: Skill kiểm tra an toàn thông tin, bảo mật Token, CSRF, XSS, SQLi và Audit Logging.
+minGovernanceVersion: 1.4.0
+priority: 100
+capabilities:
+  - sec:token-auth
+  - sec:csrf
+  - sec:xss
+  - sec:sqli
+  - sec:rbac
+  - sec:audit-log
+executionMode: exclusive
+parameters: {}
+input_schema:
+  code_snippet: string
+output_schema:
+  vulnerabilities: array
+  is_secure: boolean

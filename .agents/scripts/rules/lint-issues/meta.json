@@ -1,0 +1,12 @@
+{
+  "id": "LINT_ISSUES",
+  "name": "Static Code Analysis & Lint Issues Check",
+  "category": "STYLE",
+  "severity": "WARNING",
+  "version": "1.0.0",
+  "dependsOn": [],
+  "parallelizable": true,
+  "supportsFix": false,
+  "estimatedCost": "low",
+  "description": "Quét tĩnh mã nguồn phát hiện các lỗi Lint thường gặp (Unused Imports, Unreachable Code, Empty Catch Blocks, Floating Promises)."
+}

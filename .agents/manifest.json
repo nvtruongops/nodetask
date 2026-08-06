@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "name": "nodetask AI Agent Governance System",
-  "governanceVersion": "1.3.0",
+  "governanceVersion": "1.4.0",
   "registryPath": ".agents/registry.json",
   "pipelinePath": ".agents/pipeline.json",
   "compatibility": {

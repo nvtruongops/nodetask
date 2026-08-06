@@ -31,7 +31,7 @@ export function LandingPage({ onNavigate }: LandingPageProps) {
 
   return (
     <PublicLayoutShell currentPath="/" onNavigate={handleNavigate}>
-      <div className="max-w-[clamp(1000px,92vw,1400px)] mx-auto px-4 sm:px-6 lg:px-8 space-y-24 py-12 md:py-20 font-mono">
+      <main className="max-w-[clamp(1000px,92vw,1400px)] mx-auto px-4 sm:px-6 lg:px-8 space-y-24 py-12 md:py-20 font-mono">
         {/* Hero Section */}
         <section className="min-h-[70vh] flex flex-col items-center justify-center text-center space-y-8 max-w-4xl mx-auto pt-8">
           {/* Hero Badge */}
@@ -76,9 +76,9 @@ export function LandingPage({ onNavigate }: LandingPageProps) {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Feature Card 1: Tree Engine */}
-            <div className="p-6 border border-border bg-card hover:border-foreground transition-colors space-y-3 flex flex-col justify-between">
+            <article className="p-6 border border-border bg-card hover:border-foreground transition-colors space-y-3 flex flex-col justify-between">
               <div className="space-y-3">
-                <div className="text-xs text-muted-foreground font-bold">[01]</div>
+                <header className="text-xs text-muted-foreground font-bold">[01]</header>
                 <h3 className="text-base font-bold uppercase tracking-tight">
                   {getLandingContent('feature.tree_engine.title', locale)}
                 </h3>
@@ -86,15 +86,15 @@ export function LandingPage({ onNavigate }: LandingPageProps) {
                   {getLandingContent('feature.tree_engine.desc', locale)}
                 </p>
               </div>
-              <div className="pt-4 text-[11px] text-muted-foreground uppercase border-t border-border/50">
+              <footer className="pt-4 text-[11px] text-muted-foreground uppercase border-t border-border/50">
                 PostgreSQL LTREE
-              </div>
-            </div>
+              </footer>
+            </article>
 
             {/* Feature Card 2: AST Editor */}
-            <div className="p-6 border border-border bg-card hover:border-foreground transition-colors space-y-3 flex flex-col justify-between">
+            <article className="p-6 border border-border bg-card hover:border-foreground transition-colors space-y-3 flex flex-col justify-between">
               <div className="space-y-3">
-                <div className="text-xs text-muted-foreground font-bold">[02]</div>
+                <header className="text-xs text-muted-foreground font-bold">[02]</header>
                 <h3 className="text-base font-bold uppercase tracking-tight">
                   {getLandingContent('feature.ast_editor.title', locale)}
                 </h3>
@@ -102,15 +102,15 @@ export function LandingPage({ onNavigate }: LandingPageProps) {
                   {getLandingContent('feature.ast_editor.desc', locale)}
                 </p>
               </div>
-              <div className="pt-4 text-[11px] text-muted-foreground uppercase border-t border-border/50">
+              <footer className="pt-4 text-[11px] text-muted-foreground uppercase border-t border-border/50">
                 Tiptap Block AST
-              </div>
-            </div>
+              </footer>
+            </article>
 
             {/* Feature Card 3: Zero-Icon UI */}
-            <div className="p-6 border border-border bg-card hover:border-foreground transition-colors space-y-3 flex flex-col justify-between">
+            <article className="p-6 border border-border bg-card hover:border-foreground transition-colors space-y-3 flex flex-col justify-between">
               <div className="space-y-3">
-                <div className="text-xs text-muted-foreground font-bold">[03]</div>
+                <header className="text-xs text-muted-foreground font-bold">[03]</header>
                 <h3 className="text-base font-bold uppercase tracking-tight">
                   {getLandingContent('feature.zero_icon_ui.title', locale)}
                 </h3>
@@ -118,15 +118,15 @@ export function LandingPage({ onNavigate }: LandingPageProps) {
                   {getLandingContent('feature.zero_icon_ui.desc', locale)}
                 </p>
               </div>
-              <div className="pt-4 text-[11px] text-muted-foreground uppercase border-t border-border/50">
+              <footer className="pt-4 text-[11px] text-muted-foreground uppercase border-t border-border/50">
                 Strict Monochrome
-              </div>
-            </div>
+              </footer>
+            </article>
 
             {/* Feature Card 4: AI RAG */}
-            <div className="p-6 border border-border bg-card hover:border-foreground transition-colors space-y-3 flex flex-col justify-between">
+            <article className="p-6 border border-border bg-card hover:border-foreground transition-colors space-y-3 flex flex-col justify-between">
               <div className="space-y-3">
-                <div className="text-xs text-muted-foreground font-bold">[04]</div>
+                <header className="text-xs text-muted-foreground font-bold">[04]</header>
                 <h3 className="text-base font-bold uppercase tracking-tight">
                   {getLandingContent('feature.ai_rag.title', locale)}
                 </h3>
@@ -134,10 +134,10 @@ export function LandingPage({ onNavigate }: LandingPageProps) {
                   {getLandingContent('feature.ai_rag.desc', locale)}
                 </p>
               </div>
-              <div className="pt-4 text-[11px] text-muted-foreground uppercase border-t border-border/50">
+              <footer className="pt-4 text-[11px] text-muted-foreground uppercase border-t border-border/50">
                 Native pgvector HNSW
-              </div>
-            </div>
+              </footer>
+            </article>
           </div>
         </section>
 
@@ -193,7 +193,7 @@ export function LandingPage({ onNavigate }: LandingPageProps) {
             </table>
           </div>
         </section>
-      </div>
+      </main>
     </PublicLayoutShell>
   );
 }

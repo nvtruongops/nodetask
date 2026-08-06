@@ -1,0 +1,17 @@
+name: verification-governance
+version: 1.0.0
+description: Skill quy định cơ chế và quy trình vận hành Hệ thống Kiểm thử & Xác nhận Tự động tại .agents/scripts/verify.js.
+minGovernanceVersion: 1.4.0
+priority: 100
+capabilities:
+  - gov:verification
+  - gov:rule-engine
+  - gov:policies
+executionMode: exclusive
+parameters: {}
+input_schema:
+  strict_mode: boolean
+output_schema:
+  passed_checks: integer
+  error_count: integer
+  warning_count: integer

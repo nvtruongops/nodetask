@@ -1,86 +1,185 @@
 {
   "schemaVersion": 1,
-  "registryVersion": "1.0.0",
+  "registryVersion": "1.4.0",
   "skills": {
     "using-superpowers": {
       "type": "builtin",
       "provider": "ide-platform",
+      "priority": 100,
+      "executionMode": "exclusive",
+      "capabilities": ["meta:skill-invocation", "meta:workflow"],
       "description": "Establishes skill invocation workflows before any response."
     },
     "brainstorming": {
       "type": "builtin",
       "provider": "ide-platform",
+      "priority": 90,
+      "executionMode": "sequential",
+      "capabilities": ["meta:brainstorming", "meta:design-exploration"],
       "description": "Explores user intent, requirements, and design options."
     },
     "writing-plans": {
       "type": "builtin",
       "provider": "ide-platform",
+      "priority": 90,
+      "executionMode": "sequential",
+      "capabilities": ["meta:planning", "meta:implementation-plan"],
       "description": "Drafts multi-step execution plans."
     },
     "executing-plans": {
       "type": "builtin",
       "provider": "ide-platform",
+      "priority": 85,
+      "executionMode": "sequential",
+      "capabilities": ["meta:plan-execution", "meta:checkpoints"],
       "description": "Executes written implementation plans with checkpoints."
     },
     "codegraph": {
       "type": "mcp",
       "provider": "codegraph-mcp",
+      "priority": 90,
+      "executionMode": "sequential",
+      "manifestPath": ".agents/skills/codegraph/skill.yaml",
+      "capabilities": ["codegraph:ast", "codegraph:call-edges", "codegraph:impact-analysis"],
       "description": "Queries monorepo AST dependency graph database (./.codegraph/graph.db)."
     },
     "ponytail": {
       "type": "builtin",
       "provider": "ide-platform",
+      "priority": 80,
+      "executionMode": "sequential",
+      "capabilities": ["meta:ponytail-mode", "meta:minimal-code", "meta:root-cause-debug"],
       "description": "Lazy senior developer mode for minimal code diffs and zero bloat."
     },
     "api-designer": {
       "type": "local",
       "path": ".agents/skills/api-designer/SKILL.md",
+      "manifestPath": ".agents/skills/api-designer/skill.yaml",
+      "version": "1.0.0",
+      "priority": 80,
+      "executionMode": "sequential",
+      "capabilities": ["api:rest", "api:websocket", "api:serverpod", "api:contract-spec"],
       "description": "Serverpod REST/WebSocket API endpoints design contract."
     },
     "architecture-guardian": {
       "type": "local",
       "path": ".agents/skills/architecture-guardian/SKILL.md",
+      "manifestPath": ".agents/skills/architecture-guardian/skill.yaml",
+      "version": "1.0.0",
+      "priority": 100,
+      "executionMode": "exclusive",
+      "capabilities": ["arch:stack-lock", "arch:dependency-whitelist", "arch:folder-structure"],
       "description": "Enforces master stack and folder structure protection."
     },
     "db-schema-reviewer": {
       "type": "local",
       "path": ".agents/skills/db-schema-reviewer/SKILL.md",
+      "manifestPath": ".agents/skills/db-schema-reviewer/skill.yaml",
+      "version": "1.0.0",
+      "priority": 85,
+      "executionMode": "sequential",
+      "capabilities": ["db:schema", "db:migration", "db:ltree", "db:occ-versioning"],
       "description": "Database schema, migrations, ltree, and OCC versioning check."
     },
     "flutter-ui": {
       "type": "local",
       "path": ".agents/skills/flutter-ui/SKILL.md",
+      "manifestPath": ".agents/skills/flutter-ui/skill.yaml",
+      "version": "1.0.0",
+      "priority": 70,
+      "executionMode": "sequential",
+      "capabilities": ["mobile:flutter", "mobile:dart", "mobile:serverpod-sdk"],
       "description": "Flutter Mobile UI development synced with Serverpod SDK."
     },
     "frontend-ui": {
       "type": "local",
       "path": ".agents/skills/frontend-ui/SKILL.md",
+      "manifestPath": ".agents/skills/frontend-ui/skill.yaml",
+      "version": "1.0.0",
+      "priority": 75,
+      "executionMode": "sequential",
+      "capabilities": ["fe:react", "fe:vite", "fe:tailwind", "fe:tiptap", "fe:dnd-kit", "fe:shadcn-ui"],
       "description": "React Frontend UI development with Tiptap and dnd-kit."
     },
     "git-pr": {
       "type": "local",
       "path": ".agents/skills/git-pr/SKILL.md",
+      "manifestPath": ".agents/skills/git-pr/skill.yaml",
+      "version": "1.0.0",
+      "priority": 50,
+      "executionMode": "sequential",
+      "capabilities": ["git:pr-review", "git:changelog", "git:diff-summary"],
       "description": "Pull Request code review, CHANGELOG generator, and summary."
     },
     "minimalist-no-icon-ui": {
       "type": "local",
       "path": ".agents/skills/minimalist-no-icon-ui/SKILL.md",
+      "manifestPath": ".agents/skills/minimalist-no-icon-ui/skill.yaml",
+      "version": "1.0.0",
+      "priority": 95,
+      "executionMode": "exclusive",
+      "capabilities": ["ui:zero-icon", "ui:monochrome", "ui:text-labels"],
       "description": "Zero-icon monochrome design rules."
+    },
+    "page-route-designer": {
+      "type": "local",
+      "path": ".agents/skills/page-route-designer/SKILL.md",
+      "manifestPath": ".agents/skills/page-route-designer/skill.yaml",
+      "version": "1.0.0",
+      "priority": 80,
+      "executionMode": "sequential",
+      "capabilities": ["doc:page-route-spec", "doc:schema-validation"],
+      "description": "Page route document specification generator."
     },
     "performance": {
       "type": "local",
       "path": ".agents/skills/performance/SKILL.md",
+      "manifestPath": ".agents/skills/performance/skill.yaml",
+      "version": "1.0.0",
+      "priority": 60,
+      "executionMode": "sequential",
+      "capabilities": ["perf:frontend", "perf:api", "perf:db-query"],
       "description": "Frontend, API, and DB query performance optimization."
     },
     "security-review": {
       "type": "local",
       "path": ".agents/skills/security-review/SKILL.md",
+      "manifestPath": ".agents/skills/security-review/skill.yaml",
+      "version": "1.0.0",
+      "priority": 100,
+      "executionMode": "exclusive",
+      "capabilities": ["sec:token-auth", "sec:csrf", "sec:xss", "sec:sqli", "sec:rbac", "sec:audit-log"],
       "description": "Security audit, token lifecycle, CSRF, XSS, and RBAC review."
+    },
+    "service-designer": {
+      "type": "local",
+      "path": ".agents/skills/service-designer/SKILL.md",
+      "manifestPath": ".agents/skills/service-designer/skill.yaml",
+      "version": "1.0.0",
+      "priority": 80,
+      "executionMode": "sequential",
+      "capabilities": ["doc:service-spec", "doc:schema-validation"],
+      "description": "Service document specification generator."
     },
     "testing": {
       "type": "local",
       "path": ".agents/skills/testing/SKILL.md",
+      "manifestPath": ".agents/skills/testing/skill.yaml",
+      "version": "1.0.0",
+      "priority": 70,
+      "executionMode": "sequential",
+      "capabilities": ["test:unit", "test:integration", "test:widget"],
       "description": "Automated unit, integration, and widget tests generator."
+    },
+    "verification-governance": {
+      "type": "local",
+      "path": ".agents/skills/verification-governance/SKILL.md",
+      "manifestPath": ".agents/skills/verification-governance/skill.yaml",
+      "version": "1.0.0",
+      "priority": 100,
+      "executionMode": "exclusive",
+      "capabilities": ["gov:verification", "gov:rule-engine", "gov:policies"],
+      "description": "Verification Automated Governance Engine."
     }
   }
 }

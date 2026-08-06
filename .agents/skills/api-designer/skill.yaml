@@ -1,0 +1,22 @@
+name: api-designer
+version: 1.0.0
+description: Skill thiết kế và kiểm tra API Endpoints chuẩn Serverpod REST/WebSocket contracts.
+minGovernanceVersion: 1.4.0
+priority: 80
+capabilities:
+  - api:rest
+  - api:websocket
+  - api:serverpod
+  - api:contract-spec
+executionMode: sequential
+parameters:
+  service_name:
+    type: string
+    description: Tên dịch vụ backend tương ứng trong docs/services/
+input_schema:
+  endpoint_path: string
+  http_method: string
+  request_payload: object
+output_schema:
+  response_contract: object
+  status_codes: array

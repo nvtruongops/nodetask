@@ -1,0 +1,21 @@
+name: db-schema-reviewer
+version: 1.0.0
+description: Skill kiểm tra và đánh giá thiết kế Schema Database, Migration, LTREE và OCC Versioning.
+minGovernanceVersion: 1.4.0
+priority: 85
+capabilities:
+  - db:schema
+  - db:migration
+  - db:ltree
+  - db:occ-versioning
+executionMode: sequential
+parameters:
+  model_name:
+    type: string
+    description: Tên model hoặc table database
+input_schema:
+  table_name: string
+  columns: array
+output_schema:
+  has_version_column: boolean
+  is_migration_safe: boolean

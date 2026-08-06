@@ -31,9 +31,10 @@ nodetask/
 ## 🚀 Quickstart Guide
 
 ### 1. Prerequisites
+
 - **Node.js**: `>= 20.x`
-- **Dart SDK**: `>= 3.0.x` & **Serverpod CLI** (`dart pub global activate serverpod_cli`)
-- **Docker & Docker Compose**
+* **Dart SDK**: `>= 3.0.x` & **Serverpod CLI** (`dart pub global activate serverpod_cli`)
+* **Docker & Docker Compose**
 
 ### 2. Launch Local Environment
 
@@ -73,6 +74,7 @@ node .agents/scripts/verify.js --strict
 ```
 
 ### Rule Severity Breakdown
+
 * 🔴 **`ERROR`**: Architecture swap, forbidden dependencies, missing core docs or `.agents` structure (Blocks Commit/CI).
 * 🟡 **`WARNING`**: Icon package imports or UI guidelines violations (Blocks CI in `--strict` mode).
 * 🔵 **`INFO`**: Import order conventions and styling formatting suggestions.

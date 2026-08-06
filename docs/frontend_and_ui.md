@@ -136,8 +136,13 @@ apps/web/src/features/<feature_name>/
 
 ---
 
-### 4. Accessibility Guidelines (a11y)
+### 4. Accessibility Guidelines (a11y) & HTML5 Semantic Standards
 
+- **Bắt buộc HTML5 Semantic Elements (Chống Div Soup):**
+  - CẤM lạm dụng thẻ `<div>` lồng nhau quá nhiều (>20 divs trong 1 component).
+  - Bắt buộc dùng `<article>` cho tất cả các thẻ Card (Tech Card, Metric Card, Feature Card, Pillar Card, Milestone Card).
+  - Bắt buộc dùng `<header>` / `<footer>` cho các phần tiêu đề/chân thẻ Card hoặc bài viết.
+  - Bắt buộc dùng `<main>` cho khối nội dung chính và `<aside>` cho Sticky Sidebar/Mục lục.
 - **Keyboard Navigation:** Mọi thao tác chọn Node, Toggle Todo, Điều hướng Cây bài học bắt buộc hỗ trợ phím mũi tên (`Up`, `Down`, `Left`, `Right`, `Space`, `Enter`).
 - **Focus Indicators:** Border Focus tương phản cao trong cả 2 mode (`ring-1 ring-foreground`).
 - **Screen Reader Support:** Dùng đúng thẻ HTML5 Semantic (`<header>`, `<main>`, `<nav>`, `<article>`, `<button>`) kèm thuộc tính `aria-expanded`, `aria-selected` rõ ràng.

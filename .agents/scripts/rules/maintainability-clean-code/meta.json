@@ -1,0 +1,12 @@
+{
+  "id": "MAINTAINABILITY_CLEAN_CODE",
+  "name": "Maintainability & Code Smell Check",
+  "category": "STYLE",
+  "severity": "WARNING",
+  "version": "1.0.0",
+  "dependsOn": [],
+  "parallelizable": true,
+  "supportsFix": false,
+  "estimatedCost": "low",
+  "description": "Quét phát hiện debugger, alert và code smells đảm bảo chỉ số Maintainability cao."
+}

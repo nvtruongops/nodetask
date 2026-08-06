@@ -104,38 +104,38 @@ export function PrivacyPage({ onNavigate }: PrivacyPageProps) {
 
           {/* Quick Technical Specs Metric Grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-4">
-            <div className="p-4 border border-border bg-card space-y-1">
-              <div className="text-[10px] text-muted-foreground uppercase tracking-widest">
+            <article className="p-4 border border-border bg-card space-y-1">
+              <header className="text-[10px] text-muted-foreground uppercase tracking-widest">
                 {getPrivacyContent('privacy.stats.encryption.label', locale)}
-              </div>
+              </header>
               <div className="text-xs sm:text-sm font-bold text-foreground">
                 {getPrivacyContent('privacy.stats.encryption.val', locale)}
               </div>
-            </div>
-            <div className="p-4 border border-border bg-card space-y-1">
-              <div className="text-[10px] text-muted-foreground uppercase tracking-widest">
+            </article>
+            <article className="p-4 border border-border bg-card space-y-1">
+              <header className="text-[10px] text-muted-foreground uppercase tracking-widest">
                 {getPrivacyContent('privacy.stats.rbac.label', locale)}
-              </div>
+              </header>
               <div className="text-xs sm:text-sm font-bold text-foreground">
                 {getPrivacyContent('privacy.stats.rbac.val', locale)}
               </div>
-            </div>
-            <div className="p-4 border border-border bg-card space-y-1">
-              <div className="text-[10px] text-muted-foreground uppercase tracking-widest">
+            </article>
+            <article className="p-4 border border-border bg-card space-y-1">
+              <header className="text-[10px] text-muted-foreground uppercase tracking-widest">
                 {getPrivacyContent('privacy.stats.retention.label', locale)}
-              </div>
+              </header>
               <div className="text-xs sm:text-sm font-bold text-foreground">
                 {getPrivacyContent('privacy.stats.retention.val', locale)}
               </div>
-            </div>
-            <div className="p-4 border border-border bg-card space-y-1">
-              <div className="text-[10px] text-muted-foreground uppercase tracking-widest">
+            </article>
+            <article className="p-4 border border-border bg-card space-y-1">
+              <header className="text-[10px] text-muted-foreground uppercase tracking-widest">
                 {getPrivacyContent('privacy.stats.export.label', locale)}
-              </div>
+              </header>
               <div className="text-xs sm:text-sm font-bold text-foreground">
                 {getPrivacyContent('privacy.stats.export.val', locale)}
               </div>
-            </div>
+            </article>
           </div>
         </section>
 

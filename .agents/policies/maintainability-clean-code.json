@@ -1,0 +1,16 @@
+{
+  "id": "MAINTAINABILITY_CLEAN_CODE",
+  "enabled": true,
+  "category": "STYLE",
+  "severity": "WARNING",
+  "disallowedDebugPatterns": [
+    {
+      "regex": "\\bdebugger\\b",
+      "reason": "Phát hiện câu lệnh 'debugger;' còn sót trong mã nguồn sản phẩm (SonarQube Code Smell)"
+    },
+    {
+      "regex": "\\balert\\s*\\(",
+      "reason": "Phát hiện câu lệnh 'alert()' trực tiếp. Hãy sử dụng Notification UI Component chuẩn"
+    }
+  ]
+}

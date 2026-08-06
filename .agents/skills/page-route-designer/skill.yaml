@@ -1,0 +1,16 @@
+name: page-route-designer
+version: 1.0.0
+description: Skill thiết kế và cập nhật các file đặc tả tuyến đường trang trong docs/page_routes/*.md.
+minGovernanceVersion: 1.4.0
+priority: 80
+capabilities:
+  - doc:page-route-spec
+  - doc:schema-validation
+executionMode: sequential
+parameters:
+  route_name:
+    type: string
+input_schema:
+  route_file: string
+output_schema:
+  has_6_sections: boolean

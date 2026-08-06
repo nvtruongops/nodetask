@@ -1,0 +1,44 @@
+name: skill-manifest-schema
+version: 1.4.0
+description: Schema definition for programmatic skill manifest files (skill.yaml)
+
+requiredFields:
+  - name
+  - version
+  - description
+  - minGovernanceVersion
+  - priority
+  - capabilities
+  - executionMode
+
+fieldDefinitions:
+  name:
+    type: string
+    pattern: "^[a-z0-9-]+$"
+  version:
+    type: string
+    pattern: "^\\d+\\.\\d+\\.\\d+$"
+  description:
+    type: string
+  minGovernanceVersion:
+    type: string
+  priority:
+    type: integer
+    minimum: 1
+    maximum: 1000
+  capabilities:
+    type: array
+    items:
+      type: string
+  executionMode:
+    type: enum
+    values:
+      - exclusive
+      - sequential
+      - parallel
+  parameters:
+    type: object
+  input_schema:
+    type: object
+  output_schema:
+    type: object

@@ -1,0 +1,12 @@
+{
+  "id": "CODE_QUALITY_SECURITY",
+  "name": "Security & Vulnerability Check",
+  "category": "SECURITY",
+  "severity": "ERROR",
+  "version": "1.0.0",
+  "dependsOn": [],
+  "parallelizable": true,
+  "supportsFix": false,
+  "estimatedCost": "low",
+  "description": "Quét mã nguồn phát hiện Hardcoded Secrets, eval(), và các nguy cơ hổng bảo mật OWASP."
+}

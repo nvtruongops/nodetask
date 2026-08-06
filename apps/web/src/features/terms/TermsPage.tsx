@@ -105,35 +105,35 @@ export function TermsPage({ onNavigate }: TermsPageProps) {
 
           {/* Key Agreement Bento Grid (3 Pillars) */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
-            <div className="p-5 border border-border bg-card space-y-2">
-              <div className="text-[10px] text-muted-foreground uppercase tracking-widest">[ PILLAR_01 ]</div>
+            <article className="p-5 border border-border bg-card space-y-2">
+              <header className="text-[10px] text-muted-foreground uppercase tracking-widest">[ PILLAR_01 ]</header>
               <div className="text-sm font-bold text-foreground uppercase tracking-tight">
                 {getTermsContent('terms.pillar.use.title', locale)}
               </div>
               <p className="text-xs text-muted-foreground leading-relaxed whitespace-pre-line [text-wrap:pretty]">
                 {getTermsContent('terms.pillar.use.desc', locale)}
               </p>
-            </div>
+            </article>
 
-            <div className="p-5 border border-border bg-card space-y-2">
-              <div className="text-[10px] text-muted-foreground uppercase tracking-widest">[ PILLAR_02 ]</div>
+            <article className="p-5 border border-border bg-card space-y-2">
+              <header className="text-[10px] text-muted-foreground uppercase tracking-widest">[ PILLAR_02 ]</header>
               <div className="text-sm font-bold text-foreground uppercase tracking-tight">
                 {getTermsContent('terms.pillar.ip.title', locale)}
               </div>
               <p className="text-xs text-muted-foreground leading-relaxed whitespace-pre-line [text-wrap:pretty]">
                 {getTermsContent('terms.pillar.ip.desc', locale)}
               </p>
-            </div>
+            </article>
 
-            <div className="p-5 border border-border bg-card space-y-2">
-              <div className="text-[10px] text-muted-foreground uppercase tracking-widest">[ PILLAR_03 ]</div>
+            <article className="p-5 border border-border bg-card space-y-2">
+              <header className="text-[10px] text-muted-foreground uppercase tracking-widest">[ PILLAR_03 ]</header>
               <div className="text-sm font-bold text-foreground uppercase tracking-tight">
                 {getTermsContent('terms.pillar.sla.title', locale)}
               </div>
               <p className="text-xs text-muted-foreground leading-relaxed whitespace-pre-line [text-wrap:pretty]">
                 {getTermsContent('terms.pillar.sla.desc', locale)}
               </p>
-            </div>
+            </article>
           </div>
         </section>
 

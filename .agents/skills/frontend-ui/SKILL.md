@@ -35,6 +35,7 @@ Trước khi viết code UI, AI Agent **BẮT BỘC** tra cứu tài liệu quy 
 
 ## 3. ❌ Anti-Patterns (MUST NOT)
 
+- ❌ Lạm dụng thẻ `<div>` lồng nhau quá 20 tags ("Div Soup"). Bắt buộc dùng `<article>`, `<header>`, `<footer>`, `<main>`, `<aside>` cho các khối Card và Layout.
 - ❌ Thiếu `[text-wrap:balance]` làm tiêu đề bị rơi 1 từ cô độc (Orphan word) xuống dòng.
 - ❌ Thiếu `[text-wrap:pretty]` hoặc để đoạn văn bản mô tả tràn rộng >1000px gây mỏi mắt.
 - ❌ Nhầm lẫn Intent giữa các Archetypes (xem chi tiết tại `docs/frontend_and_ui.md#7.1`).

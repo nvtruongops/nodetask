@@ -1,0 +1,18 @@
+{
+  "id": "SEMANTIC_QUALITY_AUDIT",
+  "enabled": true,
+  "category": "SPECIFICATION",
+  "severity": "WARNING",
+  "designRules": {
+    "zeroIcon": true,
+    "forbiddenBorderRadius": ["rounded-full", "rounded-3xl", "rounded-2xl"]
+  },
+  "forbiddenTechStack": [
+    "mongodb",
+    "mysql",
+    "redux",
+    "mobx",
+    "express",
+    "nestjs"
+  ]
+}

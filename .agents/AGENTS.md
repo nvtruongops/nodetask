@@ -1,88 +1,39 @@
-# Workspaces & AI Agent Governance (Single Source of Truth)
+# Monorepo AI Agent Governance (Single Source of Truth)
 
 ---
 
-## 🚨 I. BỘ QUY TẮC CỐ ĐỊNH (STRICT POLICIES & GUARDRAILS)
+## 🚨 I. BỘ QUY TẮC CỐ ĐỊNH (ENTRY GUARDRAILS)
 
-Những quy định này trả lời câu hỏi: **"ĐƯỢC PHÉP VÀ KHÔNG ĐƯỢC PHÉP LÀM GÌ?"**
-
-1. **KHÔNG ĐỔI KIẾN TRÚC STACK (NO ARCHITECTURE SWAPPING):**
-   - Frontend: **React + Vite + Tailwind CSS + Shadcn UI**.
-   - Backend: **Dart (Serverpod Framework)**.
-   - Mobile: **Flutter (Dart)**.
-   - Nghiêm cấm tự ý chuyển đổi sang Next.js App Router, NestJS, Express hay React Native.
-
-2. **KHÔNG TỰ THÊM DEPENDENCY MỚI (NO UNAPPROVED DEPENDENCIES):**
-   - Chỉ được sử dụng các thư viện đã được phê duyệt trong [architecture.md](docs/architecture.md).
-   - Tuyệt đối KHÔNG tự cài thêm UI kit hay state management khác (như Redux, MobX...).
-
-3. **TUÂN THỦ QUY TẮC UI KHÔNG ICON (ZERO-ICON RULE):**
-   - Kiểm tra kỹ skill [.agents/skills/minimalist-no-icon-ui/SKILL.md](.agents/skills/minimalist-no-icon-ui/SKILL.md).
-   - Tuyệt đối **KHÔNG dùng bất kỳ Icon hay Emoji nào** trên UI Component. Thay thế bằng Text Labels, Brackets `[ ]` và Typography.
-
-4. **KHÔNG TỰ Ý REFACTOR API HOẶC DB SCHEMA CŨ:**
-   - Khi sửa code, luôn tuân theo Endpoints & Schema trong [data_and_api.md](docs/data_and_api.md).
-   - Giữ lại tính tương thích ngược (Backward compatibility).
-
-5. **TRIẾT LÝ PONYTAIL LAZY SENIOR DEV MODE (APPLIED EVERYWHERE):**
-   - Triết lý xuyên suốt mọi giai đoạn: Ít code nhất có thể, không tạo abstraction thừa (YAGNI).
-   - Boring over clever. Fewest files possible. Shortest working diff wins.
-   - Thêm comment `// ponytail: <lý do & upgrade path>` đối với các đơn giản hóa tạm thời.
-
-6. **ĐỌC TÀI LIỆU QUY CHUẨN TRƯỚC KHI CODE:**
-   - Bắt buộc tra cứu các tài liệu cốt lõi trong `docs/` (`architecture.md`, `data_and_api.md`, `frontend_and_ui.md`, `operations_and_quality.md`), các file đặc tả dịch vụ tại `docs/services/<service_name>.md` và đặc tả trang/route tại `docs/page_routes/<route_name>.md` khi làm việc với từng dịch vụ hoặc màn hình cụ thể.
-
-7. **KHÔNG SUY DIỄN (NO GUESSWORK):**
-   - Tuyệt đối KHÔNG đoán mò implementation, schema hay file path.
-   - Quy trình kiểm chứng: Không chắc $\rightarrow$ Đọc code $\rightarrow$ Đọc docs $\rightarrow$ Tra CodeGraph $\rightarrow$ Mới tiến hành sửa.
-
-8. **BẮT BỘC KIỂM THỬ XÁC NHẬN VERIFY.JS:**
-   - Mọi thay đổi mã nguồn trước khi công bố hoàn thành BẮT BỘC chạy `node .agents/scripts/verify.js --strict`. Chỉ khi kết quả **PASS (0 Errors, 0 Warnings)** mới kết thúc task.
-
-9. **KHÔNG DUPLICATE LOGIC (REUSE ROOT SOURCE):**
-   - Không viết trùng lặp helper hay copy-paste logic. Ưu tiên sửa tại root source để tất cả caller dùng chung.
-
-10. **KHÔNG SỬ DỤNG MOCK DATA TRONG THIẾT KẾ & CODE (NO MOCK DATA IN DESIGN & CONTRACTS):**
-   - Tuyệt đối KHÔNG tự bịa hoặc sử dụng Mock Data, fake roles hay dummy arrays khi thiết kế đặc tả trang (`docs/page_routes/*.md`) cũng như khi cài đặt mã nguồn State/Services.
-   - 100% Data Models, Endpoints và System/RBAC Roles (`GUEST`, `USER`, `ORG_MEMBER`, `ORG_ADMIN`, `SYSTEM_ADMIN`) BẮT BỘC phải tham chiếu và sử dụng chuẩn từ `docs/services/*.md` và `docs/data_and_api.md`.
+1. **STACK LOCK**: Frontend: **React + Vite + Tailwind CSS + Shadcn UI** | Backend: **Dart (Serverpod)** | Mobile: **Flutter**. Nghiêm cấm đổi stack.
+2. **NO UNAPPROVED DEPENDENCIES**: Tham chiếu whitelist tại [`docs/architecture.md`](../docs/architecture.md) & [`.agents/policies/dependencies.json`](policies/dependencies.json).
+3. **ZERO-ICON UI RULE**: Tuyệt đối không dùng Icon/Emoji. Chi tiết: [`.agents/skills/minimalist-no-icon-ui/SKILL.md`](skills/minimalist-no-icon-ui/SKILL.md).
+4. **BACKWARD COMPATIBILITY**: Tuân thủ API Endpoints & Schema trong [`docs/data_and_api.md`](../docs/data_and_api.md).
+5. **PONYTAIL LAZY SENIOR DEV MODE**: Minimum diff, YAGNI, 0 bloat. Chi tiết: [`.agents/skills/ponytail/SKILL.md`](skills/ponytail/SKILL.md).
+6. **READ DOCS FIRST**: Tra cứu `docs/architecture.md`, `docs/data_and_api.md`, `docs/frontend_and_ui.md`, `docs/services/*.md`, `docs/page_routes/*.md`.
+7. **NO GUESSWORK**: Đọc code $\rightarrow$ Đọc docs $\rightarrow$ Tra CodeGraph $\rightarrow$ Mới tiến hành sửa.
+8. **MANDATORY VERIFICATION**: Mọi task BẮT BỘC PASS `node .agents/scripts/verify.js --strict` (0 Error, 0 Warning).
+9. **REUSE ROOT SOURCE**: Không duplicate logic, sửa tận gốc caller.
+10. **NO MOCK DATA**: 100% Data Models & Roles (`GUEST`, `USER`, `ORG_MEMBER`, `ORG_ADMIN`, `SYSTEM_ADMIN`) từ [`docs/data_and_api.md`](../docs/data_and_api.md).
 
 ---
 
-## 🔄 II. QUY TRÌNH THỰC THI (WORKFLOW & EXECUTION PIPELINE)
-
-Quy trình này trả lời câu hỏi: **"THỰC HIỆN CÁC BƯỚC THEO THỨ TỰ NÀO?"**
+## 🔄 II. ENTERPRISE EXECUTION PIPELINE
 
 ```text
-               User Request
-                    │
-                    ▼
-     1. using-superpowers Workflow
-         (Method & Skill Selection)
-                    │
-                    ▼
-           2. Planning Phase
-         (Write & Confirm Plan)
-                    │
-                    ▼
-       3. CodeGraph MCP Traversal
-   (Kích hoạt KHI: refactor, rename,
-    move, delete, cross-file impact)
-                    │
-                    ▼
-       4. Implementation Phase
-      (Governed by Ponytail Mode)
-                    │
-                    ▼
-   5. Automated verify.js Verification
-        (Must Output PASS 0 Errors)
-                    │
-                    ▼
-                 Done 🎉
+User Request ──► Context Resolver ──► Intent Router ──► Skills & Policies ──► Execution ──► verify.js --strict
 ```
 
-### Chi tiết thứ tự các bước:
-1. **Lựa chọn Phương pháp (`using-superpowers`)**: Kiểm tra và gọi skill phù hợp (ví dụ: `brainstorming` cho feature mới, `systematic-debugging` cho bug).
-2. **Lập Kế hoạch (`Planning`)**: Xây dựng kế hoạch thực thi rõ ràng, xác định phạm vi thay đổi.
-3. **Tra cứu Đồ thị Điều kiện (`CodeGraph MCP`)**: Kích hoạt tra cứu `graph.db` KHI VÀ CHỈ KHI làm việc với các tác vụ `refactor`, `rename`, `move`, `delete`, hoặc thay đổi liên-file phức tạp. Task nhỏ (như sửa typo docs, đổi style đơn lẻ) KHÔNG chạy CodeGraph để tối ưu hiệu năng.
-4. **Thực thi Mã nguồn (`Implementation`)**: Áp dụng triết lý Ponytail Mode (Sửa tận gốc, ngắn nhất, đơn giản nhất, 0-icon).
-5. **Kiểm tra Xác nhận (`Verification`)**: Chạy `node .agents/scripts/verify.js --strict` và xác nhận PASS trước khi tuyên bố hoàn tất.
+1. **Context & Intent Resolution**: Chạy `node .agents/scripts/context-resolver.js --request "<request>"` để lọc Intent, Capability Matrix & Priority Skills.
+2. **Method & Skill Selection**: Gọi skill phù hợp (`using-superpowers`, `brainstorming` cho feature, `systematic-debugging` cho bug).
+3. **Planning Phase**: Lập kế hoạch chi tiết `implementation_plan.md` cho các thay đổi phức tạp.
+4. **Conditional CodeGraph Traversal**: Tra cứu `.codegraph/graph.db` khi refactor, rename, move, delete hoặc ảnh hưởng liên-file.
+5. **Ponytail Implementation**: Sửa mã nguồn tối giản, không bloat, zero icon.
+6. **Automated Verification**: Chạy `node .agents/scripts/verify.js --strict` và xác nhận PASS trước khi tuyên bố hoàn thành.
+
+---
+
+## 📁 GOVERNANCE SYSTEM REFERENCES
+- **Policies Index**: [`.agents/policies/`](policies/)
+- **Skills Registry**: [`.agents/registry.json`](registry.json) & [`.agents/skills/`](skills/)
+- **Pipeline Config**: [`.agents/pipeline.json`](pipeline.json)
+- **Context Resolver CLI**: [`.agents/scripts/context-resolver.js`](scripts/context-resolver.js)

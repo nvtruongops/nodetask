@@ -1,0 +1,16 @@
+name: service-designer
+version: 1.0.0
+description: Skill thiết kế và cập nhật các file đặc tả dịch vụ Backend trong docs/services/*.md.
+minGovernanceVersion: 1.4.0
+priority: 80
+capabilities:
+  - doc:service-spec
+  - doc:schema-validation
+executionMode: sequential
+parameters:
+  service_name:
+    type: string
+input_schema:
+  service_file: string
+output_schema:
+  has_10_sections: boolean

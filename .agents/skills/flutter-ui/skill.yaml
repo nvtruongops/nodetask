@@ -1,0 +1,17 @@
+name: flutter-ui
+version: 1.0.0
+description: Skill phát triển giao diện Mobile Flutter đồng bộ 100% Data Models với Backend Serverpod.
+minGovernanceVersion: 1.4.0
+priority: 70
+capabilities:
+  - mobile:flutter
+  - mobile:dart
+  - mobile:serverpod-sdk
+executionMode: sequential
+parameters:
+  screen_name:
+    type: string
+input_schema:
+  screen_route: string
+output_schema:
+  widget_tree: object

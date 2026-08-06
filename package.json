@@ -1,0 +1,10 @@
+{
+  "name": "nodetask-root",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "verify": "node .agents/scripts/verify.js --strict",
+    "build:web": "npm --prefix apps/web run build",
+    "check": "npm run verify && npm run build:web"
+  }
+}

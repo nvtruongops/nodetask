@@ -72,9 +72,9 @@ export function AboutPage({ onNavigate }: AboutPageProps) {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {/* Tech 1 */}
-            <div className="p-6 border border-border bg-card hover:border-foreground transition-colors space-y-3 flex flex-col justify-between">
+            <article className="p-6 border border-border bg-card hover:border-foreground transition-colors space-y-3 flex flex-col justify-between">
               <div className="space-y-3">
-                <div className="text-xs text-muted-foreground font-bold">[01 // DATABASE]</div>
+                <header className="text-xs text-muted-foreground font-bold">[01 // DATABASE]</header>
                 <h3 className="text-base font-bold uppercase tracking-tight">
                   {getAboutContent('about.tech.ltree.title', locale)}
                 </h3>
@@ -82,15 +82,15 @@ export function AboutPage({ onNavigate }: AboutPageProps) {
                   {getAboutContent('about.tech.ltree.desc', locale)}
                 </p>
               </div>
-              <div className="pt-4 text-[11px] text-muted-foreground uppercase border-t border-border/50">
+              <footer className="pt-4 text-[11px] text-muted-foreground uppercase border-t border-border/50">
                 PATH INDEXING & HIERARCHY
-              </div>
-            </div>
+              </footer>
+            </article>
 
             {/* Tech 2 */}
-            <div className="p-6 border border-border bg-card hover:border-foreground transition-colors space-y-3 flex flex-col justify-between">
+            <article className="p-6 border border-border bg-card hover:border-foreground transition-colors space-y-3 flex flex-col justify-between">
               <div className="space-y-3">
-                <div className="text-xs text-muted-foreground font-bold">[02 // BACKEND]</div>
+                <header className="text-xs text-muted-foreground font-bold">[02 // BACKEND]</header>
                 <h3 className="text-base font-bold uppercase tracking-tight">
                   {getAboutContent('about.tech.serverpod.title', locale)}
                 </h3>
@@ -98,15 +98,15 @@ export function AboutPage({ onNavigate }: AboutPageProps) {
                   {getAboutContent('about.tech.serverpod.desc', locale)}
                 </p>
               </div>
-              <div className="pt-4 text-[11px] text-muted-foreground uppercase border-t border-border/50">
+              <footer className="pt-4 text-[11px] text-muted-foreground uppercase border-t border-border/50">
                 DART RPC & WEBSOCKET STREAMING
-              </div>
-            </div>
+              </footer>
+            </article>
 
             {/* Tech 3 */}
-            <div className="p-6 border border-border bg-card hover:border-foreground transition-colors space-y-3 flex flex-col justify-between">
+            <article className="p-6 border border-border bg-card hover:border-foreground transition-colors space-y-3 flex flex-col justify-between">
               <div className="space-y-3">
-                <div className="text-xs text-muted-foreground font-bold">[03 // EDITOR]</div>
+                <header className="text-xs text-muted-foreground font-bold">[03 // EDITOR]</header>
                 <h3 className="text-base font-bold uppercase tracking-tight">
                   {getAboutContent('about.tech.tiptap.title', locale)}
                 </h3>
@@ -114,15 +114,15 @@ export function AboutPage({ onNavigate }: AboutPageProps) {
                   {getAboutContent('about.tech.tiptap.desc', locale)}
                 </p>
               </div>
-              <div className="pt-4 text-[11px] text-muted-foreground uppercase border-t border-border/50">
+              <footer className="pt-4 text-[11px] text-muted-foreground uppercase border-t border-border/50">
                 NOTION-LIKE BLOCK AST
-              </div>
-            </div>
+              </footer>
+            </article>
 
             {/* Tech 4 */}
-            <div className="p-6 border border-border bg-card hover:border-foreground transition-colors space-y-3 flex flex-col justify-between">
+            <article className="p-6 border border-border bg-card hover:border-foreground transition-colors space-y-3 flex flex-col justify-between">
               <div className="space-y-3">
-                <div className="text-xs text-muted-foreground font-bold">[04 // UI/UX]</div>
+                <header className="text-xs text-muted-foreground font-bold">[04 // UI/UX]</header>
                 <h3 className="text-base font-bold uppercase tracking-tight">
                   {getAboutContent('about.tech.zero_icon.title', locale)}
                 </h3>
@@ -130,15 +130,15 @@ export function AboutPage({ onNavigate }: AboutPageProps) {
                   {getAboutContent('about.tech.zero_icon.desc', locale)}
                 </p>
               </div>
-              <div className="pt-4 text-[11px] text-muted-foreground uppercase border-t border-border/50">
+              <footer className="pt-4 text-[11px] text-muted-foreground uppercase border-t border-border/50">
                 STRICT MONOCHROME SYSTEM
-              </div>
-            </div>
+              </footer>
+            </article>
 
             {/* Tech 5 */}
-            <div className="p-6 border border-border bg-card hover:border-foreground transition-colors space-y-3 flex flex-col justify-between md:col-span-2 lg:col-span-2">
+            <article className="p-6 border border-border bg-card hover:border-foreground transition-colors space-y-3 flex flex-col justify-between md:col-span-2 lg:col-span-2">
               <div className="space-y-3">
-                <div className="text-xs text-muted-foreground font-bold">[05 // INTELLIGENCE]</div>
+                <header className="text-xs text-muted-foreground font-bold">[05 // INTELLIGENCE]</header>
                 <h3 className="text-base font-bold uppercase tracking-tight">
                   {getAboutContent('about.tech.pgvector.title', locale)}
                 </h3>
@@ -146,10 +146,10 @@ export function AboutPage({ onNavigate }: AboutPageProps) {
                   {getAboutContent('about.tech.pgvector.desc', locale)}
                 </p>
               </div>
-              <div className="pt-4 text-[11px] text-muted-foreground uppercase border-t border-border/50">
+              <footer className="pt-4 text-[11px] text-muted-foreground uppercase border-t border-border/50">
                 POSTGRES HNSW VECTOR SEARCH
-              </div>
-            </div>
+              </footer>
+            </article>
           </div>
         </section>
 
@@ -164,9 +164,9 @@ export function AboutPage({ onNavigate }: AboutPageProps) {
 
           <div className="relative border-l-2 border-border ml-4 pl-6 space-y-10">
             {/* Milestone 1 */}
-            <div className="relative group">
+            <article className="relative group">
               <div className="absolute -left-[31px] top-1 w-3 h-3 bg-foreground border-2 border-background" />
-              <div className="space-y-1">
+              <header className="space-y-1">
                 <span className="text-[10px] font-bold uppercase text-muted-foreground bg-muted/30 px-2 py-0.5 border border-border">
                   {getAboutContent('about.timeline.m1.date', locale)}
                 </span>
@@ -176,13 +176,13 @@ export function AboutPage({ onNavigate }: AboutPageProps) {
                 <p className="text-xs text-muted-foreground leading-relaxed whitespace-pre-line [text-wrap:pretty]">
                   {getAboutContent('about.timeline.m1.desc', locale)}
                 </p>
-              </div>
-            </div>
+              </header>
+            </article>
 
             {/* Milestone 2 */}
-            <div className="relative group">
+            <article className="relative group">
               <div className="absolute -left-[31px] top-1 w-3 h-3 bg-foreground border-2 border-background" />
-              <div className="space-y-1">
+              <header className="space-y-1">
                 <span className="text-[10px] font-bold uppercase text-muted-foreground bg-muted/30 px-2 py-0.5 border border-border">
                   {getAboutContent('about.timeline.m2.date', locale)}
                 </span>
@@ -192,13 +192,13 @@ export function AboutPage({ onNavigate }: AboutPageProps) {
                 <p className="text-xs text-muted-foreground leading-relaxed whitespace-pre-line [text-wrap:pretty]">
                   {getAboutContent('about.timeline.m2.desc', locale)}
                 </p>
-              </div>
-            </div>
+              </header>
+            </article>
 
             {/* Milestone 3 */}
-            <div className="relative group">
+            <article className="relative group">
               <div className="absolute -left-[31px] top-1 w-3 h-3 bg-foreground border-2 border-background" />
-              <div className="space-y-1">
+              <header className="space-y-1">
                 <span className="text-[10px] font-bold uppercase text-muted-foreground bg-muted/30 px-2 py-0.5 border border-border">
                   {getAboutContent('about.timeline.m3.date', locale)}
                 </span>
@@ -208,8 +208,8 @@ export function AboutPage({ onNavigate }: AboutPageProps) {
                 <p className="text-xs text-muted-foreground leading-relaxed whitespace-pre-line [text-wrap:pretty]">
                   {getAboutContent('about.timeline.m3.desc', locale)}
                 </p>
-              </div>
-            </div>
+              </header>
+            </article>
           </div>
         </section>
 
@@ -225,25 +225,25 @@ export function AboutPage({ onNavigate }: AboutPageProps) {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="p-6 border border-border bg-card space-y-2">
+            <article className="p-6 border border-border bg-card space-y-2">
               <h4 className="text-sm font-bold uppercase">{getAboutContent('about.arch.step1.title', locale)}</h4>
               <p className="text-xs text-muted-foreground leading-relaxed whitespace-pre-line [text-wrap:pretty]">{getAboutContent('about.arch.step1.desc', locale)}</p>
-            </div>
+            </article>
 
-            <div className="p-6 border border-border bg-card space-y-2">
+            <article className="p-6 border border-border bg-card space-y-2">
               <h4 className="text-sm font-bold uppercase">{getAboutContent('about.arch.step2.title', locale)}</h4>
               <p className="text-xs text-muted-foreground leading-relaxed whitespace-pre-line [text-wrap:pretty]">{getAboutContent('about.arch.step2.desc', locale)}</p>
-            </div>
+            </article>
 
-            <div className="p-6 border border-border bg-card space-y-2">
+            <article className="p-6 border border-border bg-card space-y-2">
               <h4 className="text-sm font-bold uppercase">{getAboutContent('about.arch.step3.title', locale)}</h4>
               <p className="text-xs text-muted-foreground leading-relaxed whitespace-pre-line [text-wrap:pretty]">{getAboutContent('about.arch.step3.desc', locale)}</p>
-            </div>
+            </article>
 
-            <div className="p-6 border border-border bg-card space-y-2">
+            <article className="p-6 border border-border bg-card space-y-2">
               <h4 className="text-sm font-bold uppercase">{getAboutContent('about.arch.step4.title', locale)}</h4>
               <p className="text-xs text-muted-foreground leading-relaxed whitespace-pre-line [text-wrap:pretty]">{getAboutContent('about.arch.step4.desc', locale)}</p>
-            </div>
+            </article>
           </div>
         </section>
       </main>

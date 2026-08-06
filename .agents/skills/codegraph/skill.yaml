@@ -1,0 +1,21 @@
+name: codegraph
+version: 1.0.0
+description: Khai thác và đồng bộ CodeGraph MCP Database (./.codegraph/graph.db) phân tích call graph và impact scope.
+minGovernanceVersion: 1.4.0
+priority: 90
+capabilities:
+  - codegraph:ast
+  - codegraph:call-edges
+  - codegraph:impact-analysis
+executionMode: sequential
+parameters:
+  query_symbol:
+    type: string
+    description: Tên symbol, class, function hoặc file path cần truy vấn impact graph
+input_schema:
+  symbol_name: string
+  file_path: string
+output_schema:
+  callers: array
+  callees: array
+  impact_radius: integer

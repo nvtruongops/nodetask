@@ -1,0 +1,17 @@
+name: architecture-guardian
+version: 1.0.0
+description: Skill Kiến trúc sư trưởng kiểm soát và ngăn chặn AI Agent tự ý đổi stack, đổi thư viện, đổi cấu trúc thư mục.
+minGovernanceVersion: 1.4.0
+priority: 100
+capabilities:
+  - arch:stack-lock
+  - arch:dependency-whitelist
+  - arch:folder-structure
+executionMode: exclusive
+parameters: {}
+input_schema:
+  action_type: string
+  target_dependency: string
+output_schema:
+  is_approved: boolean
+  violation_reason: string

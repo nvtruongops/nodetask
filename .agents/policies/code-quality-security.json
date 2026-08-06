@@ -1,0 +1,20 @@
+{
+  "id": "CODE_QUALITY_SECURITY",
+  "enabled": true,
+  "category": "SECURITY",
+  "severity": "ERROR",
+  "forbiddenPatterns": [
+    {
+      "regex": "eval\\s*\\(",
+      "reason": "Sử dụng eval() bị cấm do nguy cơ XSS / Code Injection (SonarQube Security Standard)"
+    },
+    {
+      "regex": "(secret|password|bearer|api_key|token)\\s*[:=]\\s*['\"][A-Za-z0-9_\\-]{16,}['\"]",
+      "reason": "Phát hiện Hardcoded Secret / Private Credentials trong mã nguồn (SonarQube Security Standard)"
+    },
+    {
+      "regex": "console\\.log\\s*\\(.*(password|jwt_secret|private_key).*",
+      "reason": "Tuyệt đối không log thông tin nhạy cảm (password, secret, private_key) ra console"
+    }
+  ]
+}

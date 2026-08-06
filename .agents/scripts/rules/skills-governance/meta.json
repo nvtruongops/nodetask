@@ -1,0 +1,7 @@
+{
+  "id": "SKILLS_GOVERNANCE",
+  "name": "Skills Governance & Skill Manifest Validation",
+  "category": "ARCHITECTURE",
+  "severity": "ERROR",
+  "description": "Validates that all local skills have valid skill.yaml manifests, proper Semantic Versioning, priority scores, and capability matrix metadata matching registry.json."
+}

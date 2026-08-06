@@ -14,7 +14,7 @@ export const serverpodClient = {
     getCourseTree: (courseId: string) => apiService.getCourseTree(courseId),
   },
   node: {
-    createNode: (newNode: any) => apiService.createNode(newNode),
+    createNode: (newNode: Record<string, unknown>) => apiService.createNode(newNode as never),
     updateNode: (nodeId: string, content: string) => apiService.updateNodeContent(nodeId, content),
     deleteNode: (nodeId: string) => apiService.deleteNode(nodeId),
   },
