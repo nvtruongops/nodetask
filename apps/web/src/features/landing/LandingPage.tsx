@@ -20,12 +20,14 @@ export function LandingPage({ onNavigate }: LandingPageProps) {
     }
   };
 
-  // Auth Guard: Redirect authenticated users to /workspace
+  // Auth Guard & Document Title Setup per landing.md spec
   useEffect(() => {
+    document.title = 'nodetask - Monorepo Document & Knowledge Space Management';
     if (isAuthenticated) {
       handleNavigate('/workspace');
     }
   }, [isAuthenticated]);
+
 
   return (
     <PublicLayoutShell onNavigate={handleNavigate}>
