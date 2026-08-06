@@ -42,6 +42,10 @@ Những quy định này trả lời câu hỏi: **"ĐƯỢC PHÉP VÀ KHÔNG Đ
 9. **KHÔNG DUPLICATE LOGIC (REUSE ROOT SOURCE):**
    - Không viết trùng lặp helper hay copy-paste logic. Ưu tiên sửa tại root source để tất cả caller dùng chung.
 
+10. **KHÔNG SỬ DỤNG MOCK DATA TRONG THIẾT KẾ & CODE (NO MOCK DATA IN DESIGN & CONTRACTS):**
+   - Tuyệt đối KHÔNG tự bịa hoặc sử dụng Mock Data, fake roles hay dummy arrays khi thiết kế đặc tả trang (`docs/page_routes/*.md`) cũng như khi cài đặt mã nguồn State/Services.
+   - 100% Data Models, Endpoints và System/RBAC Roles (`GUEST`, `USER`, `ORG_MEMBER`, `ORG_ADMIN`, `SYSTEM_ADMIN`) BẮT BỘC phải tham chiếu và sử dụng chuẩn từ `docs/services/*.md` và `docs/data_and_api.md`.
+
 ---
 
 ## 🔄 II. QUY TRÌNH THỰC THI (WORKFLOW & EXECUTION PIPELINE)

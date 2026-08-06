@@ -1,0 +1,10 @@
+class: I18nNamespace
+table: i18n_namespaces
+fields:
+  name: String
+  description: String?
+  createdAt: DateTime?
+indexes:
+  i18n_namespaces_name_idx:
+    fields: name
+    unique: true

@@ -1,0 +1,12 @@
+{
+  "id": "NO_MOCK_DATA",
+  "name": "No Mock Data & Strict System Roles Verification Check",
+  "category": "SPECIFICATION",
+  "severity": "ERROR",
+  "version": "2.0.0",
+  "dependsOn": [],
+  "parallelizable": true,
+  "supportsFix": false,
+  "estimatedCost": "medium",
+  "description": "Verifies zero mock data and strict RBAC system roles adherence."
+}

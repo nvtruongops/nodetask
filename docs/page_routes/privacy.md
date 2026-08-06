@@ -72,7 +72,7 @@ Giao diện tuân thủ 100% **Zero-Icon Rule**. Cấu trúc Component hoàn to�
 ---
 
 ## Content Dictionary (i18n / CMS Ready)
-Tách rời chuỗi văn bản khỏi cấu trúc Component hỗ trợ Đa ngôn ngữ (i18n), A/B Testing và CMS:
+Tách rời chuỗi văn bản dạng Feature-Sliced Self-Contained trong `features/privacy/content/en.json` và `vi.json` (tương thích 1:1 với Serverpod RPC `namespace: "privacy"`):
 
 ```json
 {
@@ -83,18 +83,18 @@ Tách rời chuỗi văn bản khỏi cấu trúc Component hỗ trợ Đa ngôn
   "nav.terms": "[Terms]",
   "nav.login": "[LOG IN]",
   "nav.register": "[GET STARTED]",
-  "privacy.header.title": "[PRIVACY POLICY // DATA PROTECTION STATEMENT]",
-  "privacy.header.effective_date": "Effective Date: August 6, 2026",
-  "privacy.section.collection.title": "1. Information Collection & Email OTP Verification",
-  "privacy.section.collection.body": "We collect email addresses exclusively for authentication via numeric OTP verification codes.",
-  "privacy.section.session_security.title": "2. Session Storage & Redis Token Security",
-  "privacy.section.session_security.body": "Session keys are stored in encrypted Redis memory with a strict 24-hour TTL expiration.",
-  "privacy.section.data_ownership.title": "3. Ownership of Personal & Organizational Documents",
-  "privacy.section.data_ownership.body": "Users retain 100% intellectual property rights over all document nodes created in their workspaces.",
-  "privacy.section.ai_vector_privacy.title": "4. Vector Embeddings & AI Search Data Privacy",
-  "privacy.section.ai_vector_privacy.body": "PostgreSQL pgvector embeddings remain isolated per organization and are never shared with external third-party LLMs.",
+  "header.title": "[PRIVACY POLICY // DATA PROTECTION STATEMENT]",
+  "header.effective_date": "Effective Date: August 6, 2026",
+  "section.collection.title": "1. Information Collection & Email OTP Verification",
+  "section.collection.body": "We collect email addresses exclusively for authentication via numeric OTP verification codes.",
+  "section.session_security.title": "2. Session Storage & Redis Token Security",
+  "section.session_security.body": "Session tokens are stored in HTTP-only cookies and cached in Redis with strict TTL expiration policies.",
+  "section.data_ownership.title": "3. Ownership of Personal & Organizational Documents",
+  "section.data_ownership.body": "Users retain 100% intellectual property rights over all document nodes created in their workspaces.",
+  "section.vector_privacy.title": "4. Data Isolation & AI Vector Search Privacy",
+  "section.vector_privacy.body": "Document AST data and pgvector embeddings are strictly isolated per user and organization workspace.",
   "footer.copyright": "(C) 2026 nodetask. All rights reserved.",
-  "footer.build_info": "v1.3.0 | MIT License | Commit: ${GIT_SHA}"
+  "footer.build_info": "v1.4.0 | MIT License"
 }
 ```
 

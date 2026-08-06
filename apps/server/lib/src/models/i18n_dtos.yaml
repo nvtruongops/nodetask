@@ -1,0 +1,79 @@
+class: GetDictionaryInput
+fields:
+  locale: String
+  namespace: String
+  ifNoneMatchETag: String?
+
+---
+
+class: TranslationEntryInput
+fields:
+  key: String
+  value: String
+  description: String?
+  status: String?
+
+---
+
+class: UpdateTranslationInput
+fields:
+  locale: String
+  namespace: String
+  entry: TranslationEntryInput
+
+---
+
+class: BulkUpdateTranslationsInput
+fields:
+  locale: String
+  namespace: String
+  entries: List<TranslationEntryInput>
+
+---
+
+class: DeleteTranslationInput
+fields:
+  locale: String
+  namespace: String
+  key: String
+
+---
+
+class: CreateNamespaceInput
+fields:
+  namespace: String
+  description: String?
+
+---
+
+class: TranslationEntry
+fields:
+  key: String
+  value: String
+  version: int
+  status: String
+  updatedAt: DateTime
+  lastEditorId: UuidValue?
+  description: String?
+
+---
+
+class: DictionaryResponse
+fields:
+  locale: String
+  namespace: String
+  version: int
+  eTag: String
+  isNotModified: bool?
+  fallbackLocaleUsed: String?
+  entries: List<TranslationEntry>
+  updatedAt: DateTime
+
+---
+
+class: SupportedLocale
+fields:
+  code: String
+  name: String
+  isDefault: bool
+  fallbackCode: String

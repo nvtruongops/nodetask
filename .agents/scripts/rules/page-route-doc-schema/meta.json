@@ -1,0 +1,12 @@
+{
+  "id": "PAGE_ROUTE_DOC_SCHEMA",
+  "name": "Page Route Document Specification Schema Validation",
+  "category": "SPECIFICATION",
+  "severity": "WARNING",
+  "version": "2.0.0",
+  "dependsOn": ["FOLDER_STRUCTURE"],
+  "parallelizable": true,
+  "supportsFix": false,
+  "estimatedCost": "medium",
+  "description": "Validates that all page route specs in docs/page_routes/*.md adhere to the 6-section contract schema."
+}

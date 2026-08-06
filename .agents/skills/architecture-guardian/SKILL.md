@@ -16,3 +16,5 @@ Tất cả các quy tắc bắt buộc tuân thủ được định nghĩa tại
 3. **KHÔNG ĐỔI FOLDER:** Tuân thủ cấu trúc trong `docs/architecture.md`.
 4. **KHÔNG REFACTOR TỰ Ý:** Chỉ làm đúng phạm vi task. Không sửa code cũ không liên quan.
 5. **VERIFY TỰ ĐỘNG:** Chạy `.agents/scripts/verify.js` để kiểm tra trước khi hoàn tất task.
+6. **KHÔNG DÙNG MOCK DATA:** Không tự bịa hay dùng Mock Data, fake roles hay dummy arrays trong thiết kế đặc tả và cài đặt mã nguồn. Kết nối 100% System Roles (`GUEST`, `USER`, `ORG_MEMBER`, `ORG_ADMIN`, `SYSTEM_ADMIN`).
+

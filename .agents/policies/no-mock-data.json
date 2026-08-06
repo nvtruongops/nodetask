@@ -1,0 +1,9 @@
+{
+  "id": "NO_MOCK_DATA",
+  "name": "No Mock Data & Strict System Roles Verification Check",
+  "category": "SPECIFICATION",
+  "severity": "ERROR",
+  "enabled": true,
+  "allowedRoles": ["GUEST", "USER", "ORG_MEMBER", "ORG_ADMIN", "SYSTEM_ADMIN"],
+  "forbiddenPatterns": ["mockData", "fakeRole", "dummyArray", "fakeUser", "mockUsers"]
+}

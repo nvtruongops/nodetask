@@ -1,0 +1,12 @@
+{
+  "id": "IMPORT_ORDER",
+  "name": "Import Order Convention Check",
+  "category": "STYLE",
+  "severity": "INFO",
+  "version": "2.0.0",
+  "dependsOn": [],
+  "parallelizable": true,
+  "supportsFix": true,
+  "estimatedCost": "medium",
+  "description": "Verifies import ordering convention (Third-party -> UI -> Store -> Types)."
+}

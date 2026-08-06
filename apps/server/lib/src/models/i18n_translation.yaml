@@ -1,0 +1,19 @@
+class: I18nTranslation
+table: i18n_translations
+fields:
+  namespace: String
+  locale: String
+  key: String
+  value: String
+  description: String?
+  status: String?             # 'DRAFT', 'APPROVED'
+  version: int?
+  lastEditorId: UuidValue?
+  createdAt: DateTime?
+  updatedAt: DateTime?
+indexes:
+  i18n_trans_ns_locale_idx:
+    fields: namespace, locale
+  i18n_ns_locale_key_uniq:
+    fields: namespace, locale, key
+    unique: true

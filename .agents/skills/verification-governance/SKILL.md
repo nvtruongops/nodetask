@@ -16,27 +16,34 @@ Hệ thống được thiết kế theo kiến trúc **Plugin Engine Động** (
 ## System Architecture & Data Sources
 
 ### Core File Locations
-- **Engine Entrypoint**: [`.agents/scripts/verify.js`](file:///e:/Code/nodetask/.agents/scripts/verify.js)
+- **Engine Entrypoint Wrapper**: [`.agents/scripts/verify.js`](file:///e:/Code/nodetask/.agents/scripts/verify.js)
+- **Engine Core Modules**:
+  - `engine/context.js` - `RuleContext` Factory
+  - `engine/loader.js` - Auto-Discovery Engine
+  - `engine/registry.js` - Dependency Resolver Graph (DAG)
+  - `engine/executor.js` - Async Rule Executor
+  - `engine/reporter.js` - Console Reporter Engine
 - **Manifest Config**: [`.agents/manifest.json`](file:///e:/Code/nodetask/.agents/manifest.json)
-- **Registry Config**: [`.agents/registry.json`](file:///e:/Code/nodetask/.agents/registry.json)
 - **Rule Policies JSON**: [`.agents/policies/`](file:///e:/Code/nodetask/.agents/policies/)
-- **Rule Plugins JS**: [`.agents/scripts/rules/`](file:///e:/Code/nodetask/.agents/scripts/rules/)
+- **Modular Rule Plugins**: [`.agents/scripts/rules/`](file:///e:/Code/nodetask/.agents/scripts/rules/)
 - **Yaml Schemas**: [`.agents/schemas/`](file:///e:/Code/nodetask/.agents/schemas/)
 
 ---
 
 ## Active Guardrail Rules Index
 
-Hệ thống hiện tại thực thi 6 Lớp Rule Plugins trong `.agents/scripts/rules/`:
+Hệ thống hiện tại thực thi 7 Lớp Modular Rule Plugins trong `.agents/scripts/rules/`:
 
-| Rule ID | Rule File (`.agents/scripts/rules/`) | Category | Default Severity | Mục đích & Phạm vi Kiểm soát |
-| :--- | :--- | :--- | :--- | :--- |
-| **`WHITELIST_DEPENDENCIES`** | `dependencies.js` | `ARCHITECTURE` | `ERROR` | Kiểm tra tất cả dependencies trong `apps/web/package.json` có nằm trong Whitelist được duyệt hay không. |
-| **`FOLDER_STRUCTURE`** | `folder-structure.js` | `ARCHITECTURE` | `ERROR` | Đảm bảo 4 Core Docs (`architecture.md`, `data_and_api.md`, `frontend_and_ui.md`, `operations_and_quality.md`) và cấu trúc `.agents/` tồn tại hợp lệ. |
-| **`IMPORT_ORDER`** | `imports.js` | `STYLE` | `INFO` | Kiểm tra thứ tự Import Convention (Third-party ➡️ UI ➡️ Store ➡️ Types). |
-| **`PAGE_ROUTE_DOC_SCHEMA`** | `page-route-doc.js` | `SPECIFICATION` | `WARNING` | Validate tất cả file `docs/page_routes/*.md` khớp 100% 6 Sections Schema Contract (`page-route-doc.yaml`). |
-| **`SERVICE_DOC_SCHEMA`** | `service-doc.js` | `SPECIFICATION` | `WARNING` | Validate tất cả file `docs/services/*.md` khớp 100% 10 Sections Schema Contract (`service-doc.yaml`). |
-| **`ZERO_ICON`** | `zero-icon.js` | `UI` | `WARNING` | Quét toàn bộ mã nguồn Frontend phát hiện icon package hoặc emoji bị cấm (Quy tắc Zero-Icon Monochrome). |
+| Rule ID | Rule Package Subdirectory (`.agents/scripts/rules/`) | Category | Default Severity | DependsOn | Mục đích & Phạm vi Kiểm soát |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **`WHITELIST_DEPENDENCIES`** | `whitelist-dependencies/` | `ARCHITECTURE` | `ERROR` | - | Kiểm tra tất cả dependencies trong `apps/web/package.json` có nằm trong Whitelist được duyệt hay không. |
+| **`FOLDER_STRUCTURE`** | `folder-structure/` | `ARCHITECTURE` | `ERROR` | - | Đảm bảo 4 Core Docs (`architecture.md`, `data_and_api.md`, `frontend_and_ui.md`, `operations_and_quality.md`) và cấu trúc `.agents/` tồn tại hợp lệ. |
+| **`NO_MOCK_DATA`** | `no-mock-data/` | `SPECIFICATION` | `ERROR` | - | Kiểm tra tài liệu & mã nguồn, cấm Mock Data/dummy arrays, tuân thủ 5 RBAC System Roles chuẩn. |
+| **`PAGE_ROUTE_DOC_SCHEMA`** | `page-route-doc-schema/` | `SPECIFICATION` | `WARNING` | `FOLDER_STRUCTURE` | Validate tất cả file `docs/page_routes/*.md` khớp 100% 6 Sections Schema Contract (`page-route-doc.yaml`). |
+| **`SERVICE_DOC_SCHEMA`** | `service-doc-schema/` | `SPECIFICATION` | `WARNING` | `FOLDER_STRUCTURE` | Validate tất cả file `docs/services/*.md` khớp 100% 10 Sections Schema Contract (`service-doc.yaml`). |
+| **`ZERO_ICON`** | `zero-icon/` | `UI` | `WARNING` | - | Quét toàn bộ mã nguồn Frontend phát hiện icon package hoặc emoji bị cấm (Quy tắc Zero-Icon Monochrome). |
+| **`IMPORT_ORDER`** | `import-order/` | `STYLE` | `INFO` | - | Kiểm tra thứ tự Import Convention (Third-party ➡️ UI ➡️ Store ➡️ Types). |
+
 
 ---
 

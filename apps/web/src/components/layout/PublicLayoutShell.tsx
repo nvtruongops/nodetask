@@ -1,0 +1,264 @@
+import { ReactNode, useState } from 'react';
+import { getLandingContent } from '../../features/landing/content';
+import { useThemeStore } from '../../store/useThemeStore';
+import { useLanguageStore } from '../../store/useLanguageStore';
+
+interface PublicLayoutShellProps {
+  children: ReactNode;
+  onNavigate?: (path: string) => void;
+}
+
+export function PublicLayoutShell({ children, onNavigate }: PublicLayoutShellProps) {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { theme, toggleTheme } = useThemeStore();
+  const { locale, toggleLocale } = useLanguageStore();
+
+  const handleNavClick = (path: string) => {
+    if (onNavigate) {
+      onNavigate(path);
+    } else {
+      window.location.hash = path;
+    }
+    setIsMobileMenuOpen(false);
+  };
+
+  const getThemeLabel = () => {
+    if (theme === 'dark') return getLandingContent('nav.theme_dark', locale);
+    if (theme === 'light') return getLandingContent('nav.theme_light', locale);
+    return getLandingContent('nav.theme_system', locale);
+  };
+
+  const getLanguageLabel = () => {
+    return locale === 'vi'
+      ? getLandingContent('nav.language.vi', locale)
+      : getLandingContent('nav.language.en', locale);
+  };
+
+  return (
+    <div className="min-h-screen flex flex-col bg-background text-foreground font-mono selection:bg-foreground selection:text-background transition-colors duration-200">
+      {/* Skip to Main Content Link for Keyboard Accessibility */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-4 focus:bg-foreground focus:text-background font-bold tracking-wider"
+      >
+        Skip to Content
+      </a>
+
+      {/* Public Header Navigation */}
+      <header className="sticky top-0 z-40 w-full border-b border-border bg-background/95 backdrop-blur backdrop-filter">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+          {/* Brand Logo Link */}
+          <button
+            onClick={() => handleNavClick('/')}
+            aria-label={getLandingContent('brand.logo.aria', locale)}
+            className="text-xs sm:text-sm font-bold tracking-tight hover:opacity-80 transition-opacity text-left"
+          >
+            <span className="hidden sm:inline">{getLandingContent('brand.logo.text', locale)}</span>
+            <span className="sm:hidden">[NODETASK]</span>
+          </button>
+
+          {/* Desktop Nav Links */}
+          <nav className="hidden md:flex items-center space-x-5 text-xs uppercase tracking-wider">
+            <button
+              onClick={() => handleNavClick('/')}
+              className="hover:underline font-semibold"
+            >
+              {getLandingContent('nav.landing', locale)}
+            </button>
+            <button
+              onClick={() => handleNavClick('/about')}
+              aria-label="About page"
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
+              {getLandingContent('nav.about', locale)}
+            </button>
+            <button
+              onClick={() => handleNavClick('/privacy')}
+              aria-label="Privacy page"
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
+              {getLandingContent('nav.privacy', locale)}
+            </button>
+            <button
+              onClick={() => handleNavClick('/terms')}
+              aria-label="Terms page"
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
+              {getLandingContent('nav.terms', locale)}
+            </button>
+          </nav>
+
+          {/* Desktop Header Controls & CTAs */}
+          <div className="hidden md:flex items-center space-x-3 text-xs uppercase tracking-wider font-semibold">
+            {/* Theme Switcher Button */}
+            <button
+              onClick={toggleTheme}
+              aria-label={getLandingContent('nav.theme_toggle_aria', locale)}
+              title="Toggle Theme"
+              className="px-2.5 py-1.5 border border-border hover:border-foreground transition-colors text-[11px]"
+            >
+              [THEME: {getThemeLabel()}]
+            </button>
+
+            {/* Language Switcher Button */}
+            <button
+              onClick={toggleLocale}
+              aria-label={getLandingContent('nav.language_switcher_aria', locale)}
+              title="Switch Language"
+              className="px-2.5 py-1.5 border border-border hover:border-foreground transition-colors text-[11px]"
+            >
+              [LANG: {getLanguageLabel()}]
+            </button>
+
+            {/* Auth CTAs */}
+            <button
+              onClick={() => handleNavClick('/auth/login')}
+              className="px-3 py-1.5 border border-border hover:border-foreground transition-colors"
+            >
+              {getLandingContent('nav.login', locale)}
+            </button>
+            <button
+              onClick={() => handleNavClick('/auth/register')}
+              className="px-3 py-1.5 bg-foreground text-background hover:opacity-90 transition-opacity"
+            >
+              {getLandingContent('nav.register', locale)}
+            </button>
+          </div>
+
+          {/* Mobile Menu Toggle Button */}
+          <div className="flex md:hidden items-center space-x-2">
+            <button
+              onClick={toggleTheme}
+              aria-label={getLandingContent('nav.theme_toggle_aria', locale)}
+              className="px-2 py-1 border border-border text-[11px] font-bold"
+            >
+              {getThemeLabel()}
+            </button>
+            <button
+              onClick={toggleLocale}
+              aria-label={getLandingContent('nav.language_switcher_aria', locale)}
+              className="px-2 py-1 border border-border text-[11px] font-bold"
+            >
+              {getLanguageLabel()}
+            </button>
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-expanded={isMobileMenuOpen}
+              className="px-2.5 py-1 border border-border text-xs uppercase tracking-wider font-bold"
+            >
+              {isMobileMenuOpen ? '[CLOSE]' : getLandingContent('nav.mobile_toggle', locale)}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile Navigation Drawer */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden border-b border-border bg-background px-4 pt-2 pb-4 space-y-3 text-xs uppercase tracking-wider">
+            <button
+              onClick={() => handleNavClick('/')}
+              className="block w-full text-left py-2 font-bold"
+            >
+              {getLandingContent('nav.landing', locale)}
+            </button>
+            <button
+              onClick={() => handleNavClick('/about')}
+              aria-label="About page mobile"
+              className="block w-full text-left py-2 text-muted-foreground hover:text-foreground"
+            >
+              {getLandingContent('nav.about', locale)}
+            </button>
+            <button
+              onClick={() => handleNavClick('/privacy')}
+              aria-label="Privacy page mobile"
+              className="block w-full text-left py-2 text-muted-foreground hover:text-foreground"
+            >
+              {getLandingContent('nav.privacy', locale)}
+            </button>
+            <button
+              onClick={() => handleNavClick('/terms')}
+              aria-label="Terms page mobile"
+              className="block w-full text-left py-2 text-muted-foreground hover:text-foreground"
+            >
+              {getLandingContent('nav.terms', locale)}
+            </button>
+            <div className="pt-2 border-t border-border flex flex-col space-y-2 font-semibold">
+              <button
+                onClick={() => handleNavClick('/auth/login')}
+                className="w-full py-2 border border-border text-center"
+              >
+                {getLandingContent('nav.login', locale)}
+              </button>
+              <button
+                onClick={() => handleNavClick('/auth/register')}
+                className="w-full py-2 bg-foreground text-background text-center"
+              >
+                {getLandingContent('nav.register', locale)}
+              </button>
+            </div>
+          </div>
+        )}
+      </header>
+
+      {/* Main Content Area */}
+      <main id="main-content" tabIndex={-1} className="flex-1 focus:outline-none">
+        {children}
+      </main>
+
+      {/* Public Footer */}
+      <footer className="border-t border-border bg-background py-8 text-xs text-muted-foreground font-mono">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="flex flex-col space-y-1 text-center md:text-left">
+            <p className="font-bold text-foreground">{getLandingContent('brand.logo.text', locale)}</p>
+            <p>{getLandingContent('footer.copyright', locale)}</p>
+            <p className="text-[11px] opacity-70">{getLandingContent('footer.build_info', locale)}</p>
+          </div>
+
+          {/* Footer Theme & Language Controls */}
+          <div className="flex items-center space-x-2 text-[11px]">
+            <button
+              onClick={toggleTheme}
+              className="px-2 py-1 border border-border hover:border-foreground transition-colors"
+            >
+              [THEME: {getThemeLabel()}]
+            </button>
+            <button
+              onClick={toggleLocale}
+              className="px-2 py-1 border border-border hover:border-foreground transition-colors"
+            >
+              [LANG: {getLanguageLabel()}]
+            </button>
+          </div>
+
+          <div className="flex flex-wrap justify-center gap-4 text-xs">
+            <button
+              onClick={() => handleNavClick('/privacy')}
+              className="hover:text-foreground hover:underline transition-colors"
+            >
+              {getLandingContent('footer.privacy', locale)}
+            </button>
+            <button
+              onClick={() => handleNavClick('/terms')}
+              className="hover:text-foreground hover:underline transition-colors"
+            >
+              {getLandingContent('footer.terms', locale)}
+            </button>
+            <a
+              href="https://github.com/nvtruongops/nodetask"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-foreground hover:underline transition-colors"
+            >
+              {getLandingContent('footer.github', locale)}
+            </a>
+            <button
+              onClick={() => handleNavClick('/contact')}
+              className="hover:text-foreground hover:underline transition-colors"
+            >
+              {getLandingContent('footer.contact', locale)}
+            </button>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}

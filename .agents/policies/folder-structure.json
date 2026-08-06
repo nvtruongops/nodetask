@@ -7,6 +7,7 @@
     "docs",
     "docs/services",
     "docs/page_routes",
+    "docs/branding",
     ".agents"
   ],
   "expectedAppDirectories": [

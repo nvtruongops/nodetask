@@ -58,13 +58,33 @@
 
 | Loại State | Giải pháp Công nghệ | Phạm vi & Trường hợp Sử dụng |
 | :--- | :--- | :--- |
-| **Global UI State** | **Zustand (`useTreeStore`)** | Active Node ID, Sidebar Collapse, Selected Filter, Theme. |
+| **Global UI State** | **Zustand (`useTreeStore`, `useThemeStore`, `useLanguageStore`)** | Active Node ID, Sidebar Collapse, Selected Filter, Theme Mode (`dark`/`light`/`system`), Locale (`en`/`vi`). |
 | **Server Data & Cache** | **TanStack Query** | Cached Tree Nodes, Todo Lists, Automatic Invalidation. |
 | **Local Form State** | **React Hook Form + Zod** | Form nhập liệu, Search Input. |
 | **Realtime Stream** | **WebSockets + React Query** | Đồng bộ sự kiện kéo thả & tick todo tức thì. |
 
 #### Quy tắc Optimistic UI Update (<16ms)
 1. **Cancel Queries** -> 2. **Snapshot Previous State** -> 3. **Mutate Local Cache Tức thì** -> 4. **Gửi API Request** -> 5. **Rollback nếu lỗi / Settled Refetch**.
+
+---
+
+### 4. Quy Chuẩn Kiến Trúc i18n Tự Chứa (Feature-Sliced Self-Contained i18n)
+
+Toàn bộ bản dịch đa ngôn ngữ được gói gọn trong thư mục của từng Feature:
+
+```text
+apps/web/src/features/<feature_name>/
+├── <FeaturePage>.tsx
+└── content/
+    ├── en.json       # Khóa ngôn ngữ Tiếng Anh (không lặp tiền tố feature)
+    ├── vi.json       # Khóa ngôn ngữ Tiếng Việt
+    └── index.ts      # Local resolver get<Feature>Content(key, locale)
+```
+
+- **Quy tắc đặt Khóa JSON**: Sử dụng cấu trúc sạch `<section>.<element>` (Ví dụ: `hero.heading`, `cta.primary`).
+- **Fallback & Synchronization**:
+  - Khi chưa kết nối mạng Backend: Sử dụng trực tiếp `en.json` & `vi.json` cục bộ.
+  - Khi kết nối Serverpod API: Đồng bộ động qua `I18nEndpoint.getDictionary(locale, namespace)` kèm IndexedDB ETag cache per [i18n.md](docs/services/i18n.md).
 
 ---
 

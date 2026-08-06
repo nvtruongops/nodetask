@@ -120,29 +120,29 @@ Luồng truyền dữ liệu văn bản giao diện (Content Lineage):
 ---
 
 ## Content Dictionary (i18n / CMS Ready)
-Tách rời chuỗi văn bản khỏi cấu trúc Component với tiền tố namespace `about.*` đầy đủ:
+Tách rời chuỗi văn bản dạng Feature-Sliced Self-Contained trong `features/about/content/en.json` và `vi.json` (tương thích 1:1 với Serverpod RPC `namespace: "about"`):
 
 ```json
 {
-  "about.brand.logo.text": "NODETASK // KNOWLEDGE MANAGEMENT",
-  "about.nav.landing": "[Landing]",
-  "about.nav.about": "[About]",
-  "about.nav.privacy": "[Privacy]",
-  "about.nav.terms": "[Terms]",
-  "about.nav.mobile_toggle": "[MENU]",
-  "about.nav.login": "[LOG IN]",
-  "about.nav.register": "[GET STARTED]",
-  "about.vision.title": "[ABOUT NODETASK // VISION & PHILOSOPHY]",
-  "about.vision.desc": "Built for engineers and organizations who value speed, structure, and zero visual noise.",
-  "about.stack.frontend.title": "React & Tiptap AST Engine",
-  "about.stack.frontend.desc": "React (Vite) + Zustand + TanStack Query + Tiptap AST Editor.",
-  "about.stack.backend.title": "Dart Serverpod Framework",
-  "about.stack.backend.desc": "Code-first Serverpod RPC endpoints generating client SDKs.",
-  "about.stack.database.title": "PostgreSQL ltree & pgvector",
-  "about.stack.database.desc": "Native PostgreSQL ltree extension for tree hierarchy and pgvector for AI RAG.",
-  "about.governance.desc": "Governed by AI Agent Governance System v1.3.0 with strict automated rule verification.",
-  "about.footer.copyright": "(C) 2026 nodetask. All rights reserved.",
-  "about.footer.build_info": "v1.4.0 | Environment: production | Build: 2026-08-06T02:31Z | Commit: ${GIT_SHA}"
+  "brand.logo.text": "NODETASK // KNOWLEDGE MANAGEMENT",
+  "nav.landing": "[Landing]",
+  "nav.about": "[About]",
+  "nav.privacy": "[Privacy]",
+  "nav.terms": "[Terms]",
+  "nav.mobile_toggle": "[MENU]",
+  "nav.login": "[LOG IN]",
+  "nav.register": "[GET STARTED]",
+  "vision.title": "[ABOUT NODETASK // VISION & PHILOSOPHY]",
+  "vision.desc": "Built for engineers and organizations who value speed, structure, and zero visual noise.",
+  "stack.frontend.title": "React & Tiptap AST Engine",
+  "stack.frontend.desc": "React (Vite) + Zustand + TanStack Query + Tiptap AST Editor.",
+  "stack.backend.title": "Dart Serverpod Framework",
+  "stack.backend.desc": "Code-first Serverpod RPC endpoints generating client SDKs.",
+  "stack.database.title": "PostgreSQL ltree & pgvector",
+  "stack.database.desc": "Native PostgreSQL ltree extension for tree hierarchy and pgvector for AI RAG.",
+  "governance.desc": "Governed by AI Agent Governance System v1.3.0 with strict automated rule verification.",
+  "footer.copyright": "(C) 2026 nodetask. All rights reserved.",
+  "footer.build_info": "v1.4.0 | Environment: production | Build: 2026-08-06T02:31Z | Commit: ${GIT_SHA}"
 }
 ```
 

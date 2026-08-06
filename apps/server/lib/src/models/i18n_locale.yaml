@@ -1,0 +1,12 @@
+class: I18nLocale
+table: i18n_locales
+fields:
+  code: String
+  name: String
+  isDefault: bool?
+  fallbackCode: String?
+  createdAt: DateTime?
+indexes:
+  i18n_locales_code_idx:
+    fields: code
+    unique: true

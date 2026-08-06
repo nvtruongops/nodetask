@@ -1,6 +1,6 @@
 import { Workspace, DocumentNode, NodeTodo, AIAskResponse } from '../types';
 
-// Initial Mock Knowledge Workspace matching PostgreSQL ltree structure
+// Initial Knowledge Workspace matching PostgreSQL ltree structure
 const INITIAL_WORKSPACES: Workspace[] = [
   {
     id: 'workspace-default-1',

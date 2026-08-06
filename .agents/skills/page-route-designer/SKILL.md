@@ -29,9 +29,10 @@ AI Agent BẮT BỘC tuân thủ 7 Quy chuẩn Chất lượng sau khi tạo ho�
 2. **No CSS Framework Classes**: Không sử dụng class của bất kỳ CSS framework nào (như `grid-cols-4`, `flex-row`, `p-4`). Mô tả ý định thiết kế bằng thuộc tính trừu tượng (ví dụ: `columns: { desktop: 4, tablet: 2, mobile: 1 }`).
 3. **No File Path Dependencies**: Không ghi đường dẫn source code cụ thể (như `apps/web/src/...`). Khai báo phụ thuộc ở dạng trừu tượng (`Layout: PublicLayoutShell`, `Stores: useAuthStore`).
 4. **No Implementation Code**: Không viết mã nguồn React/TSX trong file đặc tả. Chỉ mô tả cấu trúc, luồng dữ liệu và hợp đồng giao tiếp.
-5. **Strict Naming Convention**: Từ khóa trong `Content Dictionary` BẮT BỘC gắn tiền tố namespace theo cú pháp: `<route_name>.<section>.<element>` (Ví dụ: `landing.hero.title`, `auth.login.submit_button`).
+5. **Feature-Sliced i18n Naming Convention**: Từ khóa từ điển được tổ chức dạng Tự chứa (Self-contained Feature Slice) trong `features/<feature>/content/en.json` và `vi.json`. Do namespace đã được gói gọn theo thư mục Feature, các key trong JSON sử dụng cấu trúc sạch `<section>.<element>` (Ví dụ: `hero.title`, `cta.primary`), tương thích 1:1 với Serverpod RPC `I18nEndpoint.getDictionary(locale, namespace)`.
 6. **Public Route Conditional CTA Rendering**: Các trang `PUBLIC` có CTA điều hướng phải quy định rõ phân nhánh giao diện giữa người dùng vãng lai (`GUEST`) và người dùng đã đăng nhập (`USER`), tuyệt đối không dẫn link trỏ vào khu vực bảo mật (`/workspace`) cho Guest gây lỗi 401/403.
 7. **Strict Canonical Policy on Error Pages**: Trang 404 và 500 không được chứa thẻ Canonical URL tự tham chiếu (Omit Canonical Tag per Google SEO Guidelines).
+8. **No Mock Data & Strict System Roles**: Tuyệt đối không dùng Mock Data, mảng dữ liệu giả hay tự định nghĩa Role ngoài chuẩn. 100% Data Types và System/RBAC Roles (`GUEST`, `USER`, `ORG_MEMBER`, `ORG_ADMIN`, `SYSTEM_ADMIN`) phải tham chiếu trực tiếp từ `docs/services/*.md`.
 
 ---
 
@@ -50,9 +51,9 @@ export interface CustomPageProps {
 ```
 
 ### 2. Data Ownership & Content Lineage Flow
-Mô tả sơ đồ luồng dữ liệu văn bản hiển thị từ CMS đến Component:
+Mô tả sơ đồ luồng dữ liệu văn bản hiển thị từ Backend Serverpod i18n Endpoint đến Feature Component:
 ```text
-[Static JSON / CMS] ──> [i18n Content Provider] ──> [useTranslation() Hook] ──> [Component (contentKey resolution)]
+[Serverpod I18nEndpoint / Feature JSON] ──> [useLanguageStore / IndexedDB] ──> [getLandingContent(key, locale)] ──> [Feature Component]
 ```
 
 ---
@@ -74,9 +75,10 @@ Mô tả sơ đồ luồng dữ liệu văn bản hiển thị từ CMS đến C
 - import React, { useState } from 'react'
 - layout="grid grid-cols-1 md:grid-cols-4"
 - path: "apps/web/src/components/Header.tsx"
-- hero.title (Thiếu namespace prefix <route_name>.)
+- Hardcoding direct text strings inside JSX components without content keys
 - <link rel="canonical" href="https://nodetask.io/404" /> (Cấm canonical trên trang 404)
 - Guest button target="/workspace" (Cấm điều hướng Guest vào khu vực bảo mật)
+- const mockData = [...] / role="STUDENT" (Cấm dùng Mock Data hoặc Role tự chế không có trong auth.md)
 ```
 
 ---

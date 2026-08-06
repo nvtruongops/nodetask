@@ -72,7 +72,7 @@ Giao diện tuân thủ 100% **Zero-Icon Rule**. Cấu trúc Component hoàn to�
 ---
 
 ## Content Dictionary (i18n / CMS Ready)
-Tách rời chuỗi văn bản khỏi cấu trúc Component hỗ trợ Đa ngôn ngữ (i18n), A/B Testing và CMS:
+Tách rời chuỗi văn bản dạng Feature-Sliced Self-Contained trong `features/terms/content/en.json` và `vi.json` (tương thích 1:1 với Serverpod RPC `namespace: "terms"`):
 
 ```json
 {
@@ -83,18 +83,18 @@ Tách rời chuỗi văn bản khỏi cấu trúc Component hỗ trợ Đa ngôn
   "nav.terms": "[Terms]",
   "nav.login": "[LOG IN]",
   "nav.register": "[GET STARTED]",
-  "terms.header.title": "[TERMS OF SERVICE // TERMS & CONDITIONS]",
-  "terms.header.effective_date": "Effective Date: August 6, 2026",
-  "terms.section.acceptance.title": "1. Acceptance of Terms & Account Registration",
-  "terms.section.acceptance.body": "By creating a workspace account, users agree to strictly comply with system rules and governance policies.",
-  "terms.section.intellectual_property.title": "2. User Content & Intellectual Property Rights",
-  "terms.section.intellectual_property.body": "All knowledge nodes and AST content remain the exclusive property of the creating user or organization.",
-  "terms.section.acceptable_use.title": "3. Acceptable Use Policy & System Limits",
-  "terms.section.acceptable_use.body": "Users must not misuse automated API endpoints, execute denial-of-service attacks, or bypass RBAC access matrix.",
-  "terms.section.limitation_liability.title": "4. Limitation of Liability & Service Guarantees",
-  "terms.section.limitation_liability.body": "Service is provided as-is with strict automated backup policies and open architecture guarantees.",
+  "header.title": "[TERMS OF SERVICE // TERMS & CONDITIONS]",
+  "header.effective_date": "Effective Date: August 6, 2026",
+  "section.acceptance.title": "1. Acceptance of Terms & Account Registration",
+  "section.acceptance.body": "By creating a workspace account, users agree to strictly comply with system rules and governance policies.",
+  "section.intellectual_property.title": "2. User Content & Intellectual Property Rights",
+  "section.intellectual_property.body": "All knowledge nodes and AST content remain the exclusive property of the creating user or organization.",
+  "section.acceptable_use.title": "3. Acceptable Use Policy & System Limits",
+  "section.acceptable_use.body": "Users must not misuse automated API endpoints, execute denial-of-service attacks, or bypass RBAC access matrix.",
+  "section.limitation_liability.title": "4. Limitation of Liability & Service Guarantees",
+  "section.limitation_liability.body": "Service is provided as-is with strict automated backup policies and open architecture guarantees.",
   "footer.copyright": "(C) 2026 nodetask. All rights reserved.",
-  "footer.build_info": "v1.3.0 | MIT License | Commit: ${GIT_SHA}"
+  "footer.build_info": "v1.4.0 | MIT License | Commit: ${GIT_SHA}"
 }
 ```
 

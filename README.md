@@ -20,23 +20,10 @@
 
 ```text
 nodetask/
-├── .agents/                      # AI Agent Governance & Rulesets (AGENTS.md, skills, prompts, scripts)
-│   ├── manifest.json             # Governance Metadata & Versioning (v1.3.0)
-│   ├── pipeline.json             # 6-Stage Execution Pipeline for Manager/Subagents
-│   ├── policies/                 # Rule policies (dependencies, folder-structure, zero-icon, imports)
-│   └── scripts/verify.js         # Automated AST & pattern rule engine runner
-├── docs/                         # Core Architecture Specifications & Service Specs
-│   ├── architecture.md           # Master Tech Stack & ADRs
-│   ├── data_and_api.md           # Serverpod Endpoints & Database Schemas Index
-│   ├── frontend_and_ui.md        # Monochrome Theme Tokens & Zero-Icon UI rules
-│   ├── operations_and_quality.md # Quality budgets, testing strategy & phased roadmap
-│   ├── services/                 # Modular Per-Service Specifications (`<service_name>.md`)
-│   └── page_routes/              # Modular Frontend Page & Route Specs (`<route_name>.md`)
-├── apps/                         # Multi-Platform Applications
-│   ├── web/                      # React (Vite) Frontend + Zustand + TanStack Query
-│   ├── server/                   # Dart Serverpod Backend + PostgreSQL + Redis
-│   └── mobile/                   # Flutter Mobile App
-└── docker-compose.yml            # Docker setup for PostgreSQL (pgvector) & Redis
+├── .agents/                      # AI Agent Governance System & Automated Verification Engine
+├── docs/                         # Master Architecture, Service & Page Route Specifications
+├── apps/                         # Multi-Platform Applications (Web Frontend, Backend Server, Mobile)
+└── docker-compose.yml            # Local Infrastructure Setup (PostgreSQL + pgvector & Redis)
 ```
 
 ---

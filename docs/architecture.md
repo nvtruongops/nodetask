@@ -48,11 +48,15 @@
 apps/web/src/
 ├── assets/                       # Images, Fonts
 ├── components/                   # Shared UI Components (Shadcn UI, Custom Layout, Tree)
-├── features/                     # Feature-driven (auth, courses, editor, todos, ai-search)
+├── features/                     # Feature-driven Slices (landing, auth, workspace, editor, ai-search)
+│   └── <feature_name>/
+│       ├── components/           # Feature UI Components
+│       ├── content/              # Feature-Sliced Self-Contained i18n (en.json, vi.json, index.ts)
+│       └── <FeaturePage>.tsx     # Main Feature Page Entry
 ├── hooks/                        # Custom React Hooks
 ├── lib/                          # Utils, Client SDK Instantiation (serverpod.ts, utils.ts)
 ├── services/                     # API Fetching & React Query Queries
-├── store/                        # Zustand Local Stores
+├── store/                        # Zustand Local Stores (useAuthStore.ts, useThemeStore.ts, useLanguageStore.ts)
 ├── types/                        # TypeScript Interfaces & Types
 └── styles/                       # globals.css (Theme Tokens)
 ```
