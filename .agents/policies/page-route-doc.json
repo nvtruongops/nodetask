@@ -6,11 +6,17 @@
   "targetDir": "docs/page_routes",
   "schemaFile": ".agents/schemas/page-route-doc.yaml",
   "requiredSections": [
-    "Overview",
-    "Route Config",
-    "Component Tree",
-    "State & Data Flow",
-    "Interactions",
+    "Overview & Route ID",
+    "Route Config & Navigation Metadata",
+    "SEO & Social Meta Specification",
+    "Loading Strategy & Code Splitting",
+    "Permission Matrix & RBAC",
+    "API Dependency & Serverpod RPC",
+    "Page State Machine & UI Transitions",
+    "Component Inventory & Tree",
+    "Error Mapping & Handling",
+    "Acceptance Criteria & QA Scenarios",
     "Accessibility"
   ]
 }
+

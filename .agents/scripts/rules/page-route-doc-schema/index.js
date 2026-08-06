@@ -14,11 +14,16 @@ module.exports = {
     }
 
     const requiredSections = policy.requiredSections || [
-      'Overview',
-      'Route Config',
-      'Component Tree',
-      'State & Data Flow',
-      'Interactions',
+      'Overview & Route ID',
+      'Route Config & Navigation Metadata',
+      'SEO & Social Meta Specification',
+      'Loading Strategy & Code Splitting',
+      'Permission Matrix & RBAC',
+      'API Dependency & Serverpod RPC',
+      'Page State Machine & UI Transitions',
+      'Component Inventory & Tree',
+      'Error Mapping & Handling',
+      'Acceptance Criteria & QA Scenarios',
       'Accessibility'
     ];
 
@@ -38,14 +43,16 @@ module.exports = {
         .map(h => h.replace(/^#{1,4}\s+/, '').trim());
 
       const missingSections = requiredSections.filter(sec => {
-        return !headings.some(h => h.toLowerCase().includes(sec.toLowerCase()));
+        // Extract key search terms for flexible section matching
+        const keywords = sec.split('&')[0].trim().toLowerCase();
+        return !headings.some(h => h.toLowerCase().includes(keywords));
       });
 
       if (missingSections.length > 0) {
         ctx.logger.warn(`File docs/page_routes/${file} thiếu ${missingSections.length} sections bắt buộc: ${missingSections.join(', ')}`);
         totalViolations++;
       } else {
-        ctx.logger.pass(`File docs/page_routes/${file} tuân thủ 100% 6 Sections Specification Contract.`);
+        ctx.logger.pass(`File docs/page_routes/${file} tuân thủ 100% 10-Point Specification Contract Schema.`);
       }
     }
 
@@ -56,3 +63,4 @@ module.exports = {
     return { passed: totalViolations === 0 };
   }
 };
+

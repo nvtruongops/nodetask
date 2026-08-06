@@ -1,175 +1,140 @@
 # Contact Page Route Specification (`contact.md`)
 
+> **Route ID**: `CONTACT_MAIN`  
+> **Route Name**: `contact.main`  
 > **Route Path**: `/contact`  
 > **Route Type**: `PUBLIC`  
 > **Layout Shell**: `PublicLayoutShell`  
-> **Specification Version**: `1.4.0`  
+> **Specification Version**: `2.0.0`  
 > **Status**: `APPROVED`  
 
 ---
 
-## Overview
-Trang Liên hệ (`/contact`) cung cấp các kênh thông tin hỗ trợ chính thức, địa chỉ email kỹ thuật, liên kết báo lỗi GitHub Issues, thông tin hợp tác và biểu mẫu gửi tin nhắn trực tiếp tới đội ngũ quản trị nền tảng **`nodetask`**.
+## 1. Overview & Route ID
+- **Route ID**: `CONTACT_MAIN` (Dùng cho Analytics, Breadcrumb, Logging, Event Tracking, RBAC)
+- **Route Name**: `contact.main`
+- **Description**: Trang Liên hệ (`/contact`) cung cấp form phản hồi, hỗ trợ kỹ thuật và thông tin liên lạc chính thức của nodetask cho người dùng và đối tác.
 
 ---
 
-## Route Config
+## 2. Route Config & Navigation Metadata
 - **URL Path**: `/contact`
 - **Access Type**: `PUBLIC`
-- **Auth Guard**: None (Công khai cho cả `GUEST` và `USER`)
+- **Auth Guard**: `None`
 - **Layout Shell**: `PublicLayoutShell`
+- **Navigation Metadata**:
+  - `sidebar`: `false`
+  - `header`: `true`
+  - `footer`: `true`
+  - `breadcrumb`: `true`
+  - `searchable`: `true`
+  - `navOrder`: `8`
+  - `navGroup`: `"public"`
 
 ---
 
-## Route Dependencies
-- **Layout Shell**: `PublicLayoutShell`
-- **Global Stores**: `useAuthStore`
-- **Providers**: `ThemeProvider`, `QueryClientProvider`
-- **Router**: `ReactRouter`
+## 3. SEO & Social Meta Specification
+- **Title Tag**: `<title>Contact Us - nodetask Support & Feedback</title>`
+- **Meta Description**: `Gửi phản hồi, yêu cầu hỗ trợ hoặc câu hỏi hợp tác cho đội ngũ nodetask.`
+- **Keywords**: `nodetask contact, support, feedback, enquiry`
+- **Canonical URL**: `https://nodetask.io/contact`
+- **OpenGraph Specification**:
+  - `og:title`: `Contact Us - nodetask`
+  - `og:description`: `Liên hệ hỗ trợ kỹ thuật và phản hồi nodetask.`
+  - `og:image`: `https://nodetask.io/og-contact.png`
+- **Twitter Card Specification**:
+  - `twitter:card`: `summary`
+  - `twitter:title`: `Contact Us - nodetask`
 
 ---
 
-## Non-Functional Requirements & Rendering Strategy
-- **Rendering Strategy**: Static Site Generation (SSG) với Form Handling Client-side.
-- **CDN Caching Policy**: `Cache-Control: public, max-age=86400, s-maxage=604800`
+## 4. Loading Strategy & Code Splitting
+- **Lazy Load**: `true` (`React.lazy(() => import('@/features/contact/ContactPage'))`)
+- **Preload Strategy**: `onHover`
+- **Chunk Name**: `chunk-contact`
+- **Priority**: `MEDIUM`
 
 ---
 
-## Component Tree
-Giao diện tuân thủ 100% **Zero-Icon Rule**:
+## 5. Permission Matrix & RBAC
+| System Role | View Access | Form Submit Rights | Notes |
+| :--- | :--- | :--- | :--- |
+| `GUEST` | **Allowed** | Gửi form liên hệ kèm captcha/rate-limit | Mọi đối tượng |
+| `USER` | **Allowed** | Gửi form với thông tin email tự điền | Người dùng cá nhân |
+| `ORG_MEMBER` | **Allowed** | Gửi form hỗ trợ tổ chức | Thành viên tổ chức |
+| `ORG_ADMIN` | **Allowed** | Gửi form ưu tiên | Quản trị viên |
+| `SYSTEM_ADMIN` | **Allowed** | Gửi form trực tiếp | Admin hệ thống |
 
+---
+
+## 6. API Dependency & Serverpod RPC
+- **Linked Backend RPC Endpoints**:
+  - `ContactEndpoint.submitEnquiry(session, input: ContactFormDto)`: Nhận thông tin liên hệ và lưu log hỗ trợ.
+- **Data Caching & Stale Policy**:
+  - `staleTime`: `0ms`.
+  - `refetchOnWindowFocus`: `false`.
+
+---
+
+## 7. Page State Machine & UI Transitions
+- **State Machine Flow**:
+  `IDLE` → `TYPING` → `SUBMITTING` → `SUCCESS` (Show Feedback Banner) | `ERROR`
+- **UI State Breakdown**:
+  - `IDLE`: Form sẵn sàng nhập Name, Email, Subject, Message.
+  - `SUBMITTING`: Nút Submit hiển thị `[Sending...]`.
+  - `SUCCESS`: Hiển thị "Cảm ơn bạn đã gửi liên hệ. Đội ngũ nodetask sẽ phản hồi sớm nhất."
+
+---
+
+## 8. Component Inventory & Tree
+
+### Component Inventory List
+- `PublicLayoutShell`: Organism bọc giao diện công khai.
+- `ContactFormCard`: Container card bọc form liên hệ.
+- `SubjectSelect`: Molecule dropdown chọn chủ đề liên hệ.
+- `MessageTextarea`: Atom textarea nhập nội dung.
+- `SubmitButton`: Button atom gửi form.
+
+### Component Tree
 ```text
 [ContactPageContainer]
-├── [SkipToContentLink] -> href="#main-content"
+├── [SkipToContentLink target="#main-content"]
 ├── [PublicHeader]
-│   ├── [BrandLogo contentKey="brand.logo.text"]
-│   └── [NavLinks]
-├── [MainContent id="main-content"]
-│   ├── [HeaderSection borderBottom="default" spacing="48px"]
-│   │   ├── [Title contentKey="contact.header.title"]
-│   │   └── [SubTitle contentKey="contact.header.subtitle"]
-│   ├── [ContactGrid columns={ desktop: 2, tablet: 2, mobile: 1 } gap="48px" spacing="48px"]
-│   │   ├── [ContactInfoCard] -> contentKeys="contact.info.*"
-│   │   └── [ContactFormContainer]
-│   │       ├── [FormInput id="name"] -> contentKey="contact.form.name_label"
-│   │       ├── [FormInput id="email"] -> contentKey="contact.form.email_label"
-│   │       ├── [FormTextarea id="message"] -> contentKey="contact.form.message_label"
-│   │       └── [SubmitButton] -> contentKey="contact.form.submit_button"
-└── [PublicFooter]
+└── [MainContent id="main-content" role="main"]
+    └── [ContactFormCard maxWidth="600px"]
+        ├── [FormTitle contentKey="contact.title"]
+        ├── [ContactForm onSubmit=handleContactSubmit]
+        │   ├── [NameInput]
+        │   ├── [EmailInput]
+        │   ├── [SubjectSelect]
+        │   ├── [MessageTextarea]
+        │   └── [SubmitButton disabled=loading]
+        └── [ContactInfoBlock]
 ```
 
 ---
 
-## Content Dictionary (i18n / CMS Ready)
-
-```json
-{
-  "brand.logo.text": "NODETASK // KNOWLEDGE MANAGEMENT",
-  "contact.header.title": "[CONTACT US // SUPPORT & FEEDBACK]",
-  "contact.header.subtitle": "Get in touch with the nodetask engineering team for support, bug reports, or partnership.",
-  "contact.info.email_title": "Technical Support Email",
-  "contact.info.email_value": "support@nodetask.io",
-  "contact.info.github_title": "Open Source & Issue Tracker",
-  "contact.info.github_value": "github.com/nvtruongops/nodetask",
-  "contact.form.name_label": "Your Full Name",
-  "contact.form.email_label": "Email Address",
-  "contact.form.message_label": "Message Detail",
-  "contact.form.submit_button": "[SEND MESSAGE ->]",
-  "footer.copyright": "(C) 2026 nodetask. All rights reserved.",
-  "footer.build_info": "v1.3.0 | MIT License | Commit: ${GIT_SHA}"
-}
-```
+## 9. Error Mapping & Handling
+| Status Code | Trigger Condition | UI Error Content Key | Recovery Action | Logging Tag |
+| :--- | :--- | :--- | :--- | :--- |
+| `422` | Thông tin form không đầy đủ | `contact.error.validation_failed` | Highlight trường bị thiếu | `CONTACT_VALIDATION_ERROR` |
+| `429` | Gửi quá 3 tin nhắn / phút | `contact.error.rate_limit` | Cooldown 60s | `CONTACT_RATE_LIMITED` |
+| `500` | Lỗi gửi ticket ở Backend | `contact.error.server_error` | Banner báo lỗi hệ thống | `CONTACT_SERVER_ERROR` |
 
 ---
 
-## Responsive Layout & Grid Specs
-- **Breakpoints**: Desktop (`>1280px`), Tablet (`768px–1279px`), Mobile (`<768px`).
-- **Grid Layout**: 2 cột trên Desktop/Tablet, 1 cột trên Mobile.
-
----
-
-## Design Tokens System
-
-```typescript
-export const contactDesignTokens = {
-  color: { background: '#000000', surface: '#0A0A0A', text: { primary: '#FFFFFF', secondary: '#888888' }, border: { default: '#333333', hover: '#FFFFFF' } },
-  spacing: { sectionPadding: '80px', cardGap: '48px' },
-  typography: { pageHeading: { fontSize: '36px', fontWeight: '700' }, bodyText: { fontSize: '16px', lineHeight: '1.6' } },
-  radius: { none: '0px' },
-  motion: { duration: '200ms', easing: 'cubic-bezier(0, 0, 0.2, 1)', properties: ['opacity', 'transform', 'border-color'] },
-};
-```
-
----
-
-## Motion & Animation Spec
-- **Properties**: `opacity`, `transform`, `border-color`. Cấm `transition: all`.
-
----
-
-## State & Data Flow
-- **Form State**: Local React state với Zod validation.
-- **Data Flow**: Submit form gửi thông tin phản hồi.
-
----
-
-## Interactions & Event Analytics
-- **Click Submit**: Kích hoạt gửi tin nhắn.
-- **Analytics Triggers**: `contact.viewed`, `contact.submitted`.
-
----
-
-## SEO & Social Meta Specification
-- **Title Tag**: `<title>Contact Us — nodetask Knowledge Engine</title>`
-- **Meta Description**: `"Contact nodetask technical support team and GitHub issue tracker."`
-- **Canonical URL**: `https://nodetask.io/contact`
-- **Robots**: `index, follow`
-
----
-
-## Performance Budget Matrix
-
-| Metric | Budget Target | Measurement Unit | Audit Tool |
-| :--- | :--- | :--- | :--- |
-| **LCP** | `< 1.5s` | Seconds | Google Lighthouse |
-| **CLS** | `< 0.02` | Score index | Web Vitals |
-| **TTFB** | `< 500ms` | Milliseconds | DevTools |
-
----
-
-## Security Headers & Policy Specification
-- **CSP**: `default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; frame-ancestors 'none';`
-- **X-Frame-Options**: `DENY`
-- **X-Content-Type-Options**: `nosniff`
-
----
-
-## Error & Fallback States
-- **Form Submit Error**: Hiển thị thông báo lỗi Zero-Icon `[ERROR: COULD NOT SEND MESSAGE]`.
-- **No-JS Fallback**: `<noscript>` thông báo *"NODETASK requires JavaScript to run."*
-
----
-
-## Accessibility (a11y) Full Contract
-- **a11y Standard**: WAI-ARIA 1.2.
-- **Skip Link**: `<a href="#main-content">Skip to Content</a>`.
-- **Semantic HTML5**: `<main id="main-content">`, `<form>`, `<label>`, `<input>`.
-
----
-
-## Acceptance Criteria & Testing Scenarios (Given-When-Then)
+## 10. Acceptance Criteria & QA Scenarios
 
 ```gherkin
-Scenario: Guest User Visits Contact Page
-  Given a guest user
-  When the user visits URL "/contact"
-  Then the heading "[CONTACT US // SUPPORT & FEEDBACK]" is visible
-  And the contact form and email support info are rendered
+Scenario: Guest submits contact form
+  Given a user on "/contact"
+  When filling name, email, subject, message and clicking Submit
+  Then `ContactEndpoint.submitEnquiry()` receives the payload
+  And a success message is displayed on screen
 ```
 
 ---
 
-## Enhanced Footer Specification
-- **Copyright**: `(C) 2026 nodetask. All rights reserved.`
-- **System Information**: `Version 1.3.0 | MIT License | Commit: ${GIT_SHA}`
-- **Footer Links**: `[Privacy Policy]`, `[Terms of Service]`, `[GitHub Repo]`, `[Contact]`
+## Accessibility (a11y) & Design Tokens
+- **a11y Standard**: WAI-ARIA 1.2 (`role="form"`).
+- **Design Tokens**: `themeMode: 'dark-only'`, `radius: 0px`, `colorScheme: 'monochrome'`.

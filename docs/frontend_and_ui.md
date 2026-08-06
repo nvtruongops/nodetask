@@ -100,9 +100,16 @@ apps/web/src/features/<feature_name>/
 
 Tương tự như cấu trúc đặc tả Dịch vụ Backend tại `docs/services/<service_name>.md`, toàn bộ Giao diện, Route Matrix, Layout Shell và Cấu trúc Component của từng màn hình Frontend được quản lý theo mô hình thư mục **`docs/page_routes/<route_name>.md`**.
 
-- **Quy tắc Khởi tạo**: Thư mục `docs/page_routes/` được giữ sẵn. Các file đặc tả trang (`<route_name>.md`) không tạo sẵn tràn lan mà được tạo theo nhu cầu phát triển (on-demand) khi bắt đầu xây dựng từng màn hình/tuyến đường tương ứng.
-- **Quy chuẩn Cấu trúc file `docs/page_routes/<route_name>.md`**:
-  1. **Route Metadata**: Đường dẫn URL, loại route (`Public` | `Guest Only` | `Protected`), Layout Shell sử dụng, Auth Guard & Redirect Rules.
-  2. **Page Content & Component Structure**: Danh sách các Section, Bố cục hiển thị (Hero, Card Grid, Form, Editor...), trạng thái State (Zustand, React Query).
-  3. **User Flow & Interactions**: Luồng tương tác của người dùng trên trang (Click, Submit, Hotkeys, Modal/Drawer).
-  4. **Zero-Icon UI Compliance**: Đảm bảo 100% không dùng Icon, tuân thủ Monochrome Theme Tokens.
+Toàn bộ 13 file đặc tả trang bắt buộc phải đáp ứng **Bộ Quy Chuẩn 10 Điểm Nâng Cấp (10-Point Page Route Specification Standard)**:
+
+1. **Route ID & route_name**: Định danh duy nhất (Ví dụ: `AUTH_LOGIN` / `auth.login`) cho Analytics, Breadcrumb, Logging, Event Tracking, RBAC.
+2. **Navigation Metadata**: Khai báo cờ điều hướng (`sidebar`, `header`, `footer`, `breadcrumb`, `searchable`, `navGroup`) cho UI Generator.
+3. **SEO & Social Meta Specification**: Metadata thẻ Title, Description, Keywords, Canonical URL, OpenGraph, Twitter Card.
+4. **Loading Strategy & Code Splitting**: Cấu hình Lazy Load, Preload condition, Chunk Name, và Bundle Priority (`CRITICAL`/`HIGH`/`MEDIUM`/`LOW`).
+5. **Permission Matrix & RBAC**: Bảng phân quyền chi tiết cho 5 System Roles (`GUEST`, `USER`, `ORG_MEMBER`, `ORG_ADMIN`, `SYSTEM_ADMIN`).
+6. **API Dependency & Serverpod RPC**: Khai báo rõ ràng các RPC endpoints (Ví dụ: `AuthEndpoint.login()`) và chiến lược Cache TTL.
+7. **Page State Machine & UI Transitions**: Sơ đồ trạng thái giao diện (`IDLE` → `TYPING` → `SUBMITTING` → `SUCCESS` / `ERROR`).
+8. **Component Inventory & Tree**: Danh sách Component nguyên tử (Atoms/Molecules/Organisms) và Cây Component Zero-Icon.
+9. **Error Mapping & Handling**: Bảng tra cứu mã lỗi HTTP/RPC (401, 403, 404, 409, 422, 429, 500), UI Content Key và luồng khôi phục lỗi.
+10. **Acceptance Criteria & QA Scenarios**: Kịch bản kiểm thử chất lượng chuẩn Gherkin (`Given-When-Then`).
+

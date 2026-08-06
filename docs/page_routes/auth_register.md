@@ -1,171 +1,164 @@
 # Auth Register Page Route Specification (`auth_register.md`)
 
+> **Route ID**: `AUTH_REGISTER`  
+> **Route Name**: `auth.register`  
 > **Route Path**: `/auth/register`  
 > **Route Type**: `GUEST_ONLY`  
 > **Layout Shell**: `AuthLayoutShell`  
-> **Specification Version**: `1.4.0`  
+> **Specification Version**: `2.0.0`  
 > **Status**: `APPROVED`  
 
 ---
 
-## Overview
-Trang Đăng ký tài khoản (`/auth/register`) quản lý luồng khởi tạo tài khoản thành viên mới. Quy trình gồm 2 bước: Gửi mã Email OTP 6 chữ số qua `AuthEndpoint.sendOtp(session, { email, type: 'REGISTER' })` và Đăng ký chính thức qua `AuthEndpoint.register(session, input)`.
+## 1. Overview & Route ID
+- **Route ID**: `AUTH_REGISTER` (Dùng cho Analytics, Breadcrumb, Logging, Event Tracking, RBAC)
+- **Route Name**: `auth.register`
+- **Description**: Trang Đăng ký (`/auth/register`) cung cấp giao diện tạo tài khoản mới cho người dùng cá nhân hoặc đại diện tổ chức. Trang gửi dữ liệu đăng ký qua `AuthEndpoint.register(session, input)`, khởi tạo User profile và gửi OTP/Link xác minh email.
 
 ---
 
-## Route Config
+## 2. Route Config & Navigation Metadata
 - **URL Path**: `/auth/register`
 - **Access Type**: `GUEST_ONLY`
 - **Auth Guard**: `GuestOnlyGuard`
 - **Layout Shell**: `AuthLayoutShell`
+- **Navigation Metadata**:
+  - `sidebar`: `false`
+  - `header`: `true`
+  - `footer`: `true`
+  - `breadcrumb`: `false`
+  - `searchable`: `false`
+  - `navOrder`: `3`
+  - `navGroup`: `"auth"`
 
 ---
 
-## Route Dependencies
-- **Layout Shell**: `AuthLayoutShell`
-- **Global Stores**: `useAuthStore`
-- **Linked RPC Services**: `AuthEndpoint.sendOtp`, `AuthEndpoint.register` (`docs/services/auth.md`)
-- **Router**: `ReactRouter`
+## 3. SEO & Social Meta Specification
+- **Title Tag**: `<title>Create Account - nodetask</title>`
+- **Meta Description**: `Đăng ký tài khoản nodetask để trải nghiệm không gian quản lý tài liệu tối giản Monochrome.`
+- **Keywords**: `nodetask register, create account, sign up, zero-icon workspace`
+- **Canonical URL**: `https://nodetask.io/auth/register`
+- **OpenGraph Specification**:
+  - `og:title`: `Create Account - nodetask`
+  - `og:description`: `Khởi tạo không gian tài liệu nodetask.`
+  - `og:image`: `https://nodetask.io/og-auth.png`
+  - `og:type`: `website`
+  - `og:url`: `https://nodetask.io/auth/register`
+- **Twitter Card Specification**:
+  - `twitter:card`: `summary`
+  - `twitter:title`: `Create Account - nodetask`
+  - `twitter:description`: `Create your nodetask account.`
 
 ---
 
-## Non-Functional Requirements & Rendering Strategy
-- **Rendering Strategy**: Client-Side Rendering (CSR) với 2-Step Form Wizard.
+## 4. Loading Strategy & Code Splitting
+- **Lazy Load**: `true` (`React.lazy(() => import('@/features/auth/RegisterPage'))`)
+- **Preload Strategy**: `onHover`
+- **Chunk Name**: `chunk-auth-register`
+- **Priority**: `HIGH`
 
 ---
 
-## Component Tree
-Giao diện tuân thủ 100% **Zero-Icon Rule**:
+## 5. Permission Matrix & RBAC
+| System Role | View Access | Form Submit Rights | Redirect Policy | Notes |
+| :--- | :--- | :--- | :--- | :--- |
+| `GUEST` | **Allowed** | Cho phép submit Form đăng ký | Giữ tại trang | Người dùng vãng lai |
+| `USER` | **Redirect** | Bị vô hiệu | Direct chuyển hướng `/workspace` | Đã đăng nhập |
+| `ORG_MEMBER` | **Redirect** | Bị vô hiệu | Direct chuyển hướng `/workspace` | Thành viên tổ chức |
+| `ORG_ADMIN` | **Redirect** | Bị vô hiệu | Direct chuyển hướng `/workspace` | Quản trị viên tổ chức |
+| `SYSTEM_ADMIN` | **Redirect** | Bị vô hiệu | Direct chuyển hướng `/admin` | Quản trị hệ thống |
 
+---
+
+## 6. API Dependency & Serverpod RPC
+- **Linked Backend RPC Endpoints**:
+  - `AuthEndpoint.register(session, input: RegisterInputDto)`: Tạo tài khoản mới, khởi tạo workspace cá nhân mặc định, trả về `AuthResponseDto`.
+- **Data Caching & Stale Policy**:
+  - `staleTime`: `0ms`.
+  - `refetchOnWindowFocus`: `false`.
+
+---
+
+## 7. Page State Machine & UI Transitions
+- **State Machine Flow**:
+  `IDLE` → `TYPING` → `SUBMITTING` → `VERIFY_REQUIRED` (Redirect `/auth/verify-email`) | `ERROR`
+- **UI State Breakdown**:
+  - `IDLE`: Form sẵn sàng nhập Full Name, Email & Password.
+  - `TYPING`: Zod validation kiểm tra độ mạnh mật khẩu và định dạng email.
+  - `SUBMITTING`: Nút Submit hiển thị `[Registering...]`, input disabled.
+  - `VERIFY_REQUIRED`: Đăng ký thành công, tự động chuyển sang trang `/auth/verify-email?email=...`.
+  - `ERROR`: Hiển thị lỗi trùng email (409) hoặc lỗi định dạng.
+
+---
+
+## 8. Component Inventory & Tree
+
+### Component Inventory List
+- `AuthLayoutShell`: Organism bọc giao diện Authentication.
+- `RegisterFormCard`: Card container bọc tiêu đề và form đăng ký.
+- `FullNameInput`: Atom input nhận họ tên hiển thị.
+- `EmailInput`: Atom input nhận email.
+- `PasswordInput`: Atom input nhận mật khẩu kèm thước đo độ mạnh (`[Weak]`, `[Medium]`, `[Strong]`).
+- `SubmitButton`: Button atom gửi thông tin đăng ký.
+
+### Component Tree
 ```text
 [RegisterPageContainer]
-├── [SkipToContentLink] -> href="#main-content"
+├── [SkipToContentLink target="#main-content"]
 ├── [AuthHeader]
 │   └── [BrandLogo contentKey="brand.logo.text"]
-├── [MainContent id="main-content" alignment="center" minHeight="80vh"]
-│   ├── [RegisterFormCard maxWidth="440px" cardPadding="32px" border="default"]
-│   │   ├── [FormTitle contentKey="auth.register.title"]
-│   │   ├── [StepIndicator contentKey="auth.register.step_indicator"]
-│   │   ├── [RegisterForm]
-│   │   │   ├── [Step1: Email & Request OTP]
-│   │   │   │   ├── [Label contentKey="auth.register.email_label"]
-│   │   │   │   ├── [Input type="email"]
-│   │   │   │   └── [SendOtpButton] -> contentKey="auth.register.send_otp_button"
-│   │   │   └── [Step2: OTP Verification & Password Setup]
-│   │   │       ├── [Label contentKey="auth.register.otp_label"]
-│   │   │       ├── [Input type="text" maxlength=6 placeholder="123456"]
-│   │   │       ├── [Label contentKey="auth.register.password_label"]
-│   │   │       ├── [Input type="password"]
-│   │   │       └── [RegisterSubmitButton] -> contentKey="auth.register.submit_button"
-│   │   └── [FormFooterNav alignment="center" spacing="24px"]
-│   │       ├── [Text contentKey="auth.register.already_account_text"]
-│   │       └── [LoginLink target="/auth/login"] -> contentKey="auth.register.login_link"
-└── [PublicFooter]
+└── [MainContent id="main-content" alignment="center"]
+    └── [RegisterFormCard maxWidth="440px"]
+        ├── [FormTitle contentKey="auth.register.title"]
+        ├── [FormSubTitle contentKey="auth.register.subtitle"]
+        ├── [RegisterForm onSubmit=handleRegister]
+        │   ├── [FormGroup id="fullName"]
+        │   │   ├── [Label contentKey="auth.register.name_label"]
+        │   │   └── [FullNameInput type="text"]
+        │   ├── [FormGroup id="email"]
+        │   │   ├── [Label contentKey="auth.register.email_label"]
+        │   │   └── [EmailInput type="email"]
+        │   ├── [FormGroup id="password"]
+        │   │   ├── [Label contentKey="auth.register.password_label"]
+        │   │   └── [PasswordInput type="password"]
+        │   └── [SubmitButton disabled=loading]
+        └── [FormFooterNav]
+            └── [LoginLink target="/auth/login"]
 ```
 
 ---
 
-## Content Dictionary (i18n / CMS Ready)
-
-```json
-{
-  "brand.logo.text": "NODETASK // KNOWLEDGE MANAGEMENT",
-  "auth.register.title": "[CREATE ACCOUNT // NEW WORKSPACE]",
-  "auth.register.step_indicator": "STEP 1 OF 2: EMAIL OTP VERIFICATION",
-  "auth.register.email_label": "Email Address",
-  "auth.register.send_otp_button": "[SEND 6-DIGIT OTP ->]",
-  "auth.register.otp_label": "6-Digit Email OTP Code",
-  "auth.register.password_label": "Choose Password (min 8 chars)",
-  "auth.register.submit_button": "[COMPLETE REGISTRATION ->]",
-  "auth.register.already_account_text": "Already have a nodetask account?",
-  "auth.register.login_link": "[LOG IN HERE]",
-  "footer.copyright": "(C) 2026 nodetask. All rights reserved.",
-  "footer.build_info": "v1.3.0 | MIT License | Commit: ${GIT_SHA}"
-}
-```
+## 9. Error Mapping & Handling
+| Status Code | Trigger Condition | UI Error Content Key | Recovery Action | Logging Tag |
+| :--- | :--- | :--- | :--- | :--- |
+| `401` | Session token không hợp lệ khi tự động lấy cấu hình | `auth.register.error.unauthorized` | Reset form | `AUTH_REG_UNAUTHORIZED` |
+| `403` | Địa chỉ IP bị block đăng ký | `auth.register.error.ip_blocked` | Hiển thị thông báo hỗ trợ | `AUTH_REG_IP_BLOCKED` |
+| `409` | Email đã tồn tại trong hệ thống | `auth.register.error.email_exists` | Gợi ý đăng nhập hoặc quên mật khẩu | `AUTH_REG_DUPLICATE_EMAIL` |
+| `422` | Mật khẩu chưa đủ độ dài/ký tự bắt buộc | `auth.register.error.weak_password` | Hiển thị hướng dẫn độ mạnh mật khẩu | `AUTH_REG_WEAK_PASSWORD` |
+| `429` | Quá nhiều lần thử đăng ký từ cùng 1 IP | `auth.register.error.rate_limit` | Khoá Form 60s | `AUTH_REG_RATE_LIMITED` |
+| `500` | Lỗi khởi tạo tài khoản ở Serverpod Database | `auth.register.error.server_error` | Banner báo lỗi hệ thống | `AUTH_REG_SERVER_ERROR` |
 
 ---
 
-## Responsive Layout & Grid Specs
-- **Card Container**: `max-width: 440px`, căn giữa `margin: 0 auto`.
-
----
-
-## Design Tokens System
-
-```typescript
-export const registerDesignTokens = {
-  color: { background: '#000000', surface: '#0A0A0A', border: { default: '#333333', focus: '#FFFFFF' } },
-  spacing: { cardPadding: '32px', cardMaxWidth: '440px' },
-  radius: { none: '0px' },
-  motion: { duration: '200ms', properties: ['opacity', 'transform', 'border-color'] },
-};
-```
-
----
-
-## Motion & Animation Spec
-- **Properties**: `opacity`, `transform`, `border-color`. Cấm `transition: all`.
-
----
-
-## State & Data Flow
-- **Step 1**: Gọi `AuthEndpoint.sendOtp({ email, type: 'REGISTER' })`.
-- **Step 2**: Gọi `AuthEndpoint.register({ fullName, email, otp, password, rePassword })`.
-- **On Success**: Đăng ký thành công ➡️ Redirect `/auth/login`.
-
----
-
-## Interactions & Event Analytics
-- **Click Send OTP**: Gửi mã OTP.
-- **Analytics**: `auth.register_otp_requested`, `auth.register_completed`.
-
----
-
-## SEO & Social Meta Specification
-- **Title Tag**: `<title>Register Account — nodetask Knowledge Engine</title>`
-- **Robots**: `noindex, follow`
-
----
-
-## Performance Budget Matrix
-
-| Metric | Budget Target | Audit Tool |
-| :--- | :--- | :--- |
-| **LCP** | `< 1.2s` | Google Lighthouse |
-
----
-
-## Security Headers & Policy Specification
-- **CSP**: `default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline';`
-- **X-Frame-Options**: `DENY`
-
----
-
-## Error & Fallback States
-- **Invalid OTP**: Banner Zero-Icon `[ERROR: AUTH_INVALID_OTP]`.
-- **Email Exists**: Banner Zero-Icon `[ERROR: AUTH_EMAIL_ALREADY_EXISTS]`.
-
----
-
-## Accessibility (a11y) Full Contract
-- **a11y Standard**: WAI-ARIA 1.2.
-- **Skip Link**: `<a href="#main-content">Skip to Content</a>`.
-
----
-
-## Acceptance Criteria & Testing Scenarios (Given-When-Then)
+## 10. Acceptance Criteria & QA Scenarios
 
 ```gherkin
-Scenario: Guest User Completes Registration via OTP
-  Given a guest user on "/auth/register"
-  When the user inputs email and requests OTP
-  And enters valid 6-digit OTP code with new password
-  Then AuthEndpoint.register returns HTTP 200 Success
+Scenario: Guest creates account with valid input
+  Given a Guest on "/auth/register"
+  When filling name "John Doe", email "john@example.com", valid password
+  And clicking Submit button
+  Then `AuthEndpoint.register()` succeeds
+  And user is redirected to "/auth/verify-email?email=john@example.com"
+
+Scenario: Registration fails due to existing email
+  Given a Guest attempting to register with "registered@domain.com"
+  When submitting the form
+  Then server returns 409 Conflict status
+  And UI displays "Email already registered. Would you like to sign in?"
 ```
 
 ---
 
-## Enhanced Footer Specification
-- **Copyright**: `(C) 2026 nodetask. All rights reserved.`
-- **System Information**: `Version 1.3.0 | MIT License | Commit: ${GIT_SHA}`
+## Accessibility (a11y) & Design Tokens
+- **a11y Standard**: WAI-ARIA 1.2 (`role="form"`).
+- **Design Tokens**: `themeMode: 'dark-only'`, `radius: 0px`, `colorScheme: 'monochrome'`.

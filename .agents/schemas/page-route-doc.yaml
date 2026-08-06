@@ -4,31 +4,47 @@
 # ==============================================================================
 
 kind: page-route-doc-spec
-version: 1
+version: 2
 
 # Mandatory sections required in every frontend page route documentation file
 requiredSections:
-  - name: "Overview"
-    description: "High-level summary of the page purpose, target audience, and primary URL path."
+  - name: "Overview & Route ID"
+    description: "Summary of page purpose, target audience, Route ID (e.g. AUTH_LOGIN), and route_name."
     minOccurrences: 1
-  - name: "Route Config"
-    description: "URL Route path, Route Access Type (Public/Guest/Protected), Layout Shell, and Auth Guard rules."
+  - name: "Route Config & Navigation Metadata"
+    description: "URL path, access type, layout shell, auth guard, and navigation flags (sidebar, header, footer, breadcrumb, searchable)."
     minOccurrences: 1
-  - name: "Component Tree"
-    description: "Zero-Icon UI Layout breakdown, visual component hierarchy, and responsive layout grid."
+  - name: "SEO & Social Meta Specification"
+    description: "Page Title, Meta Description, Keywords, Canonical URL, OpenGraph, and Twitter Card specifications."
     minOccurrences: 1
-  - name: "State & Data Flow"
-    description: "Zustand global stores, TanStack Query hooks, Form validation schemas, and linked Backend RPC Services."
+  - name: "Loading Strategy & Code Splitting"
+    description: "React Router loading strategy, lazy load, preload conditions, chunk name, and bundle priority."
     minOccurrences: 1
-  - name: "Interactions"
-    description: "User interaction flows, form submissions, keyboard shortcuts (hotkeys), and modal/drawer events."
+  - name: "Permission Matrix & RBAC"
+    description: "Explicit role-based access matrix mapping System Roles (GUEST, USER, ORG_MEMBER, ORG_ADMIN, SYSTEM_ADMIN)."
+    minOccurrences: 1
+  - name: "API Dependency & Serverpod RPC"
+    description: "Explicit Serverpod RPC signatures, endpoints called, cache TTL, and data flow."
+    minOccurrences: 1
+  - name: "Page State Machine & UI Transitions"
+    description: "UI state diagram and transitions (IDLE -> TYPING -> SUBMITTING -> SUCCESS / ERROR -> RETRY)."
+    minOccurrences: 1
+  - name: "Component Inventory & Tree"
+    description: "List of atomic/molecule components and visual component tree hierarchy."
+    minOccurrences: 1
+  - name: "Error Mapping & Handling"
+    description: "HTTP/RPC error status codes (401, 403, 404, 409, 422, 429, 500) mapped to UI error keys and recovery flows."
+    minOccurrences: 1
+  - name: "Acceptance Criteria & QA Scenarios"
+    description: "Structured Given-When-Then Gherkin scenarios for QA testing."
     minOccurrences: 1
   - name: "Accessibility"
-    description: "Web accessibility (a11y) rules, screen reader support, keyboard focus navigation, and ARIA contracts."
+    description: "Web accessibility (a11y) rules, WAI-ARIA roles, focus management, and keyboard navigation."
     minOccurrences: 1
 
 # Optional extra sections for complex page routes
 optionalSections:
-  - "User Sequence Flow"
-  - "Performance & Bundle Targets"
-  - "SEO Meta Tags"
+  - "Performance Budget Matrix"
+  - "Security Headers & Policy Specification"
+  - "Motion & Animation Spec"
+

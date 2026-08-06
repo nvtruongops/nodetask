@@ -1,160 +1,147 @@
 # Auth Verify Email Page Route Specification (`auth_verify_email.md`)
 
+> **Route ID**: `AUTH_VERIFY_EMAIL`  
+> **Route Name**: `auth.verify_email`  
 > **Route Path**: `/auth/verify-email`  
-> **Route Type**: `PUBLIC` / `GUEST_ONLY`  
+> **Route Type**: `GUEST_ONLY`  
 > **Layout Shell**: `AuthLayoutShell`  
-> **Specification Version**: `1.4.0`  
+> **Specification Version**: `2.0.0`  
 > **Status**: `APPROVED`  
 
 ---
 
-## Overview
-Trang Xác minh Email OTP (`/auth/verify-email`) cung cấp màn hình riêng biệt để kiểm tra mã OTP 6 chữ số gửi qua email của người dùng. Trang hỗ trợ nút gửi lại OTP (`AuthEndpoint.sendOtp`) và đếm ngược thời gian hết hạn mã (TTL 300 giây).
+## 1. Overview & Route ID
+- **Route ID**: `AUTH_VERIFY_EMAIL` (Dùng cho Analytics, Breadcrumb, Logging, Event Tracking, RBAC)
+- **Route Name**: `auth.verify_email`
+- **Description**: Trang Xác minh Email (`/auth/verify-email`) cho phép người dùng xác nhận địa chỉ email của mình bằng mã OTP 6 chữ số hoặc click link token từ email. Trang gọi `AuthEndpoint.verifyEmail(session, input)`.
 
 ---
 
-## Route Config
+## 2. Route Config & Navigation Metadata
 - **URL Path**: `/auth/verify-email`
-- **Access Type**: `PUBLIC`
-- **Auth Guard**: None
+- **Access Type**: `GUEST_ONLY`
+- **Auth Guard**: `GuestOnlyGuard`
 - **Layout Shell**: `AuthLayoutShell`
+- **Navigation Metadata**:
+  - `sidebar`: `false`
+  - `header`: `true`
+  - `footer`: `true`
+  - `breadcrumb`: `false`
+  - `searchable`: `false`
+  - `navOrder`: `6`
+  - `navGroup`: `"auth"`
 
 ---
 
-## Route Dependencies
-- **Layout Shell**: `AuthLayoutShell`
-- **Global Stores**: `useAuthStore`
-- **Linked RPC Services**: `AuthEndpoint.sendOtp` (`docs/services/auth.md`)
-- **Router**: `ReactRouter`
+## 3. SEO & Social Meta Specification
+- **Title Tag**: `<title>Verify Email - nodetask</title>`
+- **Meta Description**: `Xác minh địa chỉ email của bạn để kích hoạt tài khoản nodetask.`
+- **Keywords**: `nodetask verify email, email confirmation, otp code`
+- **Canonical URL**: `https://nodetask.io/auth/verify-email`
+- **OpenGraph Specification**:
+  - `og:title`: `Verify Email - nodetask`
+  - `og:description`: `Xác minh tài khoản nodetask.`
+  - `og:image`: `https://nodetask.io/og-auth.png`
+- **Twitter Card Specification**:
+  - `twitter:card`: `summary`
+  - `twitter:title`: `Verify Email - nodetask`
 
 ---
 
-## Non-Functional Requirements & Rendering Strategy
-- **Rendering Strategy**: Client-Side Rendering (CSR).
+## 4. Loading Strategy & Code Splitting
+- **Lazy Load**: `true` (`React.lazy(() => import('@/features/auth/VerifyEmailPage'))`)
+- **Preload Strategy**: `None`
+- **Chunk Name**: `chunk-auth-verify-email`
+- **Priority**: `HIGH`
 
 ---
 
-## Component Tree
-Giao diện tuân thủ 100% **Zero-Icon Rule**:
+## 5. Permission Matrix & RBAC
+| System Role | View Access | Form Submit Rights | Redirect Policy | Notes |
+| :--- | :--- | :--- | :--- | :--- |
+| `GUEST` | **Allowed** | Cho phép nhập OTP xác minh | Giữ tại trang | Người dùng mới đăng ký |
+| `USER` | **Redirect** | Bị vô hiệu | Direct chuyển hướng `/workspace` | Đã xác minh & đăng nhập |
+| `ORG_MEMBER` | **Redirect** | Bị vô hiệu | Direct chuyển hướng `/workspace` | Thành viên tổ chức |
+| `ORG_ADMIN` | **Redirect** | Bị vô hiệu | Direct chuyển hướng `/workspace` | Quản trị viên tổ chức |
+| `SYSTEM_ADMIN` | **Redirect** | Bị vô hiệu | Direct chuyển hướng `/admin` | Quản trị hệ thống |
 
+---
+
+## 6. API Dependency & Serverpod RPC
+- **Linked Backend RPC Endpoints**:
+  - `AuthEndpoint.verifyEmail(session, input: VerifyEmailInputDto)`: Kích hoạt tài khoản khi OTP hợp lệ.
+  - `AuthEndpoint.resendVerificationCode(session, email: String)`: Gửi lại mã OTP mới.
+- **Data Caching & Stale Policy**:
+  - `staleTime`: `0ms`.
+  - `refetchOnWindowFocus`: `false`.
+
+---
+
+## 7. Page State Machine & UI Transitions
+- **State Machine Flow**:
+  `IDLE` → `ENTERING_OTP` → `VERIFYING` → `SUCCESS` (Redirect `/auth/login?verified=true`) | `ERROR`
+- **UI State Breakdown**:
+  - `IDLE`: Chờ người dùng nhập OTP 6 chữ số.
+  - `VERIFYING`: Đang gọi `AuthEndpoint.verifyEmail()`.
+  - `SUCCESS`: Kích hoạt thành công, thông báo và chuyển hướng sang `/auth/login`.
+
+---
+
+## 8. Component Inventory & Tree
+
+### Component Inventory List
+- `AuthLayoutShell`: Organism bọc giao diện Authentication.
+- `VerifyEmailCard`: Container card bọc form nhập OTP.
+- `OtpCodeInput`: Atom input 6 ô nhập mã OTP.
+- `ResendCodeButton`: Button atom gửi lại mã OTP kèm đếm ngược 60s.
+- `SubmitButton`: Button xác nhận OTP.
+
+### Component Tree
 ```text
 [VerifyEmailPageContainer]
-├── [SkipToContentLink] -> href="#main-content"
+├── [SkipToContentLink target="#main-content"]
 ├── [AuthHeader]
-│   └── [BrandLogo contentKey="brand.logo.text"]
-├── [MainContent id="main-content" alignment="center" minHeight="80vh"]
-│   ├── [VerifyCard maxWidth="440px" cardPadding="32px" border="default"]
-│   │   ├── [FormTitle contentKey="auth.verify_email.title"]
-│   │   ├── [SubTitle contentKey="auth.verify_email.subtitle"]
-│   │   ├── [OtpInputForm]
-│   │   │   ├── [Label contentKey="auth.verify_email.otp_label"]
-│   │   │   ├── [Input type="text" maxlength=6 placeholder="000000"]
-│   │   │   └── [VerifyButton] -> contentKey="auth.verify_email.submit_button"
-│   │   ├── [ResendCountdown alignment="center" spacing="16px"]
-│   │   │   └── [ResendButton disabled=countdownActive] -> contentKey="auth.verify_email.resend_button"
-│   │   └── [FormFooterNav alignment="center" spacing="24px"]
-│   │       └── [BackToLoginLink target="/auth/login"] -> contentKey="auth.verify_email.back_to_login"
-└── [PublicFooter]
+└── [MainContent id="main-content" alignment="center"]
+    └── [VerifyEmailCard maxWidth="440px"]
+        ├── [FormTitle contentKey="auth.verify_email.title"]
+        ├── [VerifyEmailForm onSubmit=handleVerify]
+        │   ├── [OtpCodeInput length=6]
+        │   ├── [ResendCodeButton cooldown=60]
+        │   └── [SubmitButton disabled=loading]
+        └── [FormFooterNav]
+            └── [LoginLink target="/auth/login"]
 ```
 
 ---
 
-## Content Dictionary (i18n / CMS Ready)
-
-```json
-{
-  "brand.logo.text": "NODETASK // KNOWLEDGE MANAGEMENT",
-  "auth.verify_email.title": "[EMAIL OTP VERIFICATION]",
-  "auth.verify_email.subtitle": "A 6-digit numeric verification code was sent to your email address.",
-  "auth.verify_email.otp_label": "Enter 6-Digit OTP Code",
-  "auth.verify_email.submit_button": "[VERIFY OTP CODE ->]",
-  "auth.verify_email.resend_button": "[RESEND OTP CODE (60s)]",
-  "auth.verify_email.back_to_login": "[RETURN TO LOGIN]",
-  "footer.copyright": "(C) 2026 nodetask. All rights reserved.",
-  "footer.build_info": "v1.3.0 | MIT License | Commit: ${GIT_SHA}"
-}
-```
+## 9. Error Mapping & Handling
+| Status Code | Trigger Condition | UI Error Content Key | Recovery Action | Logging Tag |
+| :--- | :--- | :--- | :--- | :--- |
+| `401` | Mã OTP không chính xác hoặc hết hạn | `auth.verify.error.invalid_otp` | Xóa OTP, yêu cầu nhập lại hoặc gửi lại | `AUTH_VERIFY_BAD_OTP` |
+| `409` | Email đã được xác minh trước đó | `auth.verify.error.already_verified` | Chuyển hướng sang `/auth/login` | `AUTH_VERIFY_ALREADY_DONE` |
+| `429` | Thử sai OTP > 5 lần | `auth.verify.error.rate_limit` | Khoá nhập OTP 180s | `AUTH_VERIFY_RATE_LIMITED` |
+| `500` | Lỗi dịch vụ backend | `auth.verify.error.server_error` | Banner báo lỗi hệ thống | `AUTH_VERIFY_SERVER_ERROR` |
 
 ---
 
-## Responsive Layout & Grid Specs
-- **Card Container**: `max-width: 440px`, căn giữa `margin: 0 auto`.
-
----
-
-## Design Tokens System
-
-```typescript
-export const verifyEmailDesignTokens = {
-  color: { background: '#000000', surface: '#0A0A0A', border: { default: '#333333' } },
-  spacing: { cardPadding: '32px', cardMaxWidth: '440px' },
-  radius: { none: '0px' },
-  motion: { duration: '200ms', properties: ['opacity', 'transform'] },
-};
-```
-
----
-
-## Motion & Animation Spec
-- **Properties**: `opacity`, `transform`. Cấm `transition: all`.
-
----
-
-## State & Data Flow
-- **Resend Timer**: Đếm ngược 60 giây trước khi cho phép bấm nút `[RESEND OTP CODE]`.
-
----
-
-## Interactions & Event Analytics
-- **Click Resend**: Gửi lại OTP.
-- **Analytics**: `auth.otp_resent`.
-
----
-
-## SEO & Social Meta Specification
-- **Title Tag**: `<title>Verify Email — nodetask Knowledge Engine</title>`
-- **Robots**: `noindex, follow`
-
----
-
-## Performance Budget Matrix
-
-| Metric | Budget Target | Audit Tool |
-| :--- | :--- | :--- |
-| **LCP** | `< 1.2s` | Google Lighthouse |
-
----
-
-## Security Headers & Policy Specification
-- **CSP**: `default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline';`
-- **X-Frame-Options**: `DENY`
-
----
-
-## Error & Fallback States
-- **Expired OTP**: Banner Zero-Icon `[ERROR: AUTH_INVALID_OTP]`.
-- **No-JS Fallback**: `<noscript>` thông báo *"NODETASK Verify Email requires JavaScript."*
-
----
-
-## Accessibility (a11y) Full Contract
-- **a11y Standard**: WAI-ARIA 1.2.
-- **Skip Link**: `<a href="#main-content">Skip to Content</a>`.
-
----
-
-## Acceptance Criteria & Testing Scenarios (Given-When-Then)
+## 10. Acceptance Criteria & QA Scenarios
 
 ```gherkin
-Scenario: Guest User Resends Email OTP
-  Given an active 60s countdown timer
-  When countdown reaches 0s
-  And the user clicks "[RESEND OTP CODE]"
-  Then AuthEndpoint.sendOtp is called and countdown resets to 60s
+Scenario: Entering valid OTP activates account
+  Given a Guest with unverified email on "/auth/verify-email?email=test@example.com"
+  When entering correct 6-digit OTP "123456"
+  Then `AuthEndpoint.verifyEmail()` completes
+  And user is redirected to "/auth/login?verified=true"
+
+Scenario: Resend OTP cooldown timer
+  Given a user on "/auth/verify-email"
+  When clicking "Resend Code" button
+  Then a new OTP is sent to user's email
+  And the "Resend Code" button enters a 60-second disabled cooldown state
 ```
 
 ---
 
-## Enhanced Footer Specification
-- **Copyright**: `(C) 2026 nodetask. All rights reserved.`
-- **System Information**: `Version 1.3.0 | MIT License | Commit: ${GIT_SHA}`
+## Accessibility (a11y) & Design Tokens
+- **a11y Standard**: WAI-ARIA 1.2 (`role="form"`, OTP inputs with arrow-key traversal).
+- **Design Tokens**: `themeMode: 'dark-only'`, `radius: 0px`, `colorScheme: 'monochrome'`.

@@ -85,11 +85,12 @@ Mô tả sơ đồ luồng dữ liệu văn bản hiển thị từ Backend Serv
 
 ## Minimal Skeleton Template
 
-Sử dụng khung Skeleton tối giản dưới đây làm nòng cốt, không sao chép lại nội dung mẫu cứng:
+Sử dụng khung Skeleton 10 Điểm Nâng Cấp dưới đây làm nòng cốt cho tất cả các file đặc tả:
 
 ```markdown
 # [Title] Page Route Specification (`<route_name>.md`)
 
+> **Route ID**: `ROUTE_ID_ENUM`  
 > **Route Path**: `/<path>`  
 > **Route Type**: `PUBLIC` | `GUEST_ONLY` | `PROTECTED`  
 > **Layout Shell**: `[LayoutName]`  
@@ -98,103 +99,30 @@ Sử dụng khung Skeleton tối giản dưới đây làm nòng cốt, không s
 
 ---
 
-## Overview
-[Mô tả ngắn gọn mục đích trang và đối tượng sử dụng]
+## 1. Overview & Route ID
+- **Route ID**: `ROUTE_ID_ENUM` (Dùng cho Analytics, Breadcrumb, Logging, Event Tracking, RBAC)
+- **Route Name**: `<route_name>`
+- **Description**: [Mô tả mục đích trang và đối tượng sử dụng]
 
 ---
 
-## Route Config
+## 2. Route Config & Navigation Metadata
 - **URL Path**: `/<path>`
 - **Access Type**: `PUBLIC` | `GUEST_ONLY` | `PROTECTED`
 - **Auth Guard**: `GuestOnly` | `RequireAuth` | None
 - **Layout Shell**: `[LayoutName]`
+- **Navigation Metadata**:
+  - `sidebar`: `true` | `false`
+  - `header`: `true` | `false`
+  - `footer`: `true` | `false`
+  - `breadcrumb`: `true` | `false`
+  - `searchable`: `true` | `false`
+  - `navGroup`: `[GroupName]`
 
 ---
 
-## Route Dependencies
-- **Layout Shell**: `[AbstractLayoutName]`
-- **Global Stores**: `[AbstractStoreName]`
-- **Providers**: `[AbstractProviderName]`
-- **Router**: `[RouterInterface]`
-
----
-
-## Non-Functional Requirements & Rendering Strategy
-- **Rendering Strategy & HTTP Status Contract**: SSG / SSR / CSR với Client Hydration target (<100ms, CLS = 0).
-- **CDN Caching Policy**: `Cache-Control` header rules.
-
----
-
-## Component Tree & Interface Contracts
-
-### Component Tree
-[Mô tả cấu trúc component trừu tượng, tham chiếu contentKey, 0-icon rule, conditional Guest/User rendering]
-
-### Component Interface Contracts
-```typescript
-export interface PageProps {
-  id: string;
-}
-```
-
----
-
-## Content Dictionary (i18n / CMS Ready)
-```json
-{
-  "<route_name>.<section>.<element>": "String value"
-}
-```
-
----
-
-## Responsive Layout & Grid Specs
-- **Desktop**: `>1280px`
-- **Tablet**: `768px – 1279px`
-- **Mobile**: `<768px`
-
----
-
-## Design Tokens System
-[Khai báo tokens: themeMode: 'dark-only', color, spacing, typography, radius: 0px, motion GPU properties]
-
----
-
-## Motion & Animation Spec
-- **Targeted Properties**: `opacity`, `transform`, `border-color` (Cấm transition: all).
-
----
-
-## State & Data Flow
-[Mô tả luồng dữ liệu, Zustand store & linked RPC services]
-
----
-
-## Interactions & Event Analytics
-- **Comprehensive Analytics Triggers**: `<route_name>.<action>_clicked` (Kèm rich metadata: path, referrer, language).
-
----
-
-## SEO & Social Meta Specification
+## 3. SEO & Social Meta Specification
 - **Title Tag**: `<title>...</title>`
-- **Robots**: `index, follow` | `noindex, follow`
-
----
-
-## Performance Budget Matrix
-| Performance Metric | Budget Target | Audit Tool |
-| :--- | :--- | :--- |
-
----
-
-## Security Headers & Policy Specification
-[Khai báo CSP nonce, X-Frame-Options DENY, X-Content-Type-Options nosniff, Referrer-Policy, Permissions-Policy]
-
----
-
-## Error & Fallback States
-[Mô tả GlobalErrorBoundary wrapper, 404/500 offline, no-JS fallback]
-
 ---
 
 ## Accessibility (a11y) Full Contract

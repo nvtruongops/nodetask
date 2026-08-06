@@ -1,159 +1,146 @@
 # Auth Reset Password Page Route Specification (`auth_reset_password.md`)
 
+> **Route ID**: `AUTH_RESET_PASSWORD`  
+> **Route Name**: `auth.reset_password`  
 > **Route Path**: `/auth/reset-password`  
 > **Route Type**: `GUEST_ONLY`  
 > **Layout Shell**: `AuthLayoutShell`  
-> **Specification Version**: `1.4.0`  
+> **Specification Version**: `2.0.0`  
 > **Status**: `APPROVED`  
 
 ---
 
-## Overview
-Trang Đặt lại Mật khẩu (`/auth/reset-password`) nhận mã Email OTP 6 chữ số và mật khẩu mới của người dùng, thực hiện gọi RPC Endpoint `AuthEndpoint.forgotPassword(session, { email, otp, newPassword })` để cập nhật mật khẩu mới.
+## 1. Overview & Route ID
+- **Route ID**: `AUTH_RESET_PASSWORD` (Dùng cho Analytics, Breadcrumb, Logging, Event Tracking, RBAC)
+- **Route Name**: `auth.reset_password`
+- **Description**: Trang Đặt lại mật khẩu (`/auth/reset-password`) tiếp nhận token đặt lại từ URL parameter (`?token=...`), xác thực tính hợp lệ của token và cập nhật mật khẩu mới qua `AuthEndpoint.confirmPasswordReset(session, input)`.
 
 ---
 
-## Route Config
+## 2. Route Config & Navigation Metadata
 - **URL Path**: `/auth/reset-password`
 - **Access Type**: `GUEST_ONLY`
 - **Auth Guard**: `GuestOnlyGuard`
 - **Layout Shell**: `AuthLayoutShell`
+- **Navigation Metadata**:
+  - `sidebar`: `false`
+  - `header`: `true`
+  - `footer`: `true`
+  - `breadcrumb`: `false`
+  - `searchable`: `false`
+  - `navOrder`: `5`
+  - `navGroup`: `"auth"`
 
 ---
 
-## Route Dependencies
-- **Layout Shell**: `AuthLayoutShell`
-- **Global Stores**: `useAuthStore`
-- **Linked RPC Services**: `AuthEndpoint.forgotPassword` (`docs/services/auth.md`)
-- **Router**: `ReactRouter`
+## 3. SEO & Social Meta Specification
+- **Title Tag**: `<title>Set New Password - nodetask</title>`
+- **Meta Description**: `Thiết lập mật khẩu mới cho tài khoản nodetask.`
+- **Keywords**: `nodetask reset password, confirm reset token`
+- **Canonical URL**: `https://nodetask.io/auth/reset-password`
+- **OpenGraph Specification**:
+  - `og:title`: `Set New Password - nodetask`
+  - `og:description`: `Cập nhật mật khẩu mới.`
+  - `og:image`: `https://nodetask.io/og-auth.png`
+- **Twitter Card Specification**:
+  - `twitter:card`: `summary`
+  - `twitter:title`: `Set New Password - nodetask`
 
 ---
 
-## Non-Functional Requirements & Rendering Strategy
-- **Rendering Strategy**: Client-Side Rendering (CSR).
+## 4. Loading Strategy & Code Splitting
+- **Lazy Load**: `true` (`React.lazy(() => import('@/features/auth/ResetPasswordPage'))`)
+- **Preload Strategy**: `None`
+- **Chunk Name**: `chunk-auth-reset-password`
+- **Priority**: `MEDIUM`
 
 ---
 
-## Component Tree
-Giao diện tuân thủ 100% **Zero-Icon Rule**:
+## 5. Permission Matrix & RBAC
+| System Role | View Access | Form Submit Rights | Redirect Policy | Notes |
+| :--- | :--- | :--- | :--- | :--- |
+| `GUEST` | **Allowed** | Cho phép submit mật khẩu mới khi token hợp lệ | Giữ tại trang | Người dùng có token |
+| `USER` | **Redirect** | Bị vô hiệu | Direct chuyển hướng `/workspace` | Đã đăng nhập |
+| `ORG_MEMBER` | **Redirect** | Bị vô hiệu | Direct chuyển hướng `/workspace` | Thành viên tổ chức |
+| `ORG_ADMIN` | **Redirect** | Bị vô hiệu | Direct chuyển hướng `/workspace` | Quản trị viên tổ chức |
+| `SYSTEM_ADMIN` | **Redirect** | Bị vô hiệu | Direct chuyển hướng `/admin` | Quản trị hệ thống |
 
+---
+
+## 6. API Dependency & Serverpod RPC
+- **Linked Backend RPC Endpoints**:
+  - `AuthEndpoint.confirmPasswordReset(session, input: ResetPasswordInputDto)`: Xác thực token và lưu mật khẩu mới.
+- **Data Caching & Stale Policy**:
+  - `staleTime`: `0ms`.
+  - `refetchOnWindowFocus`: `false`.
+
+---
+
+## 7. Page State Machine & UI Transitions
+- **State Machine Flow**:
+  `VALIDATING_TOKEN` → `TOKEN_VALID` (Show Form) → `SUBMITTING` → `SUCCESS` (Redirect `/auth/login`) | `TOKEN_INVALID`
+- **UI State Breakdown**:
+  - `VALIDATING_TOKEN`: Đang kiểm tra token trên URL.
+  - `TOKEN_VALID`: Token hợp lệ, hiển thị Form nhập mật khẩu mới.
+  - `TOKEN_INVALID`: Token đã hết hạn hoặc không hợp lệ, hiển thị nút yêu cầu gửi lại link.
+  - `SUCCESS`: Cập nhật thành công, chuyển hướng về `/auth/login?reset=success`.
+
+---
+
+## 8. Component Inventory & Tree
+
+### Component Inventory List
+- `AuthLayoutShell`: Organism bọc giao diện Authentication.
+- `ResetPasswordCard`: Container card cho form đặt lại mật khẩu.
+- `NewPasswordInput`: Atom input nhập mật khẩu mới.
+- `ConfirmPasswordInput`: Atom input xác nhận lại mật khẩu.
+- `SubmitButton`: Button cập nhật mật khẩu.
+
+### Component Tree
 ```text
 [ResetPasswordPageContainer]
-├── [SkipToContentLink] -> href="#main-content"
+├── [SkipToContentLink target="#main-content"]
 ├── [AuthHeader]
-│   └── [BrandLogo contentKey="brand.logo.text"]
-├── [MainContent id="main-content" alignment="center" minHeight="80vh"]
-│   ├── [ResetPasswordCard maxWidth="440px" cardPadding="32px" border="default"]
-│   │   ├── [FormTitle contentKey="auth.reset_password.title"]
-│   │   ├── [ResetForm onSubmit=handleResetPassword]
-│   │   │   ├── [Label contentKey="auth.reset_password.otp_label"]
-│   │   │   ├── [Input type="text" maxlength=6 placeholder="654321"]
-│   │   │   ├── [Label contentKey="auth.reset_password.new_password_label"]
-│   │   │   ├── [Input type="password"]
-│   │   │   └── [SubmitButton] -> contentKey="auth.reset_password.submit_button"
-│   │   └── [FormFooterNav alignment="center" spacing="24px"]
-│   │       └── [BackToLoginLink target="/auth/login"] -> contentKey="auth.reset_password.back_to_login"
-└── [PublicFooter]
+└── [MainContent id="main-content" alignment="center"]
+    └── [ResetPasswordCard maxWidth="440px"]
+        ├── [FormTitle contentKey="auth.reset_password.title"]
+        ├── [ResetPasswordForm onSubmit=handleConfirmReset]
+        │   ├── [NewPasswordInput type="password"]
+        │   ├── [ConfirmPasswordInput type="password"]
+        │   └── [SubmitButton disabled=loading]
+        └── [FormFooterNav]
+            └── [LoginLink target="/auth/login"]
 ```
 
 ---
 
-## Content Dictionary (i18n / CMS Ready)
-
-```json
-{
-  "brand.logo.text": "NODETASK // KNOWLEDGE MANAGEMENT",
-  "auth.reset_password.title": "[RESET PASSWORD // NEW CREDENTIALS]",
-  "auth.reset_password.otp_label": "Enter 6-Digit Email OTP Code",
-  "auth.reset_password.new_password_label": "New Password (min 8 chars)",
-  "auth.reset_password.submit_button": "[SAVE NEW PASSWORD ->]",
-  "auth.reset_password.back_to_login": "[RETURN TO LOGIN]",
-  "footer.copyright": "(C) 2026 nodetask. All rights reserved.",
-  "footer.build_info": "v1.3.0 | MIT License | Commit: ${GIT_SHA}"
-}
-```
+## 9. Error Mapping & Handling
+| Status Code | Trigger Condition | UI Error Content Key | Recovery Action | Logging Tag |
+| :--- | :--- | :--- | :--- | :--- |
+| `401` | Reset token không hợp lệ hoặc đã hết hạn | `auth.reset.error.token_expired` | Hiển thị link về `/auth/forgot-password` | `AUTH_RESET_TOKEN_EXPIRED` |
+| `422` | Mật khẩu mới trùng mật khẩu cũ | `auth.reset.error.password_reused` | Yêu cầu nhập mật khẩu khác | `AUTH_RESET_PASSWORD_REUSED` |
+| `429` | Thử quá nhiều lần | `auth.reset.error.rate_limit` | Khoá Form 60s | `AUTH_RESET_RATE_LIMITED` |
+| `500` | Lỗi Serverpod Backend | `auth.reset.error.server_error` | Hiển thị thông báo lỗi hệ thống | `AUTH_RESET_SERVER_ERROR` |
 
 ---
 
-## Responsive Layout & Grid Specs
-- **Card Container**: `max-width: 440px`, căn giữa `margin: 0 auto`.
-
----
-
-## Design Tokens System
-
-```typescript
-export const resetPasswordDesignTokens = {
-  color: { background: '#000000', surface: '#0A0A0A', border: { default: '#333333' } },
-  spacing: { cardPadding: '32px', cardMaxWidth: '440px' },
-  radius: { none: '0px' },
-  motion: { duration: '200ms', properties: ['opacity', 'transform'] },
-};
-```
-
----
-
-## Motion & Animation Spec
-- **Properties**: `opacity`, `transform`. Cấm `transition: all`.
-
----
-
-## State & Data Flow
-- **Reset Password**: Gọi `AuthEndpoint.forgotPassword({ email, otp, newPassword })`.
-- **On Success**: Mật khẩu được lưu ➡️ Redirect `/auth/login`.
-
----
-
-## Interactions & Event Analytics
-- **Submit Form**: Kích hoạt đổi mật khẩu.
-- **Analytics**: `auth.reset_password_completed`.
-
----
-
-## SEO & Social Meta Specification
-- **Title Tag**: `<title>Reset Password — nodetask Knowledge Engine</title>`
-- **Robots**: `noindex, follow`
-
----
-
-## Performance Budget Matrix
-
-| Metric | Budget Target | Audit Tool |
-| :--- | :--- | :--- |
-| **LCP** | `< 1.2s` | Google Lighthouse |
-
----
-
-## Security Headers & Policy Specification
-- **CSP**: `default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline';`
-- **X-Frame-Options**: `DENY`
-
----
-
-## Error & Fallback States
-- **Invalid OTP**: Banner Zero-Icon `[ERROR: AUTH_INVALID_OTP]`.
-- **No-JS Fallback**: `<noscript>` thông báo *"NODETASK Reset Password requires JavaScript."*
-
----
-
-## Accessibility (a11y) Full Contract
-- **a11y Standard**: WAI-ARIA 1.2.
-- **Skip Link**: `<a href="#main-content">Skip to Content</a>`.
-
----
-
-## Acceptance Criteria & Testing Scenarios (Given-When-Then)
+## 10. Acceptance Criteria & QA Scenarios
 
 ```gherkin
-Scenario: Guest User Resets Password Successfully
-  Given a valid OTP code and new password
-  When the user submits form on "/auth/reset-password"
-  Then AuthEndpoint.forgotPassword returns HTTP 200 Success
-  And user is redirected to "/auth/login"
+Scenario: Reset password with valid token
+  Given a Guest user opening "/auth/reset-password?token=valid_token"
+  When entering new valid password and submitting
+  Then `AuthEndpoint.confirmPasswordReset()` succeeds
+  And user is redirected to "/auth/login?reset=success"
+
+Scenario: Opening reset page with expired token
+  Given a Guest opening "/auth/reset-password?token=expired_token"
+  Then the UI displays "Reset token has expired"
+  And provides a link to "/auth/forgot-password"
 ```
 
 ---
 
-## Enhanced Footer Specification
-- **Copyright**: `(C) 2026 nodetask. All rights reserved.`
-- **System Information**: `Version 1.3.0 | MIT License | Commit: ${GIT_SHA}`
+## Accessibility (a11y) & Design Tokens
+- **a11y Standard**: WAI-ARIA 1.2.
+- **Design Tokens**: `themeMode: 'dark-only'`, `radius: 0px`, `colorScheme: 'monochrome'`.
