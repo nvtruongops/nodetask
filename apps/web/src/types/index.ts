@@ -1,6 +1,6 @@
-export type NodeType = 'TOPIC' | 'MODULE' | 'SESSION' | 'SUBSESSION';
+export type NodeType = 'WORKSPACE' | 'FOLDER' | 'DOCUMENT' | 'SECTION' | 'TOPIC' | 'MODULE' | 'SESSION' | 'SUBSESSION';
 
-export interface Course {
+export interface Workspace {
   id: string;
   userId: string;
   title: string;
@@ -9,9 +9,9 @@ export interface Course {
   createdAt?: string;
 }
 
-export interface CourseNode {
+export interface DocumentNode {
   id: string;
-  courseId: string;
+  workspaceId: string;
   parentId?: string | null;
   path?: string | null;
   nodeType: NodeType;
@@ -20,8 +20,12 @@ export interface CourseNode {
   position: number;
   version: number;
   createdAt?: string;
-  children?: CourseNode[];
+  children?: DocumentNode[];
 }
+
+// Backward compatibility type aliases
+export type Course = Workspace;
+export type CourseNode = DocumentNode;
 
 export interface NodeTodo {
   id: string;

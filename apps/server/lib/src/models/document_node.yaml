@@ -1,0 +1,15 @@
+class: DocumentNode
+table: document_nodes
+fields:
+  workspaceId: UuidValue
+  parentId: UuidValue?
+  path: String?               # ltree path 'folder1.doc2.section5'
+  nodeType: String            # 'WORKSPACE', 'FOLDER', 'DOCUMENT', 'SECTION'
+  title: String
+  content: String?            # Dynamic JSON (Tiptap AST)
+  position: int
+  version: int                # OCC control
+  createdAt: DateTime?
+indexes:
+  workspace_parent_pos_idx:
+    fields: workspaceId, parentId, position

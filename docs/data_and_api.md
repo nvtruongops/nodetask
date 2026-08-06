@@ -23,11 +23,12 @@ File Core Spec `data_and_api.md` đóng vai trò **Bản đồ Chỉ mục (Inde
 | Dịch vụ (Service Domain) | Serverpod Endpoint Class | File Đặc tả Chi tiết (Single Source of Truth) | Phạm vi & Chức năng Dịch vụ |
 | :--- | :--- | :--- | :--- |
 | **Authentication & Access Control** | `AuthEndpoint` | [docs/services/auth.md](file:///E:/Code/nodetask/docs/services/auth.md) | Đăng ký (Email OTP), Đăng nhập, Quên/Đổi mật khẩu, Session & Ma trận RBAC. |
-| **Course & Learning Workspace** | `CourseEndpoint` | [docs/services/course.md](file:///E:/Code/nodetask/docs/services/course.md) | Quản lý Không gian tri thức, Cây thư mục học tập phân cấp & Workspace resources. |
+| **Knowledge Workspace** | `WorkspaceEndpoint` | [docs/services/workspace.md](file:///E:/Code/nodetask/docs/services/workspace.md) | Quản lý Không gian tri thức, Cây thư mục tài liệu phân cấp & Tài nguyên Workspace. |
 | **Node Structure & AST Document** | `NodeEndpoint` | [docs/services/node.md](file:///E:/Code/nodetask/docs/services/node.md) | Cấu trúc cây `ltree`, Kéo-Thả (Reorder) & Nội dung ghi chú Tiptap AST JSON. |
-| **Todo & Task Management** | `TodoEndpoint` | [docs/services/todo.md](file:///E:/Code/nodetask/docs/services/todo.md) | Quản lý công việc (Todo) đính kèm nút & Tính toán phần trăm tiến độ học tập. |
+| **Todo & Task Management** | `TodoEndpoint` | [docs/services/todo.md](file:///E:/Code/nodetask/docs/services/todo.md) | Quản lý công việc (Todo) đính kèm nút tài liệu & Tính toán phần trăm tiến độ. |
 | **Background Jobs & Export** | `JobEndpoint` | [docs/services/job.md](file:///E:/Code/nodetask/docs/services/job.md) | Xuất dữ liệu PDF/Markdown ngầm và theo dõi trạng thái background job. |
 | **AI Semantic Search & RAG** | `AiEndpoint` | [docs/services/ai.md](file:///E:/Code/nodetask/docs/services/ai.md) | Tìm kiếm ngữ nghĩa bằng `pgvector` & Trợ lý AI RAG giải đáp dữ liệu tri thức. |
+| **Internationalization & Content Dictionary** | `I18nEndpoint` | [docs/services/i18n.md](file:///E:/Code/nodetask/docs/services/i18n.md) | Quản lý từ điển đa ngôn ngữ (`en`/`vi`), chuỗi UI Content Dictionary, A/B Testing & CMS synchronization. |
 
 ---
 
@@ -38,7 +39,7 @@ File Core Spec `data_and_api.md` đóng vai trò **Bản đồ Chỉ mục (Inde
 // Success Response
 {
   "success": true,
-  "data": { "id": "uuid-v4", "title": "Dart Fundamentals", "position": 1, "version": 2 }
+  "data": { "id": "uuid-v4", "title": "Knowledge Management System Architecture", "position": 1, "version": 2 }
 }
 
 // Error Response Format
@@ -59,7 +60,7 @@ File Core Spec `data_and_api.md` đóng vai trò **Bản đồ Chỉ mục (Inde
 | `INVALID_INPUT` | `400 Bad Request` | Dữ liệu gửi lên vi phạm Zod validation / Trust Boundary. | Hiển thị thông báo lỗi form tại client. |
 | `UNAUTHORIZED` | `401 Unauthorized` | Thao tác yêu cầu Session Key hợp lệ nhưng token hết hạn/thiếu. | Redirect về trang Đăng nhập. |
 | `FORBIDDEN` | `403 Forbidden` | User không có quyền trên tài nguyên (RBAC violation). | Hiển thị thông báo "Không có quyền thực hiện". |
-| `NOT_FOUND` | `404 Not Found` | Tài nguyên `course_id`, `node_id`, `todo_id` không tồn tại. | Trở về danh sách trang chính. |
+| `NOT_FOUND` | `404 Not Found` | Tài nguyên `workspace_id`, `node_id`, `todo_id` không tồn tại. | Trở về danh sách trang chính. |
 | `VERSION_CONFLICT` | `409 Conflict` | Xung đột ghi đồng thời (OCC version mismatch). | Rollback UI local, fetch lại cây node mới nhất. |
 | `INTERNAL_ERROR` | `500 Internal Error` | Lỗi không xác định tại backend server. | Hiển thị "Lỗi hệ thống, thử lại sau". |
 
@@ -71,16 +72,16 @@ sequenceDiagram
     actor ClientA as Web Client A
     actor ClientB as Web Client B
     participant API as Serverpod Node Endpoint
-    participant DB as Postgres DB (course_nodes)
+    participant DB as Postgres DB (document_nodes)
 
     ClientA->>API: updateNode(nodeId, title: "Title A", version: 1)
     ClientB->>API: updateNode(nodeId, title: "Title B", version: 1)
     
-    API->>DB: UPDATE course_nodes SET title="Title A", version=2 WHERE id=nodeId AND version=1
+    API->>DB: UPDATE document_nodes SET title="Title A", version=2 WHERE id=nodeId AND version=1
     DB-->>API: 1 row updated (Success)
     API-->>ClientA: HTTP 200 { success: true, data: { version: 2 } }
 
-    API->>DB: UPDATE course_nodes SET title="Title B", version=2 WHERE id=nodeId AND version=1
+    API->>DB: UPDATE document_nodes SET title="Title B", version=2 WHERE id=nodeId AND version=1
     DB-->>API: 0 rows updated (Version mismatch!)
     API-->>ClientB: HTTP 409 { success: false, error: { code: "VERSION_CONFLICT", currentVersion: 2 } }
     ClientB->>ClientB: Rollback Optimistic UI & Refetch Tree
@@ -90,23 +91,23 @@ sequenceDiagram
 
 ### 3. Thiết Kế Database PostgreSQL (`ltree` + `JSONB` + `pgvector`)
 
-#### 3.1. Dynamic Model YAML mẫu (`models/course_node.yaml`)
+#### 3.1. Dynamic Model YAML mẫu (`models/document_node.yaml`)
 ```yaml
-class: CourseNode
-table: course_nodes
+class: DocumentNode
+table: document_nodes
 fields:
-  courseId: Uuid
+  workspaceId: Uuid
   parentId: Uuid?
-  path: String?               # ltree path 'topic1.module2.session5'
-  nodeType: String            # 'TOPIC', 'MODULE', 'SESSION', 'SUBSESSION'
+  path: String?               # ltree path 'folder1.doc2.section5'
+  nodeType: String            # 'WORKSPACE', 'FOLDER', 'DOCUMENT', 'SECTION'
   title: String
   content: String?            # Dynamic JSON (Tiptap AST)
   position: int
   version: int                # OCC: Xử lý ghi đồng thời
   createdAt: DateTime?
 indexes:
-  course_parent_pos_idx:
-    fields: courseId, parentId, position
+  workspace_parent_pos_idx:
+    fields: workspaceId, parentId, position
 ```
 
 #### 3.2. Generated DDL SQL

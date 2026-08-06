@@ -1,24 +1,24 @@
-import { Course, CourseNode, NodeTodo, AIAskResponse } from '../types';
+import { Workspace, DocumentNode, NodeTodo, AIAskResponse } from '../types';
 
-// Initial Mock Course Tree matching PostgreSQL ltree structure
-const INITIAL_COURSES: Course[] = [
+// Initial Mock Knowledge Workspace matching PostgreSQL ltree structure
+const INITIAL_WORKSPACES: Workspace[] = [
   {
-    id: 'course-default-1',
+    id: 'workspace-default-1',
     userId: 'user-admin',
     title: 'Advanced Computer Science & Monorepo Architecture',
-    description: 'Hierarchical node tree with PostgreSQL ltree, Serverpod backend, and Zero-Icon monochrome UI.',
+    description: 'Hierarchical document node tree with PostgreSQL ltree, Serverpod backend, and Zero-Icon monochrome UI.',
     isPublic: true,
     createdAt: new Date().toISOString(),
   },
 ];
 
-const INITIAL_NODES: CourseNode[] = [
+const INITIAL_NODES: DocumentNode[] = [
   {
     id: 'node-topic-1',
-    courseId: 'course-default-1',
+    workspaceId: 'workspace-default-1',
     parentId: null,
     path: 'cs_architecture',
-    nodeType: 'TOPIC',
+    nodeType: 'FOLDER',
     title: '1. Monorepo Architecture & AI Governance',
     content: JSON.stringify({
       type: 'doc',
@@ -33,7 +33,7 @@ const INITIAL_NODES: CourseNode[] = [
           content: [
             {
               type: 'text',
-              text: 'This course node covers high-performance hierarchical structure management using PostgreSQL LTREE, Serverpod backend endpoints, and zero-icon monochrome React frontend.',
+              text: 'This document node covers high-performance hierarchical structure management using PostgreSQL LTREE, Serverpod backend endpoints, and zero-icon monochrome React frontend.',
             },
           ],
         },
@@ -44,10 +44,10 @@ const INITIAL_NODES: CourseNode[] = [
   },
   {
     id: 'node-module-1',
-    courseId: 'course-default-1',
+    workspaceId: 'workspace-default-1',
     parentId: 'node-topic-1',
     path: 'cs_architecture.serverpod_backend',
-    nodeType: 'MODULE',
+    nodeType: 'DOCUMENT',
     title: '1.1 Serverpod & PostgreSQL LTREE Engine',
     content: JSON.stringify({
       type: 'doc',
@@ -73,10 +73,10 @@ const INITIAL_NODES: CourseNode[] = [
   },
   {
     id: 'node-session-1',
-    courseId: 'course-default-1',
+    workspaceId: 'workspace-default-1',
     parentId: 'node-module-1',
     path: 'cs_architecture.serverpod_backend.occ_versioning',
-    nodeType: 'SESSION',
+    nodeType: 'SECTION',
     title: '1.1.1 OCC Versioning & Optimistic UI (<16ms)',
     content: JSON.stringify({
       type: 'doc',
@@ -102,10 +102,10 @@ const INITIAL_NODES: CourseNode[] = [
   },
   {
     id: 'node-topic-2',
-    courseId: 'course-default-1',
+    workspaceId: 'workspace-default-1',
     parentId: null,
     path: 'frontend_design',
-    nodeType: 'TOPIC',
+    nodeType: 'FOLDER',
     title: '2. Zero-Icon Monochrome UI/UX Design System',
     content: JSON.stringify({
       type: 'doc',
@@ -162,19 +162,27 @@ const INITIAL_TODOS: Record<string, NodeTodo[]> = {
   ],
 };
 
-let nodesState: CourseNode[] = [...INITIAL_NODES];
+let nodesState: DocumentNode[] = [...INITIAL_NODES];
 let todosState: Record<string, NodeTodo[]> = { ...INITIAL_TODOS };
 
 export const apiService = {
-  async getCourses(): Promise<Course[]> {
-    return INITIAL_COURSES;
+  async getWorkspaces(): Promise<Workspace[]> {
+    return INITIAL_WORKSPACES;
   },
 
-  async getCourseTree(courseId: string): Promise<CourseNode[]> {
-    return nodesState.filter((node) => node.courseId === courseId);
+  async getCourses(): Promise<Workspace[]> {
+    return this.getWorkspaces();
   },
 
-  async updateNodeContent(nodeId: string, content: string): Promise<CourseNode> {
+  async getWorkspaceTree(workspaceId: string): Promise<DocumentNode[]> {
+    return nodesState.filter((node) => node.workspaceId === workspaceId);
+  },
+
+  async getCourseTree(courseId: string): Promise<DocumentNode[]> {
+    return this.getWorkspaceTree(courseId);
+  },
+
+  async updateNodeContent(nodeId: string, content: string): Promise<DocumentNode> {
     const node = nodesState.find((n) => n.id === nodeId);
     if (!node) throw new Error('Node not found');
     node.content = content;
@@ -182,13 +190,13 @@ export const apiService = {
     return node;
   },
 
-  async createNode(newNode: Partial<CourseNode>): Promise<CourseNode> {
-    const node: CourseNode = {
+  async createNode(newNode: Partial<DocumentNode> & { courseId?: string }): Promise<DocumentNode> {
+    const node: DocumentNode = {
       id: `node-${Date.now()}`,
-      courseId: newNode.courseId || 'course-default-1',
+      workspaceId: newNode.workspaceId || newNode.courseId || 'workspace-default-1',
       parentId: newNode.parentId || null,
-      nodeType: newNode.nodeType || 'SESSION',
-      title: newNode.title || 'Untitled Node',
+      nodeType: newNode.nodeType || 'DOCUMENT',
+      title: newNode.title || 'Untitled Document',
       content: newNode.content || null,
       position: nodesState.length,
       version: 1,
@@ -231,7 +239,7 @@ export const apiService = {
 
   async askAI(question: string): Promise<AIAskResponse> {
     return {
-      answer: `[AI RAG Response]: Based on your course nodes, "${question}" relates to Serverpod OCC Versioning and PostgreSQL LTREE path indexing. Check node-session-1 for code details.`,
+      answer: `[AI RAG Response]: Based on your document nodes, "${question}" relates to Serverpod OCC Versioning and PostgreSQL LTREE path indexing. Check node-session-1 for code details.`,
       sources: [
         {
           nodeId: 'node-session-1',

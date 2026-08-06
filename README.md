@@ -1,16 +1,16 @@
 # nodetask
 
-> **High-Performance Hierarchical Course Node & Task Management Monorepo**  
+> **High-Performance Hierarchical Document Node & Knowledge Management Monorepo**  
 > Built with **React (Vite)**, **Dart (Serverpod Framework)**, **PostgreSQL (`ltree` + `pgvector`)**, and **Flutter**, governed by an automated **AI Agent Governance System (`.agents/`)**.
 
 ---
 
 ## ⚡ Key Highlights
 
-* **🌳 Hierarchical Node Tree Engine**: Multi-level course node hierarchy (`Topic -> Module -> Session -> Subsession`) managed via PostgreSQL `ltree` extension and `@dnd-kit` sortable engine with **<16ms Optimistic UI updates**.
+* **🌳 Hierarchical Document Node Engine**: Multi-level document node hierarchy (`Workspace -> Folder -> Document -> Section`) managed via PostgreSQL `ltree` extension and `@dnd-kit` sortable engine with **<16ms Optimistic UI updates**.
 * **📝 Notion-Like AST Rich Text Editor**: Integrated **Tiptap AST Editor** for block-based content editing saved as clean JSON AST.
 * **🎨 Zero-Icon Monochrome UI**: Strict minimalist design philosophy with 0 icon dependencies (`lucide-react`, `react-icons` banned). Relies 100% on high-contrast typography, border tokens, and text brackets `[ ]`, `[+]`, `[-]`.
-* **🧠 Native AI Search & RAG Assistant**: Document semantic search and course Q&A assistant powered directly by PostgreSQL **`pgvector`** with HNSW indexing (**Zero Extra Infra Bloat**).
+* **🧠 Native AI Search & RAG Assistant**: Document semantic search and knowledge Q&A assistant powered directly by PostgreSQL **`pgvector`** with HNSW indexing (**Zero Extra Infra Bloat**).
 * **🔄 Code-First Serverpod SDK Auto-Generation**: Declarative YAML data models automatically generate type-safe Dart & TypeScript client SDKs.
 * **🛡️ AI Agent Governance Engine (v1.3.0)**: Built-in automated guardrails, severity-matrix rule verification (`verify.js`), 11 domain skills, execution pipeline, specification validators (`service-doc.yaml` & `page-route-doc.yaml`), and git pre-commit hooks for AI pair programming.
 

@@ -42,7 +42,7 @@ export const AISearchModal: React.FC<AISearchModalProps> = ({ isOpen, onClose })
           <div className="flex items-center gap-2">
             <input
               type="text"
-              placeholder="Ask any course question or search lesson content..."
+              placeholder="Ask any document question or search knowledge content..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               autoFocus
@@ -71,7 +71,7 @@ export const AISearchModal: React.FC<AISearchModalProps> = ({ isOpen, onClose })
 
             <div>
               <span className="font-bold text-muted-foreground uppercase block mb-2">
-                [MATCHED COURSE SOURCES]:
+                [MATCHED KNOWLEDGE SOURCES]:
               </span>
               <div className="space-y-2">
                 {response.sources.map((src) => (

@@ -1,22 +1,24 @@
 import { create } from 'zustand';
-import { CourseNode } from '../types';
 
 interface TreeStoreState {
   activeNodeId: string | null;
   expandedNodeIds: Set<string>;
   isDarkTheme: boolean;
-  activeCourseId: string;
+  activeWorkspaceId: string;
+  activeCourseId: string; // Legacy alias
   setActiveNodeId: (id: string | null) => void;
   toggleExpandNode: (id: string) => void;
   toggleTheme: () => void;
-  setActiveCourseId: (id: string) => void;
+  setActiveWorkspaceId: (id: string) => void;
+  setActiveCourseId: (id: string) => void; // Legacy alias
 }
 
 export const useTreeStore = create<TreeStoreState>((set) => ({
   activeNodeId: 'node-topic-1',
   expandedNodeIds: new Set(['node-topic-1', 'node-module-1']),
   isDarkTheme: true,
-  activeCourseId: 'course-default-1',
+  activeWorkspaceId: 'workspace-default-1',
+  activeCourseId: 'workspace-default-1',
 
   setActiveNodeId: (id) => set({ activeNodeId: id }),
 
@@ -42,5 +44,6 @@ export const useTreeStore = create<TreeStoreState>((set) => ({
       return { isDarkTheme: next };
     }),
 
-  setActiveCourseId: (id) => set({ activeCourseId: id }),
+  setActiveWorkspaceId: (id) => set({ activeWorkspaceId: id, activeCourseId: id }),
+  setActiveCourseId: (id) => set({ activeWorkspaceId: id, activeCourseId: id }),
 }));

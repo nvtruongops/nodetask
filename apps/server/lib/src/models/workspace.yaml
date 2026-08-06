@@ -1,5 +1,5 @@
-class: Course
-table: courses
+class: Workspace
+table: workspaces
 fields:
   userId: UuidValue
   title: String
@@ -7,5 +7,5 @@ fields:
   isPublic: bool?
   createdAt: DateTime?
 indexes:
-  user_courses_idx:
+  user_workspaces_idx:
     fields: userId
