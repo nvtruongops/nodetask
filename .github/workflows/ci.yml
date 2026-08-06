@@ -1,0 +1,30 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  ci:
+    name: Verification & Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run Rule Engine Verification (Strict Mode)
+        run: node .agents/scripts/verify.js --strict
+
+      - name: Install Web Dependencies
+        run: npm --prefix apps/web install
+
+      - name: Build Web Application
+        run: npm --prefix apps/web run build
