@@ -40,7 +40,7 @@ export function LandingPage({ onNavigate }: LandingPageProps) {
           </div>
 
           {/* Hero Main Heading */}
-          <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-tight uppercase max-w-3xl">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.15] uppercase max-w-4xl lg:max-w-5xl mx-auto [text-wrap:balance]">
             {getLandingContent('hero.heading', locale)}
           </h1>
 
