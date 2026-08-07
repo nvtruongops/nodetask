@@ -36,6 +36,7 @@ Hệ thống hiện tại thực thi 7 Lớp Modular Rule Plugins trong `.agents
 
 | Rule ID | Rule Package Subdirectory (`.agents/scripts/rules/`) | Category | Default Severity | DependsOn | Mục đích & Phạm vi Kiểm soát |
 | :--- | :--- | :--- | :--- | :--- | :--- |
+| **`BUILD_TYPE_CHECK`** | `build-type-check/` | `CODE_QUALITY` | `ERROR` | - | Thực thi TypeScript Compiler (`tsc --noEmit`) tự động bắt các lỗi Cú pháp JSX và Type Check. |
 | **`WHITELIST_DEPENDENCIES`** | `whitelist-dependencies/` | `ARCHITECTURE` | `ERROR` | - | Kiểm tra tất cả dependencies trong `apps/web/package.json` có nằm trong Whitelist được duyệt hay không. |
 | **`FOLDER_STRUCTURE`** | `folder-structure/` | `ARCHITECTURE` | `ERROR` | - | Đảm bảo 4 Core Docs (`architecture.md`, `data_and_api.md`, `frontend_and_ui.md`, `operations_and_quality.md`) và cấu trúc `.agents/` tồn tại hợp lệ. |
 | **`NO_MOCK_DATA`** | `no-mock-data/` | `SPECIFICATION` | `ERROR` | - | Kiểm tra tài liệu & mã nguồn, cấm Mock Data/dummy arrays, tuân thủ 5 RBAC System Roles chuẩn. |

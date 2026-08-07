@@ -37,11 +37,26 @@ body {
   color: hsl(var(--foreground));
 }
 
+/* Enforce Dark/Light color-scheme for native OS controls */
+.dark {
+  color-scheme: dark;
+}
+
+:root {
+  color-scheme: light;
+}
+
+/* Global input & textarea bounding rules (Anti-overflow / Anti-uncontrolled resize) */
+textarea {
+  resize: none;
+}
+
 /* Custom scrollbars for high-contrast monochrome design */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
+
 ::-webkit-scrollbar-track {
   background: hsl(var(--background));
 }
@@ -51,3 +66,16 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: hsl(var(--foreground));
 }
+
+/* Fix native select option popover background glare & low contrast */
+select option {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  padding: 6px 10px;
+}
+
+select option:disabled {
+  color: hsl(var(--muted-foreground));
+  opacity: 0.6;
+}
+

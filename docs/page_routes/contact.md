@@ -95,8 +95,8 @@
 ### Component Inventory List
 - `PublicLayoutShell`: Organism bọc giao diện công khai.
 - `ContactFormCard`: Container card bọc form liên hệ.
-- `SubjectSelect`: Molecule dropdown chọn chủ đề liên hệ.
-- `MessageTextarea`: Atom textarea nhập nội dung.
+- `ZeroIconSelect`: Custom Molecule dropdown chọn chủ đề liên hệ (Chống chói màu native OS & 100% Zero-Icon).
+- `MessageTextarea`: Atom textarea nhập nội dung (Khóa resize tự do `resize-none`, bounded `min-h-[140px] max-h-[220px]`).
 - `SubmitButton`: Button atom gửi form.
 
 ### Component Tree
@@ -105,16 +105,17 @@
 ├── [SkipToContentLink target="#main-content"]
 ├── [PublicHeader]
 └── [MainContent id="main-content" role="main"]
-    └── [ContactFormCard maxWidth="600px"]
+    └── [ContactFormCard maxWidth="650px"]
         ├── [FormTitle contentKey="contact.title"]
         ├── [ContactForm onSubmit=handleContactSubmit]
         │   ├── [NameInput]
         │   ├── [EmailInput]
-        │   ├── [SubjectSelect]
-        │   ├── [MessageTextarea]
+        │   ├── [ZeroIconSelect options=subjectOptions]
+        │   ├── [MessageTextarea resize="none" max-h="220px"]
         │   └── [SubmitButton disabled=loading]
         └── [ContactInfoBlock]
 ```
+
 
 ---
 

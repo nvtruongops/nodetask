@@ -250,4 +250,21 @@ export const apiService = {
       ],
     };
   },
+
+  async submitContactEnquiry(input: { name: string; email: string; subject: string; message: string }): Promise<{ success: boolean; ticketId: string; message: string }> {
+    // Simulate network delay for RPC call
+    await new Promise((resolve) => setTimeout(resolve, 600));
+
+    if (!input.name || !input.email || !input.subject || !input.message) {
+      throw new Error('422: Validation Failed - All fields are required.');
+    }
+
+    const ticketId = `TICK-${Math.floor(10000 + Math.random() * 90000)}`;
+    return {
+      success: true,
+      ticketId,
+      message: 'Cảm ơn bạn đã gửi liên hệ. Đội ngũ nodetask sẽ phản hồi sớm nhất.',
+    };
+  },
 };
+

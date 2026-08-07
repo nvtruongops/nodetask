@@ -133,7 +133,19 @@ export function PublicLayoutShell({ children, onNavigate, currentPath }: PublicL
             >
               {getLandingContent('nav.terms', locale)}
             </button>
+            <button
+              onClick={() => handleNavClick('/contact')}
+              aria-label="Contact page"
+              className={`transition-colors ${
+                isNavActive('/contact')
+                  ? 'font-bold text-foreground border-b-2 border-foreground pb-0.5'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              {getLandingContent('footer.contact', locale)}
+            </button>
           </nav>
+
 
           {/* Desktop Header Controls & CTAs */}
           <div className="hidden md:flex items-center space-x-3 text-xs uppercase tracking-wider font-semibold">
@@ -236,6 +248,16 @@ export function PublicLayoutShell({ children, onNavigate, currentPath }: PublicL
             >
               {getLandingContent('nav.terms', locale)}
             </button>
+            <button
+              onClick={() => handleNavClick('/contact')}
+              aria-label="Contact page mobile"
+              className={`block w-full text-left py-2 font-bold ${
+                isNavActive('/contact') ? 'text-foreground underline' : 'text-muted-foreground'
+              }`}
+            >
+              {getLandingContent('footer.contact', locale)}
+            </button>
+
             <div className="pt-2 border-t border-border flex flex-col space-y-2 font-semibold">
               <button
                 onClick={() => handleNavClick('/auth/login')}

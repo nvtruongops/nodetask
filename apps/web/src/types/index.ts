@@ -49,3 +49,17 @@ export interface AIAskResponse {
   answer: string;
   sources: AISearchResult[];
 }
+
+export interface ContactFormDto {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+}
+
+export interface ContactSubmissionResponse {
+  success: boolean;
+  ticketId: string;
+  message: string;
+}
+

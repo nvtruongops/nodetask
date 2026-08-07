@@ -46,6 +46,34 @@
 
 ---
 
+### 1.2. Quy Tắc Tương Phản, Chống Chói Màu & Giới Hạn Kích Thước Form Elements (Form Element Contrast & Bounded Rules)
+
+Để tránh hoàn toàn lỗi chói màu, mờ chữ khi render dropdown trên Dark Mode cũng như tình trạng vỡ khung layout do người dùng kéo dãn ô nhập:
+
+1. **Khuyến Khích Sử Dụng Custom Select Component (`ZeroIconSelect`)**:
+   - Khi tạo ô chọn Dropdown trên Dark Mode, ưu tiên sử dụng Component `ZeroIconSelect` (hoặc custom listbox popover) thay vì thẻ native `<select>`.
+   - Popover custom BẮT BỘC mang class `bg-card border border-border text-foreground`, khi hover/select đổi màu tương phản `hover:bg-foreground hover:text-background`, loại bỏ 100% hiện tượng native OS render popup màu xám sáng đè lên chữ màu trắng gây chói mắt.
+   - Thẻ native `<select>` (nếu dùng) BẮT BỘC phải được định kiểu màu nền/màu chữ toàn cục qua `globals.css` (`select option { background-color: hsl(var(--background)); color: hsl(var(--foreground)); }`) và cấu hình `color-scheme: dark;`.
+
+2. **Giới Hạn Khóa Kích Thước Ô Nhập (`<textarea>` Bounded Resizing)**:
+   - Toàn bộ các thẻ `<textarea>` BẮT BỘC phải mang class `resize-none` (khóa tính năng kéo tự do làm vỡ khung Card).
+   - Thiết lập giới hạn chiều cao `min-h-[120px] max-h-[240px]` kết hợp `overflow-y-auto` để ô nhập tin nhắn tự động xuất hiện thanh cuộn khi nội dung dài, giữ tuyệt đối độ cân đối của Card Container.
+
+3. **Quy Chuẩn Placeholder Ô Nhập Liệu & Thông Điệp Súc Tích (Functional Placeholders & Value Copywriting)**:
+   - **Tuyệt đối KHÔNG sử dụng tên người/email hư cấu** (như `Alex Johnson`, `alex@organization.com`, `Nguyễn Văn A`, `John Doe`, `user@domain.com`) làm placeholder.
+   - Placeholder BẮT BỘC phải là **hướng dẫn thao tác chức năng súc tích** (ví dụ: `Enter full name`, `Enter work email` / `Nhập họ và tên`, `Nhập email công việc`).
+   - Tiêu đề, phụ đề và mô tả BẮT BỘC giữ **ngắn gọn, trực diện & tập trung 100% vào giá trị người dùng**.
+
+4. **Anti-Patterns cho Form Elements (MUST NOT)**:
+   - ❌ Dùng tên người/email mẫu hư cấu (`Alex Johnson`, `alex@organization.com`, `John Doe`) làm placeholder.
+   - ❌ Thẻ native `<option>` không có class background/color, dẫn đến trình duyệt tự render popup màu sáng đè lên chữ màu trắng gây chói mắt.
+   - ❌ Thẻ `<textarea>` để `resize-y` hoặc `resize` tự do không có `max-h`, làm người dùng có thể kéo vỡ bố cục Card.
+   - ❌ Tương phản chữ / nền dưới tiêu chuẩn WAI-ARIA 4.5:1.
+   - ❌ Nền card bị sáng lố so với nền tổng thể Dark Mode (`#000000`).
+
+---
+
+
 ### 2. Bộ Quy Chuẩn Design Preferences Engine (`design_preferences.md`)
 
 Giao diện trong hệ thống `nodetask` bảo tốn tuyệt đối triết lý **Monochrome Zero-Icon**, không sử dụng màu sắc sặc sỡ mà quản lý dưới dạng **Hệ thống Tùy chọn Thiết kế Kỹ thuật (User Design Preferences Engine)** gồm 5 nhóm cấu hình (Grouped DTOs):
