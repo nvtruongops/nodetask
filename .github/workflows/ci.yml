@@ -20,11 +20,11 @@ jobs:
         with:
           node-version: 20
 
-      - name: Run Rule Engine Verification (Strict Mode)
-        run: node .agents/scripts/verify.js --strict
-
       - name: Install Web Dependencies
         run: npm --prefix apps/web install
+
+      - name: Run Rule Engine Verification (Strict Mode)
+        run: node .agents/scripts/verify.js --strict
 
       - name: Build Web Application
         run: npm --prefix apps/web run build

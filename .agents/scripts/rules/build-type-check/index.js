@@ -17,8 +17,19 @@ module.exports = {
       return { passed: true };
     }
 
+    const tscBin = path.join(webDir, 'node_modules/typescript/bin/tsc');
+    if (!ctx.fs.existsSync(tscBin)) {
+      try {
+        ctx.logger.info('Chưa tìm thấy node_modules trong apps/web, đang cài đặt dependencies...');
+        execSync('npm install', { cwd: webDir, stdio: 'pipe' });
+      } catch (installErr) {
+        ctx.logger.error(`Không thể cài đặt dependencies trong apps/web: ${installErr.message}`);
+        return { passed: false };
+      }
+    }
+
     try {
-      execSync('npx tsc --noEmit', {
+      execSync(`node "${tscBin}" --noEmit`, {
         cwd: webDir,
         encoding: 'utf8',
         stdio: 'pipe'
