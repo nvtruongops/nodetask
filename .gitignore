@@ -25,7 +25,10 @@ Thumbs.db
 # Environment & Secrets
 .env
 .env.local
+*.local
 config/passwords.yaml
+apps/server/config/passwords.yaml
+**/passwords.yaml
 
 # CodeGraph & AI Index Caches
 .codegraph/

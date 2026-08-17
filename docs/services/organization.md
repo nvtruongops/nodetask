@@ -208,3 +208,78 @@ const invite = await api.post('/rpc/organization/inviteMember', {
 });
 console.log('Mã lời mời:', invite.data.inviteToken);
 ```
+
+---
+
+### 11. Diagrams
+
+#### 11.1. Architecture & Multi-Tenancy Isolation Topology
+```mermaid
+flowchart TD
+  subgraph ClientUI["Frontend Admin & Member Management"]
+    OrgPanel["Organization Settings (apps/web)"]
+    MemberList["Member Role Management Table"]
+  end
+
+  subgraph OrgService["Serverpod Organization Service Engine"]
+    Endpoint["OrganizationEndpoint (organization_endpoint.dart)"]
+    SlugGuard["Slug & Domain Uniqueness Guard"]
+    InviteSigner["Cryptographic Invite Token Signer (TTL: 7d)"]
+  end
+
+  subgraph MultiTenantDB["Data & Isolation Layer"]
+    PG[("PostgreSQL\n(organizations, org_members, org_invites)")]
+    Redis[("Redis In-Memory Cache\n(org:meta, org:members_list, user:orgs)")]
+  end
+
+  subgraph Communication["External Dispatch"]
+    EmailGateway["Transactional Email Gateway (Resend / SMTP)"]
+  end
+
+  OrgPanel & MemberList -->|"RPC: createOrg / inviteMember / updateRole"| Endpoint
+  Endpoint --> SlugGuard
+  SlugGuard --> PG
+  Endpoint --> InviteSigner
+  InviteSigner --> EmailGateway
+  Endpoint -->|"Invalidate & Warm Cache"| Redis
+  EmailGateway -->|"Send Invite Email with Secure Token"| Invitee["New Team Member Email"]
+```
+
+#### 11.2. Member Invitation & Email Onboarding Sequence
+```mermaid
+sequenceDiagram
+  autonumber
+  actor Admin as Org Admin
+  participant OrgEP as OrganizationEndpoint
+  participant DB as PostgreSQL DB
+  participant Redis as Redis Cache
+  participant Mailer as Email Gateway
+  actor Invitee as Invited Developer
+  participant AuthEP as Auth & Invite Service
+
+  Admin->>OrgEP: inviteMember(orgId, email: "dev@team.io", role: "ORG_MEMBER")
+  OrgEP->>DB: Check if user already a member of org
+  OrgEP->>DB: Insert record into `organization_invites` (token, expires_at: NOW() + 7 days)
+  OrgEP->>Redis: Set cache `auth:invite:{token}`
+  OrgEP->>Mailer: Dispatch Invitation Email (with link `/#/auth/invite?token=...`)
+  OrgEP-->>Admin: 200 OK + InviteResponse (token, status: "SENT")
+
+  Note over Invitee, AuthEP: Người được mời mở email và nhấn chấp nhận
+  Invitee->>AuthEP: verifyInviteToken(token)
+  AuthEP-->>Invitee: 200 OK + InviteDetails (orgName, inviterName, role)
+  
+  Invitee->>AuthEP: acceptInvite(token, registerInput)
+  AuthEP->>DB: Insert into `organization_members` (userId, orgId, role)
+  AuthEP->>DB: Mark invite as ACCEPTED
+  AuthEP->>Redis: Invalidate `org:{orgId}:members_list` & `user:{userId}:orgs`
+  AuthEP-->>Invitee: 200 OK (Direct to Workspace)
+```
+
+#### 11.3. Role Hierarchy & Access Scope
+```mermaid
+flowchart LR
+  Owner["OWNER\n(Toàn quyền sở hữu, Billing, Xóa Org)"] --> Admin["ORG_ADMIN\n(Quản lý thành viên, Tạo Workspace)"]
+  Admin --> Member["ORG_MEMBER\n(Tạo, Sửa tài liệu trong Workspace)"]
+  Member --> Viewer["ORG_VIEWER\n(Xem tài liệu nội bộ, Không có quyền ghi)"]
+```
+

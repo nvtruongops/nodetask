@@ -157,3 +157,88 @@ if (statusResponse.data.status === 'COMPLETED') {
   console.log('Link tải file PDF:', statusResponse.data.downloadUrl);
 }
 ```
+
+---
+
+### 11. Diagrams
+
+#### 11.1. Architecture & Background Worker Topology
+```mermaid
+flowchart TD
+  subgraph ClientUI["Frontend Client Layer"]
+    ExportModal["Export & Backup Dialog (apps/web)"]
+    ToastNoti["Realtime Toast Notification"]
+  end
+
+  subgraph JobServer["Serverpod Job Coordinator"]
+    Endpoint["JobEndpoint (job_endpoint.dart)"]
+    QueueManager["Serverpod FutureCalls Task Dispatcher"]
+  end
+
+  subgraph Workers["Distributed Worker Pool"]
+    PdfWorker["PDF Renderer Worker (Tiptap AST -> PDF)"]
+    ZipWorker["Markdown / JSON Workspace Bundler"]
+    AiWorker["AI Embeddings Reindex Worker"]
+  end
+
+  subgraph StorageLayer["Data & File Storage"]
+    PG[("PostgreSQL\n(jobs, nodes, workspaces tables)")]
+    Redis[("Redis Status Cache\n(job:status, job:progress)")]
+    S3[("Object Storage\n(Exported PDF & Zip Archives)")]
+  end
+
+  ExportModal -->|"1. RPC: requestExport"| Endpoint
+  Endpoint -->|"Persist Job"| PG
+  Endpoint -->|"Enqueue Task"| QueueManager
+  QueueManager --> PdfWorker & ZipWorker & AiWorker
+  PdfWorker & ZipWorker -->|"Store Artifacts (TTL 7d)"| S3
+  PdfWorker & ZipWorker -->|"Update Status & Progress"| Redis & PG
+  Endpoint -->|"Stream: job.completed"| ToastNoti
+```
+
+#### 11.2. Background Job Lifecycle State Machine
+```mermaid
+stateDiagram-v2
+  [*] --> QUEUED: requestExport(target, format)
+  
+  QUEUED --> PROCESSING: Worker Picks Job from FutureCalls
+  PROCESSING --> COMPLETED: Render & Upload to S3 Success
+  
+  PROCESSING --> RETRY_WAIT: Transient Network / Timeout Error
+  RETRY_WAIT --> PROCESSING: Exponential Backoff Retry (<= 3 attempts)
+  RETRY_WAIT --> FAILED: Max Retries Exceeded (Dead Letter Queue)
+  
+  QUEUED --> CANCELLED: cancelJob() by User
+  PROCESSING --> CANCELLED: cancelJob() by User
+  
+  COMPLETED --> EXPIRED: TTL Expired (7 Days Auto Cleanup)
+  EXPIRED --> [*]
+  FAILED --> [*]
+  CANCELLED --> [*]
+```
+
+#### 11.3. Export Request & WebSocket Realtime Notification Sequence
+```mermaid
+sequenceDiagram
+  autonumber
+  actor User as User / Editor
+  participant JobEP as JobEndpoint
+  participant Queue as Serverpod FutureCalls
+  participant Worker as PDF Export Worker
+  participant S3 as Object Storage
+  participant Stream as Realtime Stream
+
+  User->>JobEP: requestExport(targetType: WORKSPACE, format: PDF)
+  JobEP->>Queue: Enqueue `export_workspace_job`
+  JobEP-->>User: 202 Accepted + { jobId: "job-889", status: "QUEUED" }
+
+  Note over Queue, Worker: Worker chạy nền bất đồng bộ (Non-blocking)
+  Queue->>Worker: Execute job-889
+  Worker->>Worker: Parse all Nodes in Workspace & Render Typography PDF
+  Worker->>S3: Upload `exports/ws_889.pdf`
+  S3-->>Worker: Storage URL confirmed
+  
+  Worker->>Stream: Broadcast `job.completed` (jobId: "job-889", downloadUrl: "https://...")
+  Stream-->>User: Realtime Push Notification: "Bản xuất PDF đã sẵn sàng!"
+```
+

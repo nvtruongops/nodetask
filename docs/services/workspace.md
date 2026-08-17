@@ -202,3 +202,83 @@ const newWorkspace = await api.post('/rpc/workspace/createWorkspace', {
 const treeData = await api.get(`/rpc/workspace/getWorkspaceTree?workspaceId=${newWorkspace.data.id}`);
 console.log('Cấu trúc cây tri thức:', treeData.data.rootNodes);
 ```
+
+---
+
+### 11. Diagrams
+
+#### 11.1. Architecture & Multi-Tenant Boundary Topology
+```mermaid
+flowchart TD
+  subgraph ClientScope["Frontend Application"]
+    Sidebar["Sidebar Navigator (apps/web)"]
+    Switcher["Workspace & Org Switcher"]
+  end
+
+  subgraph ServerEngine["Serverpod Workspace Engine"]
+    Endpoint["WorkspaceEndpoint (workspace_endpoint.dart)"]
+    RoleGuard["RBAC Scope Guard (Personal vs Organization)"]
+    TreeHydrator["Workspace Tree Hydration Engine"]
+  end
+
+  subgraph DataLayer["Storage & Cache"]
+    PG[("PostgreSQL\n(workspaces, workspace_members, nodes)")]
+    Redis[("Redis Cache\n(workspace:meta, workspace:tree_json)")]
+  end
+
+  subgraph Cascades["Cascade Deletion Pipeline"]
+    AsyncWorker["Serverpod FutureCalls Cascade Cleaner"]
+    CleanNodes["Delete Nodes & Ltree Subtrees"]
+    CleanEmbeddings["Purge AI Vector Embeddings"]
+    CleanAttachments["Unlink Storage Attachments"]
+  end
+
+  Sidebar & Switcher -->|"RPC: listWorkspaces / getWorkspaceTree"| Endpoint
+  Endpoint --> RoleGuard
+  RoleGuard --> TreeHydrator
+  TreeHydrator --> PG
+  Endpoint -->|"Cache Tree & Meta"| Redis
+  Endpoint -->|"On deleteWorkspace"| AsyncWorker
+  AsyncWorker --> CleanNodes & CleanEmbeddings & CleanAttachments
+```
+
+#### 11.2. Workspace Creation & Tree Hydration Sequence
+```mermaid
+sequenceDiagram
+  autonumber
+  actor User as User / Team Member
+  participant WsEP as WorkspaceEndpoint
+  participant DB as PostgreSQL DB
+  participant Redis as Redis Cache
+  participant Stream as Realtime Stream
+
+  User->>WsEP: createWorkspace(title, type: ORG, visibility: PRIVATE)
+  WsEP->>DB: Begin Transaction
+  WsEP->>DB: Insert into `workspaces` table
+  WsEP->>DB: Create default root node in `nodes` (path: `root.ws_uuid`)
+  WsEP->>DB: Insert `workspace_members` (role: OWNER)
+  WsEP->>DB: Commit Transaction
+  
+  WsEP->>Redis: Invalidate cache `user:{user_id}:workspaces`
+  WsEP->>Redis: Set cache `workspace:{ws_id}:meta`
+  WsEP->>Stream: Broadcast event `workspace.created`
+  WsEP-->>User: 200 OK + WorkspaceDetailResponse
+```
+
+#### 11.3. Workspace State Lifecycle Machine
+```mermaid
+stateDiagram-v2
+  [*] --> ACTIVE: createWorkspace()
+  
+  ACTIVE --> ARCHIVED: archiveWorkspace() (Read-only mode)
+  ARCHIVED --> ACTIVE: unarchiveWorkspace()
+  
+  ACTIVE --> TRASH: deleteWorkspace() (Soft-delete 30-day grace)
+  ARCHIVED --> TRASH: deleteWorkspace()
+  
+  TRASH --> ACTIVE: restoreWorkspace()
+  TRASH --> PERMANENT_DELETED: purgeExpiredTrash() / hardDelete()
+  
+  PERMANENT_DELETED --> [*]: Cascade purge nodes, vector embeddings & files
+```
+

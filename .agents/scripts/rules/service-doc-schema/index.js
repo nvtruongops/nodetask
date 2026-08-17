@@ -5,15 +5,18 @@ function extractSectionContent(fullContent, sectionName) {
   const lines = fullContent.split('\n');
   let inSection = false;
   let sectionLines = [];
+  let sectionHeadingLevel = 3;
 
   for (const line of lines) {
     const isHeading = /^#{1,4}\s+(.+)$/.test(line);
     if (isHeading) {
       const headingText = line.replace(/^#{1,4}\s+/, '').trim();
+      const headingLevel = (line.match(/^#{1,4}/) || ['#'])[0].length;
       if (headingText.toLowerCase().includes(sectionName.toLowerCase())) {
         inSection = true;
+        sectionHeadingLevel = headingLevel;
         continue;
-      } else if (inSection) {
+      } else if (inSection && headingLevel <= sectionHeadingLevel) {
         break;
       }
     }
@@ -47,7 +50,8 @@ module.exports = {
       Errors: { mustContain: ['HTTP Status'], regex: [/`[A-Z0-9_]+`/] },
       Events: { regex: [/[a-z0-9_]+\.[a-z0-9_]+/] },
       Cache: { mustContain: ['TTL', 'Invalidation'] },
-      Examples: { mustContain: ['```typescript'] }
+      Examples: { mustContain: ['```typescript'] },
+      Diagrams: { mustContain: ['```mermaid'] }
     };
 
     const files = ctx.fs.readdirSync(targetDir).filter(f => f.endsWith('.md'));

@@ -22,7 +22,7 @@ export function TermsPage({ onNavigate }: TermsPageProps) {
   };
 
   useEffect(() => {
-    document.title = 'Terms of Service - nodetask';
+    document.title = 'nodetask | Terms';
   }, []);
 
   // IntersectionObserver for active section tracking (Synchronized with PrivacyPage)

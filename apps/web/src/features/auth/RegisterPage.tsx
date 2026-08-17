@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AuthLayoutShell } from './AuthLayoutShell';
 import { useLanguageStore } from '../../store/useLanguageStore';
 import { getAuthContent, AuthContentKey } from './content';
@@ -10,6 +10,10 @@ interface RegisterPageProps {
 export function RegisterPage({ onNavigate }: RegisterPageProps) {
   const { locale } = useLanguageStore();
   const t = (key: AuthContentKey) => getAuthContent(key, locale);
+
+  useEffect(() => {
+    document.title = 'nodetask | Register';
+  }, []);
 
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');

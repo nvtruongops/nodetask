@@ -23,7 +23,7 @@ Toàn bộ AI Agent BẮT BỘC tuân thủ nghiêm ngặt **Quy trình 4 Cổng
 
 Trước khi khởi tạo hoặc chỉnh sửa bất kỳ tệp đặc tả dịch vụ nào trong `docs/services/*.md`, AI Agent **BẮT BỘC** phải gọi tool `view_file` mở **ĐỦ CẢ 2 TỆP**:
 
-1. 👉 [`.agents/schemas/service-doc.yaml`](file:///e:/Code/nodetask/.agents/schemas/service-doc.yaml) - Schema contract quy định 10 sections bắt buộc.
+1. 👉 [`.agents/schemas/service-doc.yaml`](file:///e:/Code/nodetask/.agents/schemas/service-doc.yaml) - Schema contract quy định 11 sections bắt buộc.
 2. 👉 [docs/data_and_api.md](file:///e:/Code/nodetask/docs/data_and_api.md) - Cấu trúc PostgreSQL Schema & Data Models gốc.
 
 > ⚠️ **STRICT GUARDRAIL**: Agent **KHÔNG ĐƯỢC PHÉP** ghi hoặc cập nhật file spec dịch vụ trước khi có tool call `view_file` đọc schema contract trong phiên làm việc.
@@ -34,7 +34,7 @@ Trước khi khởi tạo hoặc chỉnh sửa bất kỳ tệp đặc tả dị
 
 Mọi file `docs/services/*.md` BẮT BỘC phải đáp ứng 100% các tiêu chí sau:
 
-1. **10 Mandatory Sections (Đủ 10 Mục Bắt Buộc)**:
+1. **11 Mandatory Sections (Đủ 11 Mục Bắt Buộc)**:
    - `Overview`: Tóm tắt vai trò và ranh giới nghiệp vụ của dịch vụ.
    - `Endpoints`: Chữ ký Endpoint phải theo chuẩn Serverpod Dart `EndpointClass.method(Session session, InputDTO input)`.
    - `Request`: Khai báo DTOs dạng `interface`.
@@ -45,13 +45,21 @@ Mọi file `docs/services/*.md` BẮT BỘC phải đáp ứng 100% các tiêu c
    - `Events`: Tên sự kiện Realtime dạng `namespace.event_name` (ví dụ: `auth.otp_sent`).
    - `Cache`: Khai báo chiến lược Redis `TTL` và `Invalidation`.
    - `Examples`: Mã nguồn ví dụ dạng khối ` ```typescript `.
-2. **No Mock Data & Strict System Roles**: 100% Data Models và Roles tuân thủ Single Source of Truth tại `docs/data_and_api.md`.
+   - `Diagrams`: Sơ đồ Trực quan hóa Kiến trúc & Luồng Dữ liệu bằng Mermaid (` ```mermaid `).
+
+2. **Mermaid Diagrams Standard (Tiêu chuẩn Sơ đồ Trực quan)**:
+   Mỗi file spec dịch vụ cần cung cấp tối thiểu 2-3 sơ đồ Mermaid phản ánh chính xác nghiệp vụ:
+   - **Architecture & Component Interaction** (`flowchart TD`): Mô hình Client (Web/Mobile) ↔ Serverpod Endpoint ↔ Service / Repository ↔ PostgreSQL (`ltree`, `pgvector`, `JSONB`), Redis Cache & Background FutureCalls.
+   - **Core Handshake Sequence Flow** (`sequenceDiagram`): Luồng xử lý từng bước của các RPC Endpoint trọng tâm (Session Validation, RBAC Check, OCC Check, Cache Lookup, DB Transaction, Event Broadcast).
+   - **State Machine / Data Pipeline Lifecycle** (`stateDiagram-v2` / `flowchart LR`): Vòng đời trạng thái (Session lifecycle, Node hierarchy moves, Job queue states, Quota/Deduplication pipeline, AI embedding chunking).
+
+3. **No Mock Data & Strict System Roles**: 100% Data Models và Roles tuân thủ Single Source of Truth tại `docs/data_and_api.md`.
 
 ---
 
 ### 🟡 CỔNG 3: SPECIFICATION FILE GENERATION / UPDATE
 
-Tiến hành khởi tạo hoặc cập nhật tệp đặc tả dịch vụ tuân thủ đúng định dạng Markdown đã được phê duyệt.
+Tiến hành khởi tạo hoặc cập nhật tệp đặc tả dịch vụ tuân thủ đúng định dạng Markdown đã được phê duyệt, bao gồm đầy đủ 11 sections và sơ đồ Mermaid trực quan.
 
 ---
 
@@ -64,3 +72,4 @@ node .agents/scripts/verify.js --strict
 ```
 
 Chỉ khi kết quả xuất ra **PASS (0 Errors, 0 Warnings)** mới được phép kết thúc công việc.
+

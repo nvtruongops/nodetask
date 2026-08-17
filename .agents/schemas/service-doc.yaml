@@ -77,3 +77,9 @@ sections:
     description: "Concrete Request and Response code examples."
     mustContain:
       - "```typescript"
+
+  Diagrams:
+    minOccurrences: 1
+    description: "Visual Architecture, Sequence Flow, and State Machine Mermaid diagrams."
+    mustContain:
+      - "```mermaid"

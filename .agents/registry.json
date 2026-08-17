@@ -57,7 +57,7 @@
         "codegraph:call-edges",
         "codegraph:impact-analysis"
       ],
-      "description": "Queries monorepo AST dependency graph database (./.codegraph/graph.db)."
+      "description": "Queries monorepo AST dependency graph database (./.codegraph/codegraph.db)."
     },
     "ponytail": {
       "type": "builtin",

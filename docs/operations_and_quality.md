@@ -75,3 +75,28 @@ cd apps/web && npm run dev
 - **Giai đoạn 3 (Mở rộng cuối cùng: Mobile App & AI Search/RAG)**:
   - **1. Mobile App**: Phát triển ứng dụng Flutter Mobile (`apps/mobile`) đồng bộ Client SDK Dart.
   - **2. AI Search / RAG Engine**: Kích hoạt `pgvector` Embeddings, tích hợp AI Semantic Search & AI RAG Course Assistant khi dữ liệu bài học đã phong phú.
+
+---
+
+### 5. Logging, Debugging & Quality Enforcement Matrix
+
+Hệ thống quản lý chất lượng phân cấp rõ ràng theo môi trường vận hành:
+
+#### 5.1. Structured Logging Standard
+* **Client Frontend (`apps/web/src/lib/logger.ts`)**:
+  - Dùng `logger.createNamespace('<NAME>')` (e.g. `authLogger`, `rpcLogger`, `storeLogger`).
+  - Trong DEV: Cho phép `DEBUG` và `INFO` để theo dõi vòng đời ứng dụng, payload RPC và timer latency.
+  - Trong PROD: Tự động khóa `DEBUG`/`INFO`. Mọi `console.log`/`console.debug` bị Vite esbuild loại bỏ hoàn toàn khỏi mã nhị phân. Chỉ `WARN` và `ERROR` được ghi nhận.
+* **Backend Serverpod (`apps/server`)**:
+  - DEV: `logging.logLevel: info`, `logAllQueries: true`.
+  - PROD: `logging.logLevel: warning`, `logAllQueries: false`, chỉ log truy vấn chậm (`slowQueryThresholdMs: 50`).
+  - Tuyệt đối cấm ghi log chứa mật khẩu, JWT session key, bearer token hoặc dữ liệu PII.
+
+#### 5.2. Dev Debug Bypass & Safety Guardrail
+* **DevToolbar & Quick Role Switcher**:
+  - Chỉ được nạp khi `ENV.enableDevTools === true` (`import.meta.env.DEV === true`).
+  - Phục vụ kiểm thử giao diện nhanh các phân quyền (`GUEST`, `USER`, `ORG_ADMIN`) mà không cần nhập liệu form lặp lại.
+  - Được cô lập hoàn toàn, không tạo backdoor hay bypass trên Backend Serverpod (Backend luôn xác thực chữ ký token thực tế).
+* **Production Integrity**:
+  - Trước khi commit hoặc release, mã nguồn bắt buộc vượt qua `npm run check` (`node .agents/scripts/verify.js --strict && npm run build:web`).
+

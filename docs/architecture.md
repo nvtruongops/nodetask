@@ -20,6 +20,7 @@
 | **Database (DB)** | **PostgreSQL + pgvector** | ORM Code-First, extension `ltree` (cây), `JSONB` và `pgvector` (RAG Search). |
 | **Distributed Cache** | **Redis (Serverpod Redis Cache)** | Caching Session Auth & Cây bài học (Read-heavy) giảm tải DB. |
 | **Async Task Queue** | **Serverpod FutureCalls Engine** | Engine native xử lý ngầm (Background jobs & Scheduled Tasks). |
+| **Object Storage** | **MinIO (Dev/On-Prem) / Cloudflare R2 / AWS S3 (Prod)** | Lưu trữ tệp tin đa phương tiện, tài liệu đính kèm và ảnh qua Presigned URLs (AWS S3 API compatible). |
 | **Mobile App** | **Flutter (Dart)** | Tái sử dụng 100% Data Models và Dart Client SDK tự động sinh từ Backend Dart Serverpod. |
 
 ---
@@ -40,7 +41,7 @@
 │   ├── server/                   # Dart Serverpod Backend + PostgreSQL + Redis
 │   └── mobile/                   # Flutter Mobile App (Dart Client SDK)
 ├── packages/                     # Dynamic Shared packages/models
-└── docker-compose.yml            # Docker cấu hình PostgreSQL (pgvector) & Redis
+└── docker-compose.yml            # Docker cấu hình PostgreSQL (pgvector), Redis & MinIO Object Storage
 ```
 
 #### 2.1. Cấu trúc Frontend Web (`apps/web/src/`)
@@ -109,10 +110,14 @@ Chỉ sử dụng các thư viện đã được duyệt dưới đây. **Không
    * Sử dụng `session.caches` (In-memory & Redis distributed cache) để cache dữ liệu đọc nhiều. Sử dụng `FutureCalls` làm Task Queue native chạy ngầm mà không cài thêm BullMQ hay RabbitMQ.
 5. **ADR-05: PostgreSQL Native Vector Extension (`pgvector`) cho AI Search & RAG**
    * Tận dụng extension `pgvector` ngay trong PostgreSQL database chính với chỉ mục HNSW. KHÔNG cài thêm Vector DB độc lập như Chroma hay Qdrant để tối giản hạ tầng (Zero Extra Infrastructure Bloat).
+6. **ADR-06: AI Orchestration & AI Provider Abstraction Layer**
+   * Giữ toàn bộ AI Orchestration trong Dart Serverpod Boundary; thiết lập **AI Provider Layer** (Router, Timeout, Retry + Jitter, Circuit Breaker, Two-Phase Quota Reservation, Runtime Response Validation) điều phối 100% Cloud AI APIs (Gemini, OpenAI, Document AI, Azure Vision).
+7. **ADR-07: S3-Compatible Object Storage & 3-Way Presigned Handshake (MinIO / R2 / S3)**
+   * Toàn bộ tệp tin đa phương tiện và tài liệu đính kèm được lưu trữ trên **S3-Compatible Object Store**: MinIO cho môi trường Local Dev & On-Premise (`:9000` API, `:9001` Console), Cloudflare R2 / AWS S3 cho Production. Mọi luồng tải lên/xuống đều dùng **Presigned URLs** 3 chiều (AWS SigV4, TTL 15m) để giải phóng 100% băng thông của Serverpod API Server.
 
 ---
 
-### 5. Đặc Tả Kiến Trúc Cache, Task Queue & Vector Search Specification
+### 5. Đặc Tả Kiến Trúc Cache, Task Queue, Vector Search & Object Storage
 
 #### 5.1. Kiến trúc Caching Service (`session.caches`)
 - **Layer 1: Local In-Memory Cache (`session.caches.local`)**: Rate Limiting counters & Temporary Tokens.
@@ -145,25 +150,94 @@ sequenceDiagram
     Queue->>DB: Update course progress percentage
 ```
 
-#### 5.3. Kiến trúc AI Semantic Search & RAG Engine (`pgvector`)
+#### 5.3. Kiến trúc AI Provider Layer & Cloud Orchestration Engine
 
 ```mermaid
-sequenceDiagram
-    autonumber
-    actor Learner as Student / Learner
-    participant AIAPI as Serverpod AiEndpoint
-    participant Embedder as Embedding API (Gemini/OpenAI)
-    participant VectorDB as Postgres pgvector (HNSW Index)
-    participant LLM as LLM Provider
+flowchart TD
+  subgraph ClientBoundary["Web / Mobile Clients"]
+    Client["Client App (React Web / Flutter Mobile)"]
+  end
 
-    Learner->>AIAPI: AiEndpoint.ask(question, courseId)
-    AIAPI->>Embedder: Generate Vector Embedding (1536 dims)
-    Embedder-->>AIAPI: Return Query Vector
-    AIAPI->>VectorDB: Query Top 3 Chunks (Cosine Distance < 10ms)
-    VectorDB-->>AIAPI: Return Chunks & Node IDs
-    AIAPI->>LLM: Synthesize Answer (Prompt + Retrieved Chunks Context)
-    LLM-->>AIAPI: Return Synthesized Response
-    AIAPI-->>Learner: Return Answer + Direct Node Links
+  subgraph ServerpodCore["Dart Serverpod Backend Boundary"]
+    AuthRBAC["Auth & RBAC Guard"]
+    QuotaMgr["Two-Phase Quota & Metering"]
+    Orchestrator["AI Orchestration Service"]
+    
+    subgraph ProviderLayer["AI Provider Layer"]
+      Router["Provider Router\n(Model Routing & Cost Optimization)"]
+      ResilienceEngine["Resilience Engine\n(Timeout, Retry + Jitter, Circuit Breaker)"]
+      Validator["Runtime Response Validator"]
+    end
+  end
+
+  subgraph CloudAI["Cloud AI Providers (100% Cloud APIs)"]
+    GeminiOpenAI["Gemini / OpenAI API\n(Reasoning & LLM Stream)"]
+    DocAI["Google Document AI / Azure OCR\n(Document Parsing API)"]
+    VisionAudio["Whisper / Azure Vision API\n(Multimodal APIs)"]
+  end
+
+  subgraph StorageEngine["PostgreSQL & Redis"]
+    PG[("PostgreSQL\n(pgvector + node_embeddings)")]
+    RedisCache[("Redis Cache\n(Quota Reservations & Circuit Breaker)")]
+  end
+
+  Client -->|"RPC Request"| AuthRBAC
+  AuthRBAC --> QuotaMgr
+  QuotaMgr <-->|"Reserve Quota Token"| RedisCache
+  QuotaMgr --> Orchestrator
+  Orchestrator --> Router
+  Router --> ResilienceEngine
+  ResilienceEngine --> GeminiOpenAI & DocAI & VisionAudio
+  
+  GeminiOpenAI & DocAI & VisionAudio -.->|"Raw JSON Stream"| Validator
+  Validator -->|"Validated Domain DTO"| Orchestrator
+  Orchestrator -->|"Query / Store Vectors"| PG
+  Orchestrator -->|"Commit Actual Usage"| QuotaMgr
+  QuotaMgr -->|"Update Balance"| RedisCache
+```
+
+#### 5.4. Kiến trúc S3-Compatible Object Storage & MinIO Topology
+
+```mermaid
+flowchart TD
+  subgraph ClientApp["Client Interface"]
+    User["Web Dropzone / Mobile Uploader"]
+  end
+
+  subgraph ServerpodEngine["Serverpod Storage Engine"]
+    StorageEP["StorageEndpoint (storage_endpoint.dart)"]
+    Deduplicator["SHA-256 Checksum Deduplicator"]
+    Signer["S3 / MinIO Presigned Signer (SigV4)"]
+  end
+
+  subgraph ObjectStoreCluster["S3-Compatible Object Storage"]
+    MinIOAPI["MinIO S3 API Server (:9000)\n(Dev / On-Premise)"]
+    CloudflareR2["Cloudflare R2 / AWS S3\n(Production Multi-region)"]
+    MinIOAdmin["MinIO Web Console (:9001)\n(Management GUI)"]
+    
+    subgraph BucketsTopology["Bucket Taxonomy"]
+      B_Uploads["nodetask-uploads (Public Read)"]
+      B_Attachments["nodetask-attachments (Private Read)"]
+      B_Avatars["nodetask-avatars (Public CDN)"]
+      B_Exports["nodetask-exports (7-Day Auto Purge)"]
+    end
+  end
+
+  subgraph MetaCache["Metadata & Cache"]
+    DBMeta[("PostgreSQL\n(file_assets, node_attachments)")]
+    RedisUsage[("Redis Cache\n(storage:file:meta, storage:user:usage)")]
+  end
+
+  User -->|"1. RPC: requestUploadUrl"| StorageEP
+  StorageEP --> Deduplicator
+  Deduplicator --> DBMeta
+  StorageEP --> Signer
+  Signer -->|"2. Presigned PUT URL (TTL: 15m)"| User
+  
+  User -->|"3. Direct Binary PUT (HTTPS)"| MinIOAPI & CloudflareR2
+  MinIOAPI --> BucketsTopology
+  User -->|"4. RPC: confirmUpload"| StorageEP
+  StorageEP -->|"5. Update Metadata & Cache"| DBMeta & RedisUsage
 ```
 
 ---
@@ -179,3 +253,21 @@ Hệ thống định nghĩa các quy tắc nghiệp vụ cố định (Business 
    - Mọi thao tác Mutation trên `course_nodes` bắt buộc phải tăng `version = version + 1`. Nếu `version` gửi lên khác `version` hiện tại trong DB, hệ thống từ chối cập nhật và trả về lỗi `VERSION_CONFLICT`.
 3. **Progress Calculation Invariant**:
    - Phần trăm hoàn thành cây bài học / tài liệu $\text{Progress} = \left(\frac{\text{Completed Todos}}{\text{Total Todos}}\right) \times 100$. Nếu `Total Todos == 0`, `Progress = 0%`.
+
+---
+
+### 7. Environment Strategy & Dev/Prod Quality Isolation
+
+Dự án áp dụng mô hình phân tách môi trường nghiêm ngặt (Environment-Driven Configuration) nhằm cân bằng giữa trải nghiệm lập trình linh hoạt (Developer Experience) và chất lượng/bảo mật sản phẩm (Production Quality):
+
+| Tiêu chí | Môi trường Development (`DEV`) | Môi trường Production (`PROD`) |
+| :--- | :--- | :--- |
+| **Frontend Runtime** | `import.meta.env.DEV === true` | `import.meta.env.PROD === true` |
+| **Env Files** | `apps/web/.env.development` & `.env` | `apps/web/.env.production` |
+| **Backend Serverpod** | `apps/server/config/development.yaml` (`http://localhost:8080`) | `apps/server/config/production.yaml` (`https://api.nodetask.io`) |
+| **Structured Logger** | Hiển thị đầy đủ `DEBUG`, `INFO`, `WARN`, `ERROR` kèm namespace badge & timestamps. | Tự động tắt `DEBUG` & `INFO`; chỉ log `WARN` và `ERROR` bảo mật. |
+| **Console & Debugger** | Giữ nguyên cho việc inspect & trace luồng RPC/Store. | **Vite esbuild drop sạch** toàn bộ `console.*` và `debugger` khi build bundle. |
+| **Dev Debug Toolbar** | Kích hoạt `DevToolbar` (Quick Role Switcher, Latency Simulator, Reset State). | **Tree-shaken 100%**, không xuất hiện trong bundle build. |
+| **Auth & Guards** | Cho phép Dev Role Switcher để test nhanh các view `GUEST`, `USER`, `ORG_ADMIN`. | Thực thi nghiêm ngặt JWT Session, Cookie Secure, RBAC và Rate Limiter. |
+| **Quality Verification** | Kiểm tra linh hoạt trong quá trình code. | Bắt buộc PASS `node .agents/scripts/verify.js --strict` (0 Error, 0 Warning). |
+

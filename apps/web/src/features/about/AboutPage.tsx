@@ -21,7 +21,7 @@ export function AboutPage({ onNavigate }: AboutPageProps) {
   };
 
   useEffect(() => {
-    document.title = 'About nodetask - Architecture & Core Principles';
+    document.title = 'nodetask | About';
   }, []);
 
   return (

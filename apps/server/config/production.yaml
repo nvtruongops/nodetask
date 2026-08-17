@@ -1,0 +1,40 @@
+# ==============================================================================
+# Serverpod Production Configuration (production.yaml)
+# Production runtime settings with strict TLS/HTTPS and containerized networking
+# ==============================================================================
+
+apiServer:
+  port: 8080
+  publicHost: api.nodetask.io
+  publicPort: 443
+  publicScheme: https
+
+webServer:
+  port: 8082
+  publicHost: app.nodetask.io
+  publicPort: 443
+  publicScheme: https
+
+insightsServer:
+  port: 8081
+  publicHost: insights.internal.nodetask.io
+  publicPort: 8081
+  publicScheme: http
+
+database:
+  host: ${POSTGRES_HOST}
+  port: ${POSTGRES_PORT}
+  name: ${POSTGRES_DB}
+  user: ${POSTGRES_USER}
+
+redis:
+  enabled: true
+  host: ${REDIS_HOST}
+  port: ${REDIS_PORT}
+  user: default
+
+# Logging & Telemetry Level for Production
+logging:
+  logLevel: warning
+  logAllQueries: false
+  slowQueryThresholdMs: 50

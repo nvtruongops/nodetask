@@ -60,9 +60,7 @@ export function PublicLayoutShell({ children, onNavigate, currentPath }: PublicL
   };
 
   const getLanguageLabel = () => {
-    return locale === 'vi'
-      ? getLandingContent('nav.language.vi', locale)
-      : getLandingContent('nav.language.en', locale);
+    return locale.toUpperCase();
   };
 
   return (
@@ -77,22 +75,21 @@ export function PublicLayoutShell({ children, onNavigate, currentPath }: PublicL
 
       {/* Public Header Navigation */}
       <header className="sticky top-0 z-40 w-full border-b border-border bg-background/95 backdrop-blur backdrop-filter">
-        <div className="max-w-[clamp(1000px,92vw,1400px)] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <div className="max-w-[clamp(1000px,92vw,1400px)] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2 lg:gap-4 overflow-hidden">
           {/* Brand Logo Link */}
           <button
             onClick={() => handleNavClick('/')}
             aria-label={getLandingContent('brand.logo.aria', locale)}
-            className="text-xs sm:text-sm font-bold tracking-tight hover:opacity-80 transition-opacity text-left"
+            className="text-xs sm:text-sm font-bold tracking-tight hover:opacity-80 transition-opacity text-left shrink-0"
           >
-            <span className="hidden sm:inline">{getLandingContent('brand.logo.text', locale)}</span>
-            <span className="sm:hidden">[NODETASK]</span>
+            <span className="font-mono font-bold tracking-wider">[{getLandingContent('brand.logo.text', locale)}]</span>
           </button>
 
           {/* Desktop Nav Links */}
-          <nav className="hidden md:flex items-center space-x-5 text-xs uppercase tracking-wider">
+          <nav className="hidden lg:flex items-center space-x-3 xl:space-x-4 text-xs uppercase tracking-wider shrink-0">
             <button
               onClick={() => handleNavClick('/')}
-              className={`transition-colors ${
+              className={`transition-colors shrink-0 ${
                 isNavActive('/')
                   ? 'font-bold text-foreground border-b-2 border-foreground pb-0.5'
                   : 'text-muted-foreground hover:text-foreground'
@@ -103,7 +100,7 @@ export function PublicLayoutShell({ children, onNavigate, currentPath }: PublicL
             <button
               onClick={() => handleNavClick('/about')}
               aria-label="About page"
-              className={`transition-colors ${
+              className={`transition-colors shrink-0 ${
                 isNavActive('/about')
                   ? 'font-bold text-foreground border-b-2 border-foreground pb-0.5'
                   : 'text-muted-foreground hover:text-foreground'
@@ -114,7 +111,7 @@ export function PublicLayoutShell({ children, onNavigate, currentPath }: PublicL
             <button
               onClick={() => handleNavClick('/privacy')}
               aria-label="Privacy page"
-              className={`transition-colors ${
+              className={`transition-colors shrink-0 ${
                 isNavActive('/privacy')
                   ? 'font-bold text-foreground border-b-2 border-foreground pb-0.5'
                   : 'text-muted-foreground hover:text-foreground'
@@ -125,7 +122,7 @@ export function PublicLayoutShell({ children, onNavigate, currentPath }: PublicL
             <button
               onClick={() => handleNavClick('/terms')}
               aria-label="Terms page"
-              className={`transition-colors ${
+              className={`transition-colors shrink-0 ${
                 isNavActive('/terms')
                   ? 'font-bold text-foreground border-b-2 border-foreground pb-0.5'
                   : 'text-muted-foreground hover:text-foreground'
@@ -136,7 +133,7 @@ export function PublicLayoutShell({ children, onNavigate, currentPath }: PublicL
             <button
               onClick={() => handleNavClick('/contact')}
               aria-label="Contact page"
-              className={`transition-colors ${
+              className={`transition-colors shrink-0 ${
                 isNavActive('/contact')
                   ? 'font-bold text-foreground border-b-2 border-foreground pb-0.5'
                   : 'text-muted-foreground hover:text-foreground'
@@ -148,13 +145,13 @@ export function PublicLayoutShell({ children, onNavigate, currentPath }: PublicL
 
 
           {/* Desktop Header Controls & CTAs */}
-          <div className="hidden md:flex items-center space-x-3 text-xs uppercase tracking-wider font-semibold">
+          <div className="hidden md:flex items-center space-x-2 xl:space-x-3 text-xs uppercase tracking-wider font-semibold shrink-0">
             {/* Theme Switcher Button */}
             <button
               onClick={toggleTheme}
               aria-label={getLandingContent('nav.theme_toggle_aria', locale)}
               title="Toggle Theme"
-              className="px-2.5 py-1.5 border border-border hover:border-foreground transition-colors text-[11px]"
+              className="px-2.5 py-1.5 border border-border hover:border-foreground transition-colors text-[11px] whitespace-nowrap shrink-0"
             >
               [THEME: {getThemeLabel()}]
             </button>
@@ -163,8 +160,8 @@ export function PublicLayoutShell({ children, onNavigate, currentPath }: PublicL
             <button
               onClick={toggleLocale}
               aria-label={getLandingContent('nav.language_switcher_aria', locale)}
-              title="Switch Language"
-              className="px-2.5 py-1.5 border border-border hover:border-foreground transition-colors text-[11px]"
+              title={locale === 'vi' ? 'Switch to English' : 'Chuyển sang Tiếng Việt'}
+              className="px-2.5 py-1.5 border border-border hover:border-foreground transition-colors text-[11px] whitespace-nowrap shrink-0"
             >
               [LANG: {getLanguageLabel()}]
             </button>
@@ -172,33 +169,33 @@ export function PublicLayoutShell({ children, onNavigate, currentPath }: PublicL
             {/* Auth CTAs */}
             <button
               onClick={() => handleNavClick('/auth/login')}
-              className="px-3 py-1.5 border border-border hover:border-foreground transition-colors"
+              className="px-3 py-1.5 border border-border hover:border-foreground transition-colors whitespace-nowrap shrink-0"
             >
               {getLandingContent('nav.login', locale)}
             </button>
             <button
               onClick={() => handleNavClick('/auth/register')}
-              className="px-3 py-1.5 bg-foreground text-background hover:opacity-90 transition-opacity"
+              className="px-3 py-1.5 bg-foreground text-background hover:opacity-90 transition-opacity whitespace-nowrap shrink-0"
             >
               {getLandingContent('nav.register', locale)}
             </button>
           </div>
 
           {/* Mobile Menu Toggle Button */}
-          <div className="flex md:hidden items-center space-x-2">
+          <div className="flex md:hidden items-center space-x-2 shrink-0">
             <button
               onClick={toggleTheme}
               aria-label={getLandingContent('nav.theme_toggle_aria', locale)}
               className="px-2 py-1 border border-border text-[11px] font-bold"
             >
-              {getThemeLabel()}
+              [{getThemeLabel()}]
             </button>
             <button
               onClick={toggleLocale}
               aria-label={getLandingContent('nav.language_switcher_aria', locale)}
               className="px-2 py-1 border border-border text-[11px] font-bold"
             >
-              {getLanguageLabel()}
+              [{getLanguageLabel()}]
             </button>
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}

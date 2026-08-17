@@ -215,3 +215,78 @@ const newPreset = await client.designPreferences.createCustomPreset({
 // 4. Apply System or Custom Preset Profile
 const appliedPrefs = await client.designPreferences.applyPreset("writer");
 ```
+
+---
+
+### 11. Diagrams
+
+#### 11.1. Architecture & Multi-Device Sync Topology
+```mermaid
+flowchart TD
+  subgraph DeviceA["Client Device A (Desktop Browser)"]
+    ZustandA["Zustand useThemeStore"]
+    DOMA["CSS Root Variables (:root / .dark)"]
+    LocalStoreA["LocalStorage (nodetask_design_preferences)"]
+  end
+
+  subgraph DeviceB["Client Device B (Mobile / Tablet)"]
+    ZustandB["Zustand useThemeStore"]
+    DOMB["CSS Root Variables"]
+  end
+
+  subgraph ServerEngine["Serverpod Design Preferences Service"]
+    Endpoint["DesignPreferencesEndpoint (design_preferences_endpoint.dart)"]
+    Validator["Preferences Schema & Enum Guard"]
+  end
+
+  subgraph DataLayer["Persistence & Fast Cache"]
+    Redis[("Redis Fast Cache\n(design_prefs:userId - TTL 365d)")]
+    PG[("PostgreSQL\n(user_design_preferences, design_presets)")]
+    Stream["Serverpod Realtime Stream"]
+  end
+
+  DOMA --> ZustandA --> LocalStoreA
+  ZustandA -->|"1. RPC: updatePreferences"| Endpoint
+  Endpoint --> Validator
+  Validator --> PG & Redis
+  Endpoint -->|"2. Broadcast design_preferences.updated"| Stream
+  Stream -->|"3. Live Sync Push"| ZustandB
+  ZustandB --> DOMB
+```
+
+#### 11.2. Zero-Lag Optimistic Update & Multi-Device Sync Sequence
+```mermaid
+sequenceDiagram
+  autonumber
+  actor User as User on Laptop
+  participant FEA as Frontend A (Zustand)
+  participant DOM as DOM CSS Root
+  participant PrefEP as DesignPreferencesEndpoint
+  participant Redis as Redis Cache
+  participant DB as PostgreSQL DB
+  participant Stream as Realtime Stream
+  participant FEB as Frontend B (Mobile App)
+
+  User->>FEA: Select "Monochrome High Contrast + Compact"
+  FEA->>DOM: Inject CSS Variables & class .dark (0ms UI Response!)
+  FEA->>FEA: Save to LocalStorage
+  
+  FEA->>PrefEP: updatePreferences(newConfig)
+  PrefEP->>Redis: Set `design_prefs:{userId}` = newConfig
+  PrefEP->>DB: UPSERT user_design_preferences
+  PrefEP->>Stream: Broadcast `design_preferences.updated` (userId, newConfig)
+  PrefEP-->>FEA: 200 OK + Sync Success
+
+  Note over Stream, FEB: Thiết bị B nhận sự kiện đồng bộ tự động
+  Stream->>FEB: Event `design_preferences.updated`
+  FEB->>FEB: Update Zustand state & Inject CSS Variables
+```
+
+#### 11.3. Preference Cascading & Fallback Hierarchy
+```mermaid
+flowchart LR
+  L1["1. User Custom Preferences (Highest Priority)"] --> L2["2. Applied Custom / Preset Profile"]
+  L2 --> L3["3. Organization Brand Preset"]
+  L3 --> L4["4. System Default (Monochrome Standard Light/Dark)"]
+```
+

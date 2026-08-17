@@ -1,11 +1,12 @@
 name: service-designer
-version: 1.0.0
-description: Skill thiết kế và cập nhật các file đặc tả dịch vụ Backend trong docs/services/*.md.
+version: 1.1.0
+description: Skill thiết kế và cập nhật các file đặc tả dịch vụ Backend trong docs/services/*.md với sơ đồ kiến trúc Mermaid trực quan.
 minGovernanceVersion: 1.4.0
 priority: 80
 capabilities:
   - doc:service-spec
   - doc:schema-validation
+  - doc:diagram-generation
 executionMode: sequential
 parameters:
   service_name:
@@ -13,4 +14,5 @@ parameters:
 input_schema:
   service_file: string
 output_schema:
-  has_10_sections: boolean
+  has_11_sections: boolean
+  has_mermaid_diagrams: boolean

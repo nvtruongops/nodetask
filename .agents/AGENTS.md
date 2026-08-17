@@ -30,7 +30,7 @@
 | `docker-compose up -d` | `./` | Launch PostgreSQL (`pgvector`, `ltree`) & Redis cache containers |
 | `cd apps/server && dart bin/main.dart` | `apps/server` | Start Dart Serverpod backend server |
 | `cd apps/web && npm run dev` | `apps/web` | Start React Vite local development server |
-| `codegraph sync` | `./` | Sync monorepo AST dependency graph in `.codegraph/graph.db` |
+| `codegraph sync` | `./` | Sync monorepo AST dependency graph in `.codegraph/codegraph.db` |
 
 ---
 
@@ -57,7 +57,7 @@
 ## 🧠 II. CODE INTELLIGENCE & REPO MEMORY
 
 ### 1. CodeGraph (`.codegraph`)
-- **Database**: `.codegraph/graph.db` lưu trữ toàn bộ AST, symbols, imports và call-edges.
+- **Database**: `.codegraph/codegraph.db` lưu trữ toàn bộ AST, symbols, imports và call-edges (SQLite WAL).
 - **Commands**:
   - `codegraph sync`: Cập nhật index đồ thị sau khi thêm/sửa file.
   - `codegraph query <symbol>`: Tìm kiếm định nghĩa hàm, interface, class.
@@ -83,7 +83,7 @@ User Request ──► Context Resolver ──► Intent Router ──► Skills
 1. **Context & Intent Resolution**: Chạy `node .agents/scripts/context-resolver.js --request "<request>"` để lọc Intent, Capability Matrix & Priority Skills.
 2. **Method & Skill Selection**: Gọi skill phù hợp (`using-superpowers`, `brainstorming` cho feature, `systematic-debugging` cho bug, `ponytail` cho sửa lỗi tối giản).
 3. **Planning Phase**: Lập kế hoạch chi tiết `implementation_plan.md` cho các thay đổi phức tạp / multi-step.
-4. **Conditional CodeGraph Traversal**: Tra cứu `.codegraph/graph.db` khi refactor, rename, move, delete hoặc ảnh hưởng liên-file.
+4. **Conditional CodeGraph Traversal**: Tra cứu `.codegraph/codegraph.db` khi refactor, rename, move, delete hoặc ảnh hưởng liên-file.
 5. **Ponytail Implementation**: Sửa mã nguồn tối giản, không bloat, zero icon, tuân thủ Monochrome Design System.
 6. **Automated Verification**: Chạy `node .agents/scripts/verify.js --strict` và xác nhận PASS trước khi tuyên bố hoàn thành.
 

@@ -73,6 +73,28 @@
 
 ---
 
+### 1.3. Quy Chuẩn Thẻ Trình Duyệt & Navbar Súc Tích Chống Tràn Đa Ngôn Ngữ (Compact Tab Titles & Resilient i18n Navbar)
+
+Để tối ưu trải nghiệm người dùng, chống tràn vỡ thanh điều hướng khi hỗ trợ nhiều ngôn ngữ và giữ tab trình duyệt luôn rõ ràng:
+
+1. **Quy chuẩn Thẻ Trình duyệt (Browser Tab Titles)**:
+   - **Trang chủ (Landing Page)**: `<title>nodetask</title>` (đơn giản, mang tính nhận diện cao, không bị cắt cụt trên tab trình duyệt hẹp).
+   - **Trang con**: `nodetask | <Tên Trang>` (ví dụ: `nodetask | About`, `nodetask | Contact`, `nodetask | Privacy`, `nodetask | Login`).
+   - Cấm đặt tiêu đề quá dài (>35 ký tự) gây tràn và bị cắt `...` trên tab trình duyệt.
+
+2. **Quy chuẩn Navbar Súc Tích & ISO 639-1 Badging**:
+   - **Brand Badge**: Dùng `[NODETASK]` ngắn gọn thay cho khẩu hiệu dài để tiết kiệm không gian ngang.
+   - **Language Switcher**: Nút chuyển đổi ngôn ngữ trên Header luôn hiển thị **Mã ngôn ngữ ISO viết hoa** (ví dụ: `[LANG: VI]`, `[LANG: EN]`, `[LANG: JA]`, `[LANG: FR]`). Điều này đảm bảo kích thước nút bấm luôn cố định, hoàn toàn miễn nhiễm với hiện tượng tràn thanh điều hướng dù ngôn ngữ tương lai có tên dài (`Português Brasileiro`, `Traditional Chinese`, `Bahasa Indonesia`). Tên đầy đủ được hiển thị trong `aria-label`, `title` tooltip và menu drawer.
+   - **Theme Switcher**: Hiển thị nhãn trực tiếp không lồng ngoặc vuông thừa: `[THEME: TỐI]`, `[THEME: SÁNG]`, `[THEME: SYS]`.
+   - **Nav Link Labels**: Giữ nhãn súc tích: `[Trang Chủ]`, `[Giới Thiệu]`, `[Bảo Mật]`, `[Điều Khoản]`, `[Liên Hệ]`, `[ĐĂNG NHẬP]`, `[BẮT ĐẦU]`.
+
+3. **Kỹ thuật Chống Bẻ Dòng & Phòng thủ Layout (Layout Defense)**:
+   - Header container BẮT BỘC mang class `h-16 flex items-center justify-between gap-2 lg:gap-4 overflow-hidden`.
+   - Các nút điều hướng và điều khiển BẮT BỘC mang class `whitespace-nowrap shrink-0`.
+   - Sử dụng breakpoint phân cấp (`hidden lg:flex` cho chuỗi link trang và `hidden md:flex` cho controls/auth) để đảm bảo không bị đè chữ trên màn hình tablet/laptop nhỏ trước khi chuyển sang Mobile Drawer.
+
+---
+
 
 ### 2. Bộ Quy Chuẩn Design Preferences Engine (`design_preferences.md`)
 

@@ -30,6 +30,8 @@ Serverpod định nghĩa API theo dạng các **Endpoint Classes & Methods**. Đ
 | **Background Jobs & Export** | `JobEndpoint` | [docs/services/job.md](file:///E:/Code/nodetask/docs/services/job.md) | Xuất dữ liệu PDF/Markdown ngầm qua FutureCalls và theo dõi trạng thái tác vụ. |
 | **User Design Preferences** | `DesignPreferencesEndpoint` | [docs/services/design_preferences.md](file:///E:/Code/nodetask/docs/services/design_preferences.md) | Quản lý giao diện cá nhân hóa Monochrome Zero-Icon, Typography, Density & Custom Presets. |
 | **Internationalization (i18n)** | `I18nEndpoint` | [docs/services/i18n.md](file:///E:/Code/nodetask/docs/services/i18n.md) | Quản lý từ điển đa ngôn ngữ (`en`/`vi`), Content Dictionary & CMS sync. |
+| **AI Knowledge Graph & Vector Topology** | `GraphEndpoint` | [docs/services/graph.md](file:///E:/Code/nodetask/docs/services/graph.md) | Trích xuất Topology đồ thị tri thức 2D/3D (pgvector + ltree + backlinks), Phân cụm cộng đồng & Stream WebGL. |
+| **Pentest & API Security Testing** | `PentestEndpoint` | [docs/services/pentest.md](file:///E:/Code/nodetask/docs/services/pentest.md) | Kiểm thử an ninh tự động, quét lỗ hổng OWASP API Top 10, Fuzzing & Báo cáo an toàn thông tin. |
 
 ---
 
@@ -167,6 +169,23 @@ CREATE TABLE document_nodes (
 CREATE INDEX idx_document_nodes_ws_parent_pos ON document_nodes(workspace_id, parent_id, position);
 CREATE INDEX idx_document_nodes_path ON document_nodes USING GIST(path);
 
+CREATE TABLE document_node_versions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  node_id UUID NOT NULL REFERENCES document_nodes(id) ON DELETE CASCADE,
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  version_number INT NOT NULL,
+  title VARCHAR(255) NOT NULL,
+  content JSONB NOT NULL,
+  change_summary VARCHAR(255),
+  is_snapshot BOOLEAN DEFAULT FALSE,
+  snapshot_tag VARCHAR(50),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  UNIQUE (node_id, version_number)
+);
+
+CREATE INDEX idx_node_versions_node_ver ON document_node_versions(node_id, version_number DESC);
+CREATE INDEX idx_node_versions_snapshot ON document_node_versions(node_id, is_snapshot);
+
 -- ============================================================================
 -- 5. TẦNG TÁC VỤ TODO ĐÍNH KÈM NODE (NODE TODOS)
 -- ============================================================================
@@ -253,6 +272,47 @@ CREATE TABLE background_jobs (
 );
 
 CREATE INDEX idx_background_jobs_user_status ON background_jobs(user_id, status);
+
+-- ============================================================================
+-- 9. TẦNG KIỂM THỬ AN NINH & QUÉT LỖ HỔNG (PENTEST & VULNERABILITY AUDITING)
+-- ============================================================================
+CREATE TABLE pentest_scans (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  organization_id UUID REFERENCES organizations(id) ON DELETE CASCADE,
+  target_scope VARCHAR(30) NOT NULL, -- FULL_SYSTEM, WORKSPACE_SCOPE, AUTH_GATEWAY, STORAGE_PIPELINE, AI_VECTOR_ENGINE
+  scan_type VARCHAR(30) NOT NULL,    -- PASSIVE_AUDIT, ACTIVE_FUZZING, BOLA_INSPECTION, FULL_PENETRATION_TEST
+  status VARCHAR(20) NOT NULL DEFAULT 'QUEUED', -- QUEUED, RUNNING, COMPLETED, FAILED, CANCELLED
+  progress_percentage INT DEFAULT 0,
+  total_endpoints_scanned INT DEFAULT 0,
+  critical_vulnerabilities INT DEFAULT 0,
+  high_vulnerabilities INT DEFAULT 0,
+  medium_vulnerabilities INT DEFAULT 0,
+  low_vulnerabilities INT DEFAULT 0,
+  compliance_score INT DEFAULT 100,
+  error_message TEXT,
+  started_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  completed_at TIMESTAMP WITH TIME ZONE
+);
+
+CREATE INDEX idx_pentest_scans_org_status ON pentest_scans(organization_id, status);
+
+CREATE TABLE pentest_vulnerabilities (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  scan_id UUID NOT NULL REFERENCES pentest_scans(id) ON DELETE CASCADE,
+  endpoint_name VARCHAR(100) NOT NULL,
+  vulnerability_type VARCHAR(50) NOT NULL,
+  owasp_category VARCHAR(50) NOT NULL, -- e.g. API1:2023-BOLA
+  severity VARCHAR(10) NOT NULL,       -- INFO, LOW, MEDIUM, HIGH, CRITICAL
+  cvss_score NUMERIC(3, 1) NOT NULL,   -- 0.0 - 10.0
+  title VARCHAR(255) NOT NULL,
+  description TEXT NOT NULL,
+  proof_of_concept TEXT,
+  remediation_advice TEXT NOT NULL,
+  detected_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE INDEX idx_pentest_vuln_scan_severity ON pentest_vulnerabilities(scan_id, severity);
 ```
 
 ---
@@ -275,6 +335,7 @@ Hệ thống thực thi mô hình Phân quyền Đa cấp:
 | **Tìm kiếm ngữ nghĩa & Hỏi đáp AI RAG** | ❌ (Public only) | ✅ (Personal Scope) | ✅ (Org Scope) | ✅ (Org Scope) | ✅ (All) |
 | **Mời thành viên / Đổi quyền Tổ chức** | ❌ | ❌ | ❌ | ✅ (Org Scope) | ✅ (All) |
 | **Xuất dữ liệu PDF / Markdown / Backup** | ❌ | ✅ (Owner/Viewer) | ✅ (Org Scope) | ✅ (Org Scope) | ✅ (All) |
+| **Chạy quét an ninh & Pentest API** | ❌ | ❌ | ❌ | ✅ (Org Scope) | ✅ (Full System) |
 | **Quản trị Toàn quyền Hệ thống** | ❌ | ❌ | ❌ | ❌ | ✅ (Full Root) |
 
 ---
@@ -310,6 +371,10 @@ Hệ thống thực thi mô hình Phân quyền Đa cấp:
 | `NOT_FOUND` | `404 Not Found` | Tài nguyên `workspace_id`, `node_id`, `todo_id` không tồn tại. | Trở về danh sách trang chính. |
 | `VERSION_CONFLICT` | `409 Conflict` | Xung đột ghi đồng thời (OCC version mismatch). | Rollback UI local, fetch lại cây node mới nhất. |
 | `STORAGE_QUOTA_EXCEEDED` | `413 Payload Too Large` | Vượt quá dung lượng lưu trữ cho phép. | Gợi ý dọn dẹp file hoặc nâng cấp gói. |
+| `MINIO_CONNECTION_FAILED` | `502 Bad Gateway` | Không thể kết nối tới MinIO / S3 Object Storage. | Kiểm tra trạng thái container MinIO. |
+| `PRESIGNED_URL_EXPIRED` | `410 Gone` | Presigned URL đã quá hạn thời gian hiệu lực. | Yêu cầu cấp mới Presigned URL. |
+| `PENTEST_SCAN_ALREADY_RUNNING` | `409 Conflict` | Đang có chiến dịch quét bảo mật đang chạy. | Chờ quét xong hoặc hủy chiến dịch cũ. |
+| `PENTEST_UNAUTHORIZED_TARGET` | `403 Forbidden` | Quét mục tiêu ngoài phạm vi thẩm quyền tổ chức. | Chỉ định đúng scope quản trị. |
 | `INTERNAL_ERROR` | `500 Internal Error` | Lỗi không xác định tại backend server. | Hiển thị "Lỗi hệ thống, thử lại sau". |
 
 ---
@@ -322,5 +387,12 @@ Tất cả Redis cache key phải tuân thủ chuẩn `snake_case` phân cấp b
 - `workspace:{workspace_id}:tree_json` -> Cấu trúc cây thư mục JSON phân cấp (TTL 30m).
 - `node:{node_id}:detail` -> Chi tiết nội dung node và Tiptap AST (TTL 1h).
 - `storage:file:{file_id}:meta` -> Metadata file đính kèm (TTL 24h).
+- `storage:node:{node_id}:attachments` -> Danh sách file đính kèm theo node (TTL 1h).
+- `storage:user:{user_id}:usage` -> Thống kê dung lượng đã dùng (TTL 10m).
+- `storage:presigned:{file_id}:download` -> Cache Presigned Download URL (TTL 10m).
 - `ai:search:{sha256(query_workspace)}` -> Kết quả tìm kiếm ngữ nghĩa vector (TTL 10m).
 - `user:{user_id}:workspaces` -> Danh sách Workspace của người dùng (TTL 15m).
+- `pentest:scan:{scan_id}:summary` -> Thông tin tiến độ chiến dịch quét an ninh (TTL 1h).
+- `pentest:rules:active` -> Danh mục quy tắc kiểm thử an ninh (TTL 24h).
+- `pentest:org:{org_id}:active_scan` -> Khóa ngăn chặn quét đồng thời theo tổ chức (TTL 2h).
+

@@ -54,7 +54,7 @@
         "delete",
         "cross_file_impact"
       ],
-      "description": "Query ./.codegraph/graph.db to analyze cross-file call edges and impact scope."
+      "description": "Query ./.codegraph/codegraph.db to analyze cross-file call edges and impact scope."
     },
     {
       "step": 4,

@@ -182,3 +182,80 @@ const toggled = await api.put('/rpc/todo/toggleTodoStatus', {
 });
 console.log('Trạng thái mới:', toggled.data.isCompleted);
 ```
+
+---
+
+### 11. Diagrams
+
+#### 11.1. Architecture & Kanban Board Integration
+```mermaid
+flowchart TD
+  subgraph ClientComponents["Frontend Task UI Components"]
+    Checklist["In-Note Rich-Text Checklist Block"]
+    Kanban["Kanban Board / Task Matrix View"]
+    ProgressBar["Node Completion Progress Indicator"]
+  end
+
+  subgraph BackendEngine["Serverpod Todo Management Engine"]
+    Endpoint["TodoEndpoint (todo_endpoint.dart)"]
+    ProgressCalc["Node Progress % Aggregator"]
+    PrioritySorter["Task Position & Priority Sorter"]
+  end
+
+  subgraph Persistence["Storage & Realtime"]
+    PG[("PostgreSQL\n(todos, nodes, users tables)")]
+    Redis[("Redis In-Memory Cache\n(todo:node:list, todo:node:progress)")]
+    Stream["Serverpod Realtime Stream"]
+  end
+
+  Checklist & Kanban -->|"RPC: createTodo / toggleTodoStatus / reorderTodos"| Endpoint
+  Endpoint --> PrioritySorter
+  PrioritySorter --> PG
+  Endpoint --> ProgressCalc
+  ProgressCalc --> PG
+  Endpoint -->|"Invalidate list & progress"| Redis
+  Endpoint -->|"Broadcast Realtime Updates"| Stream
+  Stream --> ProgressBar & Kanban
+```
+
+#### 11.2. Todo State Machine & Task Transitions
+```mermaid
+stateDiagram-v2
+  [*] --> PENDING: createTodo(title, priority, dueDate)
+  
+  PENDING --> IN_PROGRESS: assignToUser() / startWork()
+  IN_PROGRESS --> COMPLETED: toggleTodoStatus(isCompleted: true)
+  PENDING --> COMPLETED: toggleTodoStatus(isCompleted: true)
+  
+  COMPLETED --> PENDING: toggleTodoStatus(isCompleted: false) (Reopen)
+  
+  PENDING --> ARCHIVED: archiveNode() / deleteTodo()
+  COMPLETED --> ARCHIVED: archiveNode()
+  
+  ARCHIVED --> [*]
+```
+
+#### 11.3. Task Completion & Node Progress Recalculation Sequence
+```mermaid
+sequenceDiagram
+  autonumber
+  actor User as User / Assignee
+  participant TodoEP as TodoEndpoint
+  participant DB as PostgreSQL DB
+  participant Redis as Redis Cache
+  participant Stream as Realtime Stream
+
+  User->>TodoEP: toggleTodoStatus(todoId: "todo-123", isCompleted: true)
+  TodoEP->>DB: UPDATE todos SET is_completed = true, completed_at = NOW() WHERE id = todoId
+  TodoEP->>DB: COUNT(*) completed vs total todos for linked nodeId
+  DB-->>TodoEP: 8 completed / 10 total (80% Progress)
+  
+  TodoEP->>Redis: Invalidate cache `todo:node:{nodeId}:list`
+  TodoEP->>Redis: Set cache `todo:node:{nodeId}:progress` = { completed: 8, total: 10, percent: 80 }
+  
+  TodoEP->>Stream: Broadcast `todo.status_toggled` (todoId, isCompleted: true)
+  TodoEP->>Stream: Broadcast `node.progress_updated` (nodeId, progressPercent: 80)
+  
+  TodoEP-->>User: 200 OK + TodoItemResponse (isCompleted: true, nodeProgress: 80%)
+```
+

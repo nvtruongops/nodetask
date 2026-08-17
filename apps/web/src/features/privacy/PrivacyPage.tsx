@@ -22,7 +22,7 @@ export function PrivacyPage({ onNavigate }: PrivacyPageProps) {
   };
 
   useEffect(() => {
-    document.title = 'Privacy Policy - nodetask';
+    document.title = 'nodetask | Privacy';
   }, []);
 
   // IntersectionObserver for active section tracking

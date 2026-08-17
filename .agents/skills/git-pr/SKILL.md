@@ -29,7 +29,7 @@ node .agents/scripts/verify.js --strict
 
 Đồng thời tự động cập nhật đồ thị mã nguồn CodeGraph local:
 ```powershell
-$env:CODEGRAPH_DATA_DIR="e:\Code\nodetask\.codegraph"; npx --yes @astudioplus/codegraph-mcp --workspace "e:\Code\nodetask" --graph-only
+codegraph sync
 ```
 
 > ⚠️ **STRICT GUARDRAIL**: Bất kỳ cảnh báo (Warning) hoặc lỗi (Error) nào xuất ra từ `verify.js` BẮT BỘC phải được khắc phục hoàn toàn trước khi tiếp tục. Tuyệt đối **CẤM TẠO PR** khi kết quả chưa đạt `PASS (0 Errors, 0 Warnings)`.

@@ -149,7 +149,7 @@ export function ContactPage({ onNavigate }: ContactPageProps) {
   };
 
   useEffect(() => {
-    document.title = 'Contact Us - nodetask Support & Feedback';
+    document.title = 'nodetask | Contact';
   }, []);
 
   const handleInputChange = (field: keyof FormFields, value: string) => {

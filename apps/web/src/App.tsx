@@ -13,6 +13,9 @@ import { AcceptInvitePage } from './features/auth/AcceptInvitePage';
 import { AccountDisabledPage } from './features/auth/AccountDisabledPage';
 import { AuthCallbackPage } from './features/auth/AuthCallbackPage';
 
+import { ENV } from './lib/env';
+import { DevToolbar } from './components/dev/DevToolbar';
+
 export function App() {
   const [currentPath, setCurrentPath] = useState<string>(() => {
     return window.location.hash.replace('#', '') || '/';
@@ -37,56 +40,66 @@ export function App() {
   // Route matching based on path prefix / exact route
   const basePath = currentPath.split('?')[0];
 
-  if (basePath === '/about') {
-    return <AboutPage onNavigate={handleNavigate} />;
-  }
+  const renderCurrentPage = () => {
+    if (basePath === '/about') {
+      return <AboutPage onNavigate={handleNavigate} />;
+    }
 
-  if (basePath === '/contact') {
-    return <ContactPage onNavigate={handleNavigate} />;
-  }
+    if (basePath === '/contact') {
+      return <ContactPage onNavigate={handleNavigate} />;
+    }
 
-  if (basePath === '/privacy') {
-    return <PrivacyPage onNavigate={handleNavigate} />;
-  }
+    if (basePath === '/privacy') {
+      return <PrivacyPage onNavigate={handleNavigate} />;
+    }
 
-  if (basePath === '/terms') {
-    return <TermsPage onNavigate={handleNavigate} />;
-  }
+    if (basePath === '/terms') {
+      return <TermsPage onNavigate={handleNavigate} />;
+    }
 
-  // Auth Feature Routes
-  if (basePath === '/auth/login') {
-    return <LoginPage onNavigate={handleNavigate} />;
-  }
+    // Auth Feature Routes
+    if (basePath === '/auth/login') {
+      return <LoginPage onNavigate={handleNavigate} />;
+    }
 
-  if (basePath === '/auth/register') {
-    return <RegisterPage onNavigate={handleNavigate} />;
-  }
+    if (basePath === '/auth/register') {
+      return <RegisterPage onNavigate={handleNavigate} />;
+    }
 
-  if (basePath === '/auth/verify-email') {
-    return <VerifyEmailPage onNavigate={handleNavigate} />;
-  }
+    if (basePath === '/auth/verify-email') {
+      return <VerifyEmailPage onNavigate={handleNavigate} />;
+    }
 
-  if (basePath === '/auth/forgot-password') {
-    return <ForgotPasswordPage onNavigate={handleNavigate} />;
-  }
+    if (basePath === '/auth/forgot-password') {
+      return <ForgotPasswordPage onNavigate={handleNavigate} />;
+    }
 
-  if (basePath === '/auth/reset-password') {
-    return <ResetPasswordPage onNavigate={handleNavigate} />;
-  }
+    if (basePath === '/auth/reset-password') {
+      return <ResetPasswordPage onNavigate={handleNavigate} />;
+    }
 
-  if (basePath === '/auth/accept-invite') {
-    return <AcceptInvitePage onNavigate={handleNavigate} />;
-  }
+    if (basePath === '/auth/accept-invite') {
+      return <AcceptInvitePage onNavigate={handleNavigate} />;
+    }
 
-  if (basePath === '/auth/account-disabled') {
-    return <AccountDisabledPage onNavigate={handleNavigate} />;
-  }
+    if (basePath === '/auth/account-disabled') {
+      return <AccountDisabledPage onNavigate={handleNavigate} />;
+    }
 
-  if (basePath === '/auth/callback') {
-    return <AuthCallbackPage onNavigate={handleNavigate} />;
-  }
+    if (basePath === '/auth/callback') {
+      return <AuthCallbackPage onNavigate={handleNavigate} />;
+    }
 
-  return <LandingPage onNavigate={handleNavigate} />;
+    return <LandingPage onNavigate={handleNavigate} />;
+  };
+
+  return (
+    <>
+      {renderCurrentPage()}
+      {ENV.enableDevTools && <DevToolbar />}
+    </>
+  );
 }
 
 export default App;
+

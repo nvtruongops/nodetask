@@ -7,22 +7,27 @@
 > **Route Name**: `landing.main`  
 > **Route Path**: `/`  
 > **Route Type**: `PUBLIC`  
+> **Page Archetype**: `Marketing & Showcase`  
 > **Layout Shell**: `PublicLayoutShell`  
-> **Specification Version**: `2.0.0`  
-> **Status**: `APPROVED`  
+> **Specification Version**: `2.1.0`  
+> **Status**: `APPROVED & ENFORCED`  
 
 ---
 
 ## 1. Overview & Route ID
 - **Route ID**: `LANDING_MAIN` (Dùng cho Analytics, Breadcrumb, Logging, Event Tracking, RBAC)
 - **Route Name**: `landing.main`
-- **Description**: Trang chủ (`/`) là điểm tiếp cận đầu tiên của người dùng vãng lai (`GUEST`) tới nền tảng **`nodetask`** — Không gian Quản lý Tri thức & Tài liệu Không giới hạn cho Cá nhân và Đội ngũ. Trang chủ tuân thủ tuyệt đối quy tắc **Value-First Product Hierarchy**, tập trung truyền tải giá trị cốt lõi giải quyết vấn đề người dùng: Quản lý cây tài liệu lồng nhau không giới hạn, Trình soạn thảo tập trung cao độ mượt như Notion, AI Tìm kiếm theo ngữ nghĩa tức thì và Giao diện Monochrome 100% Zero-Icon loại bỏ hoàn toàn xao nhãng. Thuật ngữ công nghệ (`ltree`, `pgvector`, `Serverpod`, `Tiptap AST`) đóng vai trò minh chứng kỹ thuật (Proof Points) ở tầng dưới.
+- **Description**: Trang chủ (`/`) là cổng thông tin chính giới thiệu **`nodetask`** — Không gian Quản lý Tri thức & Điều phối Tác vụ Phân cấp (Local-first Hierarchical Knowledge & Task Workspace) dành cho Kỹ sư phần mềm, Nhà nghiên cứu và Đội ngũ sản phẩm. Trang chủ được thiết kế theo nguyên lý **Liftable Content & Direct Value Hierarchy** (chuẩn AEO/SEO):
+  1. **Direct Value Proposition**: Trực tiếp định nghĩa giá trị cốt lõi ngay câu đầu tiên — Tổ chức cây tài liệu lồng nhau không giới hạn độ sâu (`ltree`), Trình soạn thảo tập trung cao độ Tiptap AST không giật lag (<16ms DnD), Trợ lý Semantic RAG hỏi đáp tức thì trên đồ thị tri thức nội bộ (`pgvector`), và Giao diện Typography Monochrome 100% Zero-Icon loại bỏ 100% yếu tố xao nhãng.
+  2. **Liftable Copywriting & E-E-A-T Proof Points**: Mỗi khối nội dung được cấu trúc độc lập để các bộ máy trả lời AI (ChatGPT, Perplexity, Google SGE) và người dùng có thể trích xuất thông tin chuẩn xác mà không bị cắt nghĩa.
+  3. **High-Converting Product Journey**: Từ Hero giải quyết bài toán phân mảnh ghi chú -> Ma trận so sánh tính năng -> Xem trước Sandbox trực tiếp -> 6 Câu hỏi thường gặp cốt lõi (FAQ Schema) -> Kêu gọi hành động trải nghiệm tức thì không cần thẻ tín dụng.
 
 ---
 
 ## 2. Route Config & Navigation Metadata
 - **URL Path**: `/`
 - **Access Type**: `PUBLIC` (Truy cập tự do không cần Session Token)
+- **Page Archetype**: `Marketing & Showcase`
 - **Auth Guard**: `GuestOnly` (Nếu đã đăng nhập, tự động chuyển hướng đến `/workspace`)
 - **Layout Shell**: `PublicLayoutShell` (Header điều hướng tĩnh tích hợp Logo, Theme & Language Switcher, Footer liên kết)
 - **Navigation Metadata**:
@@ -36,23 +41,28 @@
 
 ---
 
-## 3. SEO & Social Share Metadata (SEO Meta Specification)
-- **Title Tag**: `<title>nodetask - Unlimited Nested Notes & Instant AI Knowledge Search</title>`
-- **Meta Description**: `Quản lý cây tài liệu phân cấp không giới hạn và tìm kiếm AI ngữ nghĩa tức thì với giao diện Monochrome 100% Zero-Icon tập trung tuyệt đối.`
-- **Keywords**: `nodetask, knowledge management, document workspace, zero-icon, distraction-free notes, ai knowledge search`
+## 3. SEO & Social Meta Specification (SEO & Social Share Metadata)
+- **Title Tag**: `<title>nodetask</title>`
+- **Meta Description**: `Không gian quản lý tài liệu phân cấp không giới hạn độ sâu, soạn thảo tập trung cao độ và tìm kiếm tri thức AI ngữ nghĩa với giao diện Monochrome 100% Zero-Icon.`
+- **Keywords**: `nodetask, hierarchical notes, nested document tree, ltree postgresql, pgvector semantic search, zero-icon ui, distraction-free workspace, local-first note taking, developer documentation, tiptap ast editor`
 - **Canonical URL**: `/#/`
 - **OpenGraph Specification**:
-  - `og:title`: `nodetask - Unlimited Nested Notes & Instant AI Knowledge Search`
-  - `og:description`: `Không gian quản lý tri thức & tài liệu đội ngũ tối giản Monochrome Zero-Icon.`
+  - `og:title`: `nodetask - Unlimited Nested Notes & AI Knowledge Workspace`
+  - `og:description`: `Tổ chức ghi chú lồng nhau không giới hạn, tìm kiếm ngữ nghĩa siêu tốc và tối đa hóa năng suất với giao diện thuần Typography Monochrome.`
   - `og:image`: `/og-landing.png`
   - `og:type`: `website`
   - `og:url`: `/#/`
 - **Twitter Card Specification**:
   - `twitter:card`: `summary_large_image`
   - `twitter:site`: `@nodetask`
-  - `twitter:title`: `nodetask - Distraction-Free Knowledge Workspace`
-  - `twitter:description`: `Monochrome Zero-Icon Knowledge Management Platform for Teams.`
+  - `twitter:title`: `nodetask - Local-First Hierarchical Knowledge Workspace`
+  - `twitter:description`: `Distraction-free nested notes, task execution, and instant AI semantic search.`
   - `twitter:image`: `/og-landing.png`
+- **Structured Data (JSON-LD)**:
+  - `@type`: `SoftwareApplication` / `Organization`
+  - `applicationCategory`: `ProductivityApplication`
+  - `operatingSystem`: `Web, Desktop, Mobile`
+  - `offers`: `{ price: "0.00", priceCurrency: "USD" }`
 
 ---
 
@@ -64,7 +74,7 @@
 
 ---
 
-## 5. Permission Matrix & Access Control (Access Control & RBAC Permissions)
+## 5. Permission Matrix & RBAC (Access Control & RBAC Permissions)
 | System Role | View Access | CTA Primary Behavior | Navigation Rights | Notes |
 | :--- | :--- | :--- | :--- | :--- |
 | `GUEST` | **Allowed** | Điều hướng `/auth/register` hoặc `/demo` | Đầy đủ Header/Footer public | Đối tượng phục vụ chính |
@@ -78,6 +88,8 @@
 ## 6. API Dependency & Serverpod RPC
 - **Linked Backend RPC Endpoints**:
   - `I18nEndpoint.getDictionary(locale: String, namespace: 'landing')`: Lấy bộ từ điển đa ngôn ngữ cho Namespace `landing`.
+  - `WorkspaceEndpoint.getPublicPricingPlans(session)`: Lấy dữ liệu các gói cước hiển thị trên Preview Pricing Block.
+- **Serverpod Contract Integration**: Toàn bộ RPC gọi thông qua Serverpod Client Protocol đảm bảo Type-Safety từ Dart sang TypeScript.
 - **Data Caching & Stale Policy**:
   - `staleTime`: `86400000ms` (24 giờ, cached tại Client IndexedDB via `useLanguageStore`).
   - `cacheTime`: `604800000ms` (7 ngày).
@@ -91,7 +103,7 @@
 - **UI State Breakdown**:
   - `IDLE`: Server-Side HTML đã sẵn sàng.
   - `HYDRATING`: Client Hydration đang kết nối Zustand Stores (`useAuthStore`, `useThemeStore`).
-  - `READY`: Hiển thị toàn bộ Hero, Feature Cards, FAQ & Footer.
+  - `READY`: Hiển thị toàn bộ Hero, Feature Cards, Value Comparison, Interactive Preview, FAQ & Footer.
   - `SWITCHING_LOCALE`: Cập nhật `locale` từ `en` ↔ `vi`, thay đổi tức thì các `contentKey`.
   - `REDIRECTING_WORKSPACE`: Nếu phát hiện Token hợp lệ, kích hoạt chuyển hướng sang `/workspace`.
 
@@ -100,23 +112,38 @@
 ## 8. Component Inventory & Tree
 
 ### Required Pattern Components (MUST)
-- `Hero` (Value Headline) + `MetricsGrid` + `ValueComparisonTable` (User Benefits Mapped to Technical Proofs) + `BentoGrid` + `SectionDivider` + `CTA` + `Footer`
+- `Required Pattern Components`: `Hero`, `MetricsGrid`, `ValueComparisonTable`, `BentoGrid`, `InteractiveSandboxPreview`, `FaqAccordionSection`, `SectionDivider`, `CTA`, `Footer`
 
 ### Route Anti-Patterns (MUST NOT)
-- ❌ Hero nhồi nhét tên thuật ngữ backend thô.
-- ❌ Single centered column stack cuộn dọc.
-- ❌ Khoảng trắng chết >30vh lãng phí.
-- ❌ Thiếu bảng so sánh ma trận giá trị người dùng `ValueComparisonTable`.
+- `Route Anti-Patterns`:
+  - ❌ Hero nhồi nhét tên thuật ngữ backend thô mà không giải thích giá trị thực tế cho người dùng.
+  - ❌ Single centered column stack cuộn dọc đơn điệu.
+  - ❌ Khoảng trắng chết >30vh lãng phí.
+  - ❌ Dùng Icon/Emoji (SVG Lucide, FontAwesome, Unicode Emoji) — bắt buộc dùng Monochrome Typography Tokens & Text Badges `[ ]`.
+  - ❌ Thiếu bảng so sánh ma trận giá trị người dùng `ValueComparisonTable`.
 
-### Component Inventory List
-- `PublicLayoutShell`: Organism bọc Header & Footer công khai.
-- `PublicHeader`: Organism thanh điều hướng trên cùng kèm Logo, Link, Switchers.
-- `PublicFooter`: Organism thanh chân trang thông tin bản quyền và chính sách.
-- `LandingHeroSection`: Section chính hiển thị Tiêu đề, Mô tả và CTA Buttons.
-- `LandingFeaturesGrid`: Grid 6 Card giới thiệu tính năng cốt lõi (ltree, Tiptap, Zero-Icon, RAG).
-- `LandingDemoPreview`: Molecule preview giao diện workspace dạng ASCII / Zero-Icon frame.
-- `ThemeSwitcherButton`: Atom nút chuyển đổi giao diện Dark/Light/System.
-- `LanguageSwitcherButton`: Atom nút chuyển đổi ngôn ngữ EN/VI.
+### Editorial Sections & Content Structure
+1. **Hero Section (Value Headline)**:
+   - *Primary Headline*: "Tổ chức Tri thức Phân cấp. Soạn thảo Không Xao nhãng. Tìm kiếm Ngữ nghĩa Tức thì."
+   - *Subheading*: "nodetask hợp nhất ghi chú phân cấp đa tầng, danh sách công việc theo ngữ cảnh và trợ lý AI RAG trong một giao diện Monochrome tinh khiết — được thiết kế để bạn tập trung trọn vẹn vào tư duy sâu."
+   - *Primary CTAs*: `[Bắt đầu Miễn phí]` (Dẫn tới `/auth/register`) và `[Thử Sandbox Trực tiếp]` (Dẫn tới `/demo`).
+   - *Trust Proofs*: `[Hoàn toàn Miễn phí]` • `[Không cần Thẻ tín dụng]` • `[Hỗ trợ Offline Local-First]`.
+2. **Metrics & Engineering Benchmarks Grid**:
+   - `01. ĐỘ TRỄ KÉO THẢ`: `<16ms` (Duy trì chuẩn 60 FPS mượt mà với dnd-kit và vị trí số nguyên).
+   - `02. TRUY VẤN CÂY PHÂN CẤP`: `O(log N)` (PostgreSQL `ltree` index hỗ trợ hàng triệu nút tài liệu tức thì).
+   - `03. TÌM KIẾM NGỮ NGHĨA AI`: `<10ms` (Chỉ mục `pgvector` HNSW 1536 chiều Cosine Distance).
+   - `04. BẢO TOÀN DỮ LIỆU`: `100%` (Optimistic Concurrency Control OCC ngăn chặn ghi đè xung đột).
+3. **Core Value Pillars (Bento Grid 4 Khối)**:
+   - *Khối 1: Cây Tài liệu Lồng nhau Vô tận*: Không giới hạn độ sâu thư mục. Kéo thả phân cấp tự nhiên như cách não bộ tổ chức ý tưởng.
+   - *Khối 2: Trình soạn thảo Tiptap AST Trực quan*: Trải nghiệm gõ phím mượt mà như Notion với cấu trúc khối Block AST JSON, hỗ trợ Code block, Markdown syntax, Callout và Bảng biểu.
+   - *Khối 3: Trợ lý AI RAG Hỏi đáp Tri thức Nội bộ*: Đặt câu hỏi trực tiếp trên toàn bộ kho ghi chú của bạn. AI phân tích ngữ nghĩa và trích dẫn chính xác từng đoạn tài liệu nguồn.
+   - *Khối 4: Triết lý Monochrome 100% Zero-Icon*: Loại bỏ toàn bộ icon màu sắc và emoji gây phân tán thị giác, đưa typography và độ tương phản cao làm trung tâm trải nghiệm.
+4. **Value Comparison Matrix (`ValueComparisonTable`)**:
+   - So sánh trực quan giữa `Ghi chú Truyền thống (Flat Folders)`, `Công cụ SaaS Cồng kềnh (Heavy Bloatware)` và `nodetask (Local-First Monochrome)`.
+5. **Liftable FAQ Section (Chuẩn AEO/Schema)**:
+   - *Q1*: "nodetask khác gì so với Notion hay Obsidian?" -> Trả lời rõ về sự kết hợp giữa cấu trúc phân cấp nhanh như Notion, tốc độ local-first và AI Semantic Search tích hợp sẵn không cần plugin.
+   - *Q2*: "Dữ liệu của tôi có được bảo mật và riêng tư không?" -> Khẳng định mã hóa TLS 1.3, AES-256 at-rest, cách ly Row-Level Security và AI không bao giờ dùng dữ liệu ghi chú để train model công cộng.
+   - *Q3*: "Tôi có thể xuất dữ liệu ghi chú ra ngoài không?" -> 1-Click xuất toàn bộ sang Markdown, JSON AST và PDF bất cứ lúc nào.
 
 ### Component Tree
 ```text
@@ -126,6 +153,10 @@
 ├── [PublicHeader]
 │   ├── [BrandLogoLink target="/"]
 │   ├── [NavLinks]
+│   │   ├── [FeaturesLink target="#features"]
+│   │   ├── [ComparisonLink target="#comparison"]
+│   │   ├── [PricingLink target="/pricing"]
+│   │   └── [AboutLink target="/about"]
 │   ├── [HeaderControls]
 │   │   ├── [ThemeSwitcherButton]
 │   │   └── [LanguageSwitcherButton]
@@ -137,9 +168,17 @@
 │           └── [GoToWorkspaceLink target="/workspace"]
 └── [MainContent id="main-content" role="main"]
     ├── [HeroSection]
-    ├── [FeaturesGridSection]
-    ├── [DemoPreviewSection]
-    └── [CTASection]
+    │   ├── [HeroBadge label="[NODETASK 2.0 • LOCAL-FIRST WORKSPACE]"]
+    │   ├── [HeroHeading]
+    │   ├── [HeroSubheading]
+    │   ├── [HeroCTAButtonGroup]
+    │   └── [TrustBadgesList]
+    ├── [MetricsGridSection]
+    ├── [BentoFeaturesSection]
+    ├── [ValueComparisonSection]
+    ├── [InteractivePreviewSection]
+    ├── [FaqAccordionSection]
+    └── [FinalCTASection]
 ```
 
 ---
@@ -187,3 +226,4 @@ Scenario: Accessibility keyboard navigation
 ## Accessibility (a11y) & Design Tokens
 - **a11y Standard**: WAI-ARIA 1.2 (`<main id="main-content" role="main">`, `aria-live="polite"`).
 - **Design Tokens**: `themeMode: 'dark-only'`, `radius: 0px`, `colorScheme: 'monochrome'`.
+

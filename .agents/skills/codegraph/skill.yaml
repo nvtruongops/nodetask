@@ -1,6 +1,6 @@
 name: codegraph
 version: 1.0.0
-description: Khai thác và đồng bộ CodeGraph MCP Database (./.codegraph/graph.db) phân tích call graph và impact scope.
+description: Khai thác và đồng bộ CodeGraph MCP Database (./.codegraph/codegraph.db) phân tích call graph và impact scope.
 minGovernanceVersion: 1.4.0
 priority: 90
 capabilities:

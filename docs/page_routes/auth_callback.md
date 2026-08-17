@@ -16,7 +16,7 @@
 ## 1. Overview & Route ID
 - **Route ID**: `AUTH_CALLBACK` (Dùng cho Analytics, OAuth Audit, Event Tracking, RBAC)
 - **Route Name**: `auth.callback`
-- **Description**: Trang trung gian xử lý phản hồi mã xác thực OAuth 2.0 (Google, GitHub PKCE authorization code exchange) hoặc Magic Link callback. Trang hiển thị giao diện xử lý (Demo Mode) mượt mà với spinner/progress bar để tránh hiệu ứng giật vỡ layout trên trang Đăng nhập (`/auth/login`). Khi mã xác thực được kiểm tra (mô phỏng trong bản Demo), trang tiến hành lưu Session Token và chuyển hướng người dùng vào `/workspace`.
+- **Description**: Trang trung gian xử lý phản hồi mã xác thực OAuth 2.0 (Google PKCE authorization code exchange) hoặc Magic Link callback. Trang hiển thị giao diện xử lý (Demo Mode) mượt mà với spinner/progress bar để tránh hiệu ứng giật vỡ layout trên trang Đăng nhập (`/auth/login`). Khi mã xác thực được kiểm tra (mô phỏng trong bản Demo), trang tiến hành lưu Session Token và chuyển hướng người dùng vào `/workspace`.
 
 ---
 
@@ -89,7 +89,7 @@
   `IDLE` → `PROCESSING` (Extract URL Params & Demo Code Exchange) → `SUCCESS` (Redirect `/workspace`) | `ERROR` (Redirect `/auth/login` kèm error banner)
 - **UI State Breakdown**:
   - `IDLE`: Khởi tạo trang, đọc tham số `code` và `state` từ URL Search Parameters.
-  - `PROCESSING`: Hiển thị trạng thái đang xử lý xác thực `[Authenticating with Provider...]` kèm badge `[SOON / DEMO]` mô phỏng cho Google/GitHub OAuth provider.
+  - `PROCESSING`: Hiển thị trạng thái đang xử lý xác thực `[Authenticating with Provider...]` kèm badge `[SOON / DEMO]` mô phỏng cho Google OAuth provider.
   - `SUCCESS`: Xác thực thành công (hoặc mô phỏng thành công ở Demo Mode), chuyển hướng người dùng về `/workspace`.
   - `ERROR`: Khi URL chứa `error` hoặc đổi token thất bại, hiển thị thông báo lỗi và cung cấp nút quay lại `/auth/login`.
 
@@ -100,7 +100,7 @@
 ### Component Inventory List
 - `AuthLayoutShell`: Container giao diện Authentication.
 - `CallbackStatusCard`: Card hiển thị trạng thái xử lý OAuth.
-- `ProviderLogoBadge`: Text-based Provider Brand Label `[Google OAuth / SOON]` hoặc `[GitHub OAuth / SOON]` (Tuân thủ Zero-Icon Rule).
+- `ProviderLogoBadge`: Text-based Provider Brand Label `[Google OAuth / SOON]` (Tuân thủ Zero-Icon Rule).
 - `ProcessingSpinner`: Atom hiển thị chỉ báo đang xử lý không dùng icon (Monochrome Progress Indicator).
 - `StatusMessage`: Text label thông báo tiến trình xác thực (`auth.callback.processing`).
 - `ReturnToLoginButton`: Button quay lại trang đăng nhập khi có lỗi.
@@ -120,7 +120,7 @@
 └── [MainContent id="main-content" alignment="center"]
     └── [CallbackStatusCard maxWidth="440px"]
         ├── [StatusTitle contentKey="auth.callback.title"]
-        ├── [ProviderLogoBadge label="[Google / GitHub OAuth - SOON]"]
+        ├── [ProviderLogoBadge label="[Google OAuth - SOON]"]
         ├── [ProcessingSpinner progressState=active]
         ├── [StatusMessage contentKey="auth.callback.processing"]
         └── [FormActions alignment="center"]

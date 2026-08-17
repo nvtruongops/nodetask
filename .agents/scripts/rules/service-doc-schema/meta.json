@@ -8,5 +8,5 @@
   "parallelizable": true,
   "supportsFix": false,
   "estimatedCost": "medium",
-  "description": "Validates that all service specs in docs/services/*.md adhere to the 10-section contract schema."
+  "description": "Validates that all service specs in docs/services/*.md adhere to the 11-section contract schema including visual Mermaid diagrams."
 }

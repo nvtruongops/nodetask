@@ -7,16 +7,22 @@
 > **Route Name**: `public.pricing`  
 > **Route Path**: `/pricing`  
 > **Route Type**: `PUBLIC`  
+> **Page Archetype**: `Marketing & Showcase`  
 > **Layout Shell**: `PublicLayoutShell`  
-> **Specification Version**: `2.0.0`  
-> **Status**: `APPROVED`  
+> **Specification Version**: `2.1.0`  
+> **Status**: `APPROVED & ENFORCED`  
 
 ---
 
 ## 1. Overview & Route ID
 - **Route ID**: `PUBLIC_PRICING` (Dùng cho Analytics, Navigation, Conversion Tracking, RBAC)
 - **Route Name**: `public.pricing`
-- **Description**: Trang Bảng giá các gói cước dịch vụ nodetask (`/pricing`). Cung cấp thông tin so sánh minh bạch giữa các gói (Free, Pro, Enterprise Demo Cards). Hiện tại trong giai đoạn phát triển Demo, ứng dụng chưa kết nối Gateway thanh toán thực tế, toàn bộ các gói cước đều cho phép người dùng click trải nghiệm Miễn phí (`[Start Free Demo]`) nhằm hỗ trợ kiểm thử giao diện & luồng Onboarding.
+- **Description**: Trang Bảng giá dịch vụ (`/pricing`) công bố cấu trúc chi phí minh bạch, cam kết không khóa dữ liệu (Zero Vendor Lock-in) và hỗ trợ trải nghiệm dùng thử không giới hạn của `nodetask`:
+  1. **Transparent Tier Structure**:
+     - `Community Free Plan` ($0/tháng): Đầy đủ tính năng cốt lõi, không giới hạn số lượng ghi chú phân cấp (`ltree`), lưu trữ cục bộ Local-First và AI Semantic Search cơ bản.
+     - `Pro Developer Plan` ($12/tháng — Hiện đang mở Miễn phí trong Chế độ Demo): Tăng dung lượng lưu trữ đám mây, vector embeddings không giới hạn và AI RAG nâng cao.
+     - `Enterprise & Self-Host Plan` (Custom): Dành cho tổ chức cần triển khai on-premise, SSO/SAML, ma trận RBAC đa cấp và kiểm thử an ninh chuyên sâu Pentest.
+  2. **Liftable Pricing FAQ & Answers**: Trực tiếp giải đáp các thắc mắc về chính sách thanh toán, tự lưu trữ, quyền sở hữu dữ liệu và cam kết hoàn tiền.
 
 ---
 
@@ -37,21 +43,21 @@
 
 ---
 
-## 3. SEO & Social Share Metadata (SEO Meta Specification)
-- **Title Tag**: `<title>Pricing Plans & Free Demo - nodetask</title>`
-- **Meta Description**: `Khám phá bảng giá các gói cước nodetask. Trải nghiệm không giới hạn tính năng quản lý tri thức hoàn toàn miễn phí trong bản Demo.`
-- **Keywords**: `nodetask pricing, free plan, pro plan, zero-icon pricing, SaaS plan demo`
+## 3. SEO & Social Meta Specification (SEO & Social Share Metadata)
+- **Title Tag**: `<title>Transparent Pricing Plans & Free Demo - nodetask</title>`
+- **Meta Description**: `Xem bảng giá minh bạch của nodetask. Trải nghiệm không gian quản lý tri thức phân cấp và AI Semantic Search hoàn toàn miễn phí.`
+- **Keywords**: `nodetask pricing, free note taking app, developer pricing, hierarchical notes cost, zero-icon pricing, self-host pricing, saas pricing transparent`
 - **Canonical URL**: `/#/pricing`
 - **OpenGraph Specification**:
-  - `og:title`: `Pricing Plans & Free Demo - nodetask`
-  - `og:description`: `Bảng giá dịch vụ nodetask - Trải nghiệm miễn phí ngay hôm nay.`
+  - `og:title`: `Pricing Plans - nodetask`
+  - `og:description`: `Bảng giá minh bạch, không chi phí ẩn. Bắt đầu miễn phí ngay hôm nay.`
   - `og:image`: `/og-pricing.png`
   - `og:type`: `website`
   - `og:url`: `/#/pricing`
 - **Twitter Card Specification**:
   - `twitter:card`: `summary_large_image`
-  - `twitter:title`: `Pricing Plans & Free Demo - nodetask`
-  - `twitter:description`: `Explore nodetask pricing and start your free demo.`
+  - `twitter:title`: `Transparent Pricing - nodetask`
+  - `twitter:description`: `Honest, transparent pricing for developers and teams.`
 
 ---
 
@@ -63,7 +69,7 @@
 
 ---
 
-## 5. Permission Matrix & Access Control (Access Control & RBAC Permissions)
+## 5. Permission Matrix & RBAC (Access Control & RBAC Permissions)
 | System Role | View Access | Form Submit Rights | Redirect Policy | Notes |
 | :--- | :--- | :--- | :--- | :--- |
 | `GUEST` | **Allowed** | Kích hoạt nút Demo CTA | Dẫn tới `/auth/register` hoặc `/demo` | Khách vãng lai xem bảng giá |
@@ -76,7 +82,9 @@
 
 ## 6. API Dependency & Serverpod RPC
 - **Linked Backend RPC Endpoints**:
-  - `WorkspaceEndpoint.getPublicPricingPlans(session)`: Lấy danh sách thông tin gói cước công khai (Free, Pro, Enterprise). Ở chế độ Demo Mode, trả về danh sách gói cước tĩnh không kèm cổng thanh toán.
+  - `WorkspaceEndpoint.getPublicPricingPlans(session)`: Lấy danh sách thông tin gói cước công khai (Free, Pro, Enterprise).
+  - `I18nEndpoint.getDictionary(locale: String, namespace: 'pricing')`: Tải từ điển đa ngôn ngữ cho bảng giá.
+- **Serverpod Architecture Reference**: Dữ liệu gói cước và tính năng được đồng bộ dạng typed DTO từ backend Serverpod.
 - **Data Caching & Stale Policy**:
   - `staleTime`: `3600000ms` (1 giờ - thông tin bảng giá ít thay đổi).
   - `refetchOnWindowFocus`: `false`.
@@ -85,30 +93,52 @@
 
 ## 7. Page State Machine & UI Transitions
 - **State Machine Flow**:
-  `IDLE` → `TOGGLING_CYCLE` (Monthly/Yearly Toggle) → `SELECTING_PLAN` → `DEMO_REDIRECT`
+  `IDLE` → `TOGGLING_CYCLE` (Monthly/Yearly) → `SELECTING_PLAN` → `DEMO_REDIRECT`
 - **UI State Breakdown**:
-  - `IDLE`: Hiển thị 3 thẻ Pricing Card (Free `[ACTIVE]`, Pro `[SOON / FREE DEMO]`, Enterprise `[SOON / CONTACT]`) kèm badge thông báo `[PAYMENT GATEWAY - COMING SOON]`.
-  - `TOGGLING_CYCLE`: Chuyển đổi giữa chu kỳ Thanh toán Tháng / Năm (cập nhật UI label tính toán tiết kiệm).
-  - `SELECTING_PLAN`: Người dùng click chọn gói cước demo bất kỳ.
-  - `DEMO_REDIRECT`: Hiển thị banner thông báo "Chế độ Demo: Mọi tính năng đang mở Miễn phí! Cổng thanh toán sắp ra mắt [SOON]" và chuyển hướng tới `/auth/register` hoặc `/workspace`.
+  - `IDLE`: Hiển thị 3 thẻ Pricing Card (Free `[ACTIVE]`, Pro `[FREE DEMO MODE]`, Enterprise `[CONTACT]`) kèm badge `[DEMO ACTIVE • FULL ACCESS]`.
+  - `TOGGLING_CYCLE`: Chuyển đổi giữa chu kỳ Thanh toán Tháng / Năm (tiết kiệm 20% khi chọn Yearly).
+  - `SELECTING_PLAN`: Người dùng click chọn gói cước bất kỳ.
+  - `DEMO_REDIRECT`: Chuyển hướng nhanh tới luồng Onboarding `/auth/register` hoặc `/workspace`.
 
 ---
 
 ## 8. Component Inventory & Tree
 
-### Component Inventory List
-- `PublicLayoutShell`: Shell khung giao diện công khai tiêu chuẩn.
-- `PricingHeroHeader`: Component tiêu đề bảng giá và phụ đề giải thích chế độ Free Demo & Payment [SOON].
-- `BillingCycleToggle`: Switch toggle chuyển đổi Tháng/Năm không dùng icon.
-- `PricingCardGrid`: Grid 3 cột chứa các thẻ gói cước (`FreeCard`, `ProCard [SOON]`, `EnterpriseCard [SOON]`).
-- `PlanFeatureList`: Danh sách tính năng của từng gói dạng text label định dạng monochrome.
-- `PlanCtaButton`: Button hành động cho từng gói `[Start Free Demo]` / `[Try Pro Demo - SOON]`.
+### Required Pattern Components (MUST)
+- `Required Pattern Components`: `Hero`, `BillingCycleToggle`, `PricingCardGrid`, `PlanComparisonTable`, `FaqAccordionSection`, `PlanCtaButton`, `Footer`
 
-### Required Pattern Components
-- `Required Pattern Components`: `PublicLayoutShell`, `PricingHeroHeader`, `BillingCycleToggle`, `PricingCardGrid`, `PlanCtaButton`
+### Route Anti-Patterns (MUST NOT)
+- `Route Anti-Patterns`:
+  - ❌ Dùng icon tích xanh / dấu x hay emoji màu mè — dùng text label `[YES]` / `[--]` và text badge monochrome.
+  - ❌ Ẩn chi phí thật hoặc nhồi nhét phí phụ thu không rõ ràng.
+  - ❌ Thiếu bảng so sánh chi tiết tính năng `PlanComparisonTable`.
 
-### Route Anti-Patterns
-- `Route Anti-Patterns`: Không dùng icon tích xanh / dấu x hay emoji; không tích hợp SDK cổng thanh toán bên thứ 3 (Stripe/PayPal) khi chưa có backend API.
+### Editorial Sections & Plan Breakdown
+1. **Pricing Hero Header**:
+   - *Headline*: "Bảng giá Đơn giản, Minh bạch và Hoàn toàn Không Khóa dữ liệu."
+   - *Subheading*: "Mọi tính năng mạnh mẽ nhất đều có thể trải nghiệm ngay hôm nay. Không yêu cầu thẻ tín dụng."
+   - *Notice Badge*: `[CHẾ ĐỘ DEMO: TOÀN BỘ TÍNH NĂNG ĐANG MỞ MIỄN PHÍ TRẢI NGHIỆM]`.
+2. **Pricing Cards Matrix (3 Tiers)**:
+   - **Community Free ($0 / vĩnh viễn)**:
+     - Không giới hạn số lượng nốt tài liệu phân cấp `ltree`.
+     - Trình soạn thảo Tiptap AST đầy đủ định dạng.
+     - 1 Workspace Cá nhân, tìm kiếm ngữ nghĩa 500 chunks vector.
+     - CTA: `[Bắt đầu Miễn phí]` -> `/auth/register`.
+   - **Pro Developer ($12 / tháng — Đang mở Miễn phí)**:
+     - Tất cả quyền lợi của Community.
+     - Không giới hạn vector embeddings và trợ lý AI RAG nội bộ.
+     - 10GB dung lượng lưu trữ Object Storage đính kèm.
+     - Tự động sao lưu lịch sử phiên bản tài liệu (OCC Snapshots).
+     - CTA: `[Trải nghiệm Pro Miễn phí]` -> `/auth/register`.
+   - **Enterprise & Self-Host (Custom / Đội ngũ)**:
+     - Hỗ trợ triển khai On-Premise / Private Cloud.
+     - Quản lý Tổ chức & Phân quyền đa cấp RBAC.
+     - Tích hợp kiểm thử an ninh Pentest & Báo cáo tuân thủ an toàn.
+     - Hỗ trợ kỹ thuật 24/7 có cam kết SLA.
+     - CTA: `[Liên hệ Đội ngũ]` -> `/contact`.
+3. **Liftable Pricing FAQs**:
+   - *Q1*: "Tôi có thể tự host (Self-host) nodetask trên server riêng không?" -> Có, kiến trúc monorepo chạy hoàn chỉnh qua Docker Compose (PostgreSQL, Redis, Serverpod).
+   - *Q2*: "Dữ liệu của tôi có bị mất nếu ngừng sử dụng không?" -> Không, bạn có thể xuất toàn bộ ghi chú sang Markdown/JSON chỉ với 1 cú nhấp chuột.
 
 ### Component Tree
 ```text
@@ -119,21 +149,17 @@
     ├── [PricingHeroHeader]
     │   ├── [Title contentKey="pricing.title"]
     │   ├── [Subtitle contentKey="pricing.subtitle"]
-    │   └── [DemoNoticeBadge label="[FREE DEMO - PAYMENT GATEWAY SOON]"]
+    │   └── [DemoNoticeBadge label="[FREE DEMO • FULL ACCESS]"]
     ├── [BillingCycleToggle activeCycle="yearly"]
-    └── [PricingCardGrid columns=3]
-        ├── [PricingCard plan="free"]
-        │   ├── [CardHeader name="Free Plan" price="$0"]
-        │   ├── [PlanFeatureList]
-        │   └── [PlanCtaButton label="[Start Free Demo]" target="/auth/register"]
-        ├── [PricingCard plan="pro" highlighted=true]
-        │   ├── [CardHeader name="Pro Plan [SOON]" price="$0 (Free Demo)"]
-        │   ├── [PlanFeatureList]
-        │   └── [PlanCtaButton label="[Try Pro Demo - SOON]" target="/auth/register"]
-        └── [PricingCard plan="enterprise"]
-            ├── [CardHeader name="Enterprise Plan [SOON]" price="Custom"]
-            ├── [PlanFeatureList]
-            └── [PlanCtaButton label="[Contact Sales - SOON]" target="/contact"]
+    ├── [PricingCardGrid columns=3]
+    │   ├── [PricingCard plan="free"]
+    │   ├── [PricingCard plan="pro" highlighted=true]
+    │   └── [PricingCard plan="enterprise"]
+    ├── [PlanComparisonSection]
+    │   ├── [ComparisonTitle]
+    │   └── [PlanComparisonTable]
+    ├── [PricingFaqSection]
+    └── [PricingFinalCTA target="/auth/register"]
 ```
 
 ---
@@ -145,8 +171,8 @@
 | `403` | Đã hết quyền tạo workspace thử nghiệm | `pricing.error.limit_reached` | Hiển thị thông báo giới hạn | `PRICING_LIMIT_REACHED` |
 | `409` | Xung đột nâng cấp gói | `pricing.error.conflict` | Nút làm mới trang | `PRICING_CONFLICT` |
 | `422` | Tham số chu kỳ thanh toán không hợp lệ | `pricing.error.invalid_cycle` | Reset toggle về Monthly | `PRICING_INVALID_CYCLE` |
-| `429` | Thao tác click CTA quá dồn dập | `pricing.error.rate_limit` | Khóa tạm thời 5 giây | `PRICING_RATE_LIMIT` |
-| `500` | Không lấy được danh sách gói cước từ RPC | `pricing.error.server_error` | Hiển thị fallback UI tĩnh | `PRICING_SERVER_ERROR` |
+| `429` | Thao tác click CTA quá dồn dập | `pricing.error.rate_limit` | Khóa tạm thời 5 giây | `PRICING_RATE_LIMITED` |
+| `500` | Không lấy được danh sách gói cước từ Serverpod RPC | `pricing.error.server_error` | Hiển thị fallback UI tĩnh | `PRICING_SERVER_ERROR` |
 
 ---
 
@@ -156,7 +182,7 @@
 Scenario: Visitor views pricing page in demo mode
   Given a Guest user navigating to "/pricing"
   When the page loads successfully
-  Then all 3 pricing cards display price "$0 / Free Demo"
+  Then all 3 pricing cards display transparent pricing details
   And clicking any "[Start Free Demo]" CTA button redirects to "/auth/register"
 
 Scenario: User toggles billing cycle between Monthly and Yearly
@@ -171,3 +197,4 @@ Scenario: User toggles billing cycle between Monthly and Yearly
 ## Accessibility (a11y) & Design Tokens
 - **a11y Standard**: WAI-ARIA 1.2 (`role="region"`, `aria-labelledby="pricing-heading"`).
 - **Design Tokens**: `themeMode: 'dark-only'`, `radius: 0px`, `colorScheme: 'monochrome'`.
+

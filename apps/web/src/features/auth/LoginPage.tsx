@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AuthLayoutShell } from './AuthLayoutShell';
 import { useLanguageStore } from '../../store/useLanguageStore';
 import { useAuthStore } from '../../store/useAuthStore';
@@ -12,6 +12,10 @@ export function LoginPage({ onNavigate }: LoginPageProps) {
   const { locale } = useLanguageStore();
   const loginState = useAuthStore((state) => state.login);
   const t = (key: AuthContentKey) => getAuthContent(key, locale);
+
+  useEffect(() => {
+    document.title = 'nodetask | Login';
+  }, []);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -44,7 +48,7 @@ export function LoginPage({ onNavigate }: LoginPageProps) {
     }, 600);
   };
 
-  const handleOAuth = (provider: 'google' | 'github') => {
+  const handleOAuth = (provider: 'google') => {
     onNavigate(`/auth/callback?provider=${provider}&code=demo_code_123`);
   };
 
@@ -128,13 +132,6 @@ export function LoginPage({ onNavigate }: LoginPageProps) {
             className="w-full py-2 px-4 border border-border bg-background text-foreground text-xs font-medium hover:bg-muted transition-colors focus:outline-none focus:ring-1 focus:ring-foreground"
           >
             {t('login.oauth_google')}
-          </button>
-          <button
-            type="button"
-            onClick={() => handleOAuth('github')}
-            className="w-full py-2 px-4 border border-border bg-background text-foreground text-xs font-medium hover:bg-muted transition-colors focus:outline-none focus:ring-1 focus:ring-foreground"
-          >
-            {t('login.oauth_github')}
           </button>
         </div>
 

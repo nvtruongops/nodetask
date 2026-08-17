@@ -22,7 +22,7 @@ export function LandingPage({ onNavigate }: LandingPageProps) {
 
   // Auth Guard & Document Title Setup per landing.md spec
   useEffect(() => {
-    document.title = 'nodetask - Monorepo Document & Knowledge Space Management';
+    document.title = 'nodetask';
     if (isAuthenticated) {
       handleNavigate('/workspace');
     }
