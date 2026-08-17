@@ -21,54 +21,62 @@
 
 ```mermaid
 flowchart TD
-  subgraph ClientTier["1. Client Tier (Multi-Platform)"]
-    WebClient["Web Client (React + Vite)\n- Zustand + TanStack Query\n- Tiptap AST Editor + @dnd-kit\n- Zero-Icon Monochrome UI"]
-    MobileClient["Mobile Client (Flutter)\n- Riverpod State Management\n- Serverpod Dart Client SDK\n- Offline-Ready Cache"]
+  subgraph T1["1. MULTI-PLATFORM CLIENT TIER"]
+    WEB["Web App (React + Vite + Tiptap + @dnd-kit)"]
+    MOB["Mobile App (Flutter + Serverpod SDK)"]
   end
 
-  subgraph BackendTier["2. Backend Core Tier (Dart Serverpod Framework)"]
-    Gateway["Serverpod RPC & REST Gateway\n- WebSocket Realtime Streams\n- Session Auth & RBAC Guard"]
-    
-    subgraph Services["Core Domain Services"]
-      NodeService["Document Node Engine\n(Hierarchical LTREE & OCC)"]
-      AuthService["Authentication & Session\n(JWT, Refresh & Passwordless)"]
-      AIOrchestrator["AI Orchestration Engine\n(RAG Pipeline, Router & Quota)"]
-      StorageService["S3 Storage Service\n(Presigned SigV4 URLs)"]
-      JobWorker["Native FutureCalls Engine\n(Async Task Queue)"]
-    end
+  subgraph T2["2. BACKEND API GATEWAY (Dart Serverpod)"]
+    GW["Serverpod RPC / REST Gateway & WebSocket Stream\n(Session Auth • RBAC Guard • Rate Limiter)"]
   end
 
-  subgraph DataTier["3. Data, Cache & Object Storage Tier"]
-    Postgres[("PostgreSQL 16\n- ltree (Hierarchical Tree Nodes)\n- pgvector (Vector Embeddings & HNSW)\n- JSONB (Tiptap AST Content)")]
-    RedisCache[("Redis Cache\n- Distributed Session Tokens\n- Document Tree Cache\n- AI Quota Metering")]
-    MinIOStore[("S3-Compatible Storage (MinIO / R2 / S3)\n- nodetask-uploads / attachments\n- nodetask-avatars / exports")]
+  subgraph T3["3. CORE DOMAIN SERVICES"]
+    S1["Document Node Engine\n(LTREE Hierarchy & OCC)"]
+    S2["AI RAG Orchestrator\n(pgvector Search & Multi-LLM Router)"]
+    S3["Storage Service\n(S3 Presigned SigV4 URLs)"]
+    S4["Async Task Queue\n(Native FutureCalls Jobs)"]
   end
 
-  subgraph CloudAITier["4. External Cloud AI Services"]
-    LLMProviders["Cloud LLM & Embedding APIs\n(Gemini / OpenAI)"]
-    DocAI["Document AI & Vision APIs\n(Google DocAI / Azure Vision)"]
+  subgraph T4["4. DATA, CACHE & OBJECT STORAGE"]
+    PG[("PostgreSQL 16\n(ltree • pgvector • JSONB AST)")]
+    RD[("Redis 7 Cache\n(Distributed Sessions & Quota)")]
+    S3D[("MinIO Object Storage\n(Attachments & Media Exports)")]
   end
 
-  subgraph GovernanceTier["5. AI Agent Governance Engine (v1.7.0)"]
-    GovEngine["Governance & Quality Engine\n- verify.js --strict (15 Core Rules)\n- 16 Specialized Domain Skills\n- CodeGraph AST (codegraph.db)\n- Engram Persistent Memory"]
+  subgraph T5["5. EXTERNAL AI & GOVERNANCE"]
+    AI["Cloud / Local AI Providers\n(Gemini / OpenAI / LocalAI)"]
+    GOV["AI Agent Governance v1.7.0\n(verify.js --strict • CodeGraph AST)"]
   end
 
-  WebClient -->|"REST RPC / WebSocket"| Gateway
-  MobileClient -->|"Dart Client SDK"| Gateway
-  
-  Gateway --> AuthService & NodeService & AIOrchestrator & StorageService & JobWorker
-  
-  NodeService -->|"LTREE Queries & OCC"| Postgres
-  NodeService -->|"Cache Invalidation"| RedisCache
-  AuthService -->|"Session State"| RedisCache
-  AIOrchestrator -->|"Vector Similarity Search"| Postgres
-  AIOrchestrator -->|"Model Invocations"| LLMProviders & DocAI
-  StorageService -->|"3-Way Presigned Handshake"| MinIOStore
-  JobWorker -->|"Background Processing"| Postgres & RedisCache
+  WEB -->|"REST RPC / WebSocket"| GW
+  MOB -->|"Dart Client SDK"| GW
 
-  BackendTier -.->|"Governed & Verified by"| GovEngine
-  ClientTier -.->|"CI/CD Verification Hook"| GovEngine
+  GW --> S1
+  GW --> S2
+  GW --> S3
+  GW --> S4
+
+  S1 -->|"LTREE Queries & Updates"| PG
+  S1 -.->|"Cache Invalidation"| RD
+  S2 -->|"Vector Similarity Search"| PG
+  S2 -->|"Model Invocations"| AI
+  S3 -->|"Presigned SigV4 Handshake"| S3D
+  S4 -->|"Background Execution"| PG
+  S4 -.->|"Distributed Locking"| RD
+
+  GOV -.->|"Pre-Commit & CI Guardrails"| T1
+  GOV -.->|"Strict Rule Engine"| T2
 ```
+
+### 📐 Architectural Layers & Responsibilities
+
+| Layer / Tier | Core Components | Tech Stack | Key Responsibilities |
+|---|---|---|---|
+| **1. Multi-Platform Clients** | `apps/web`<br/>`apps/mobile` | React 18, Vite, Tiptap, Zustand, TanStack Query, Flutter | Notion-like block editing, drag-and-drop hierarchy (<16ms), offline cache, zero-icon monochrome UI. |
+| **2. API Gateway & Security** | Serverpod Endpoints | Dart, Serverpod RPC/REST/WS | Session validation, RBAC enforcement (`GUEST`, `USER`, `ORG_MEMBER`, `ORG_ADMIN`, `SYSTEM_ADMIN`), WebSocket streams. |
+| **3. Core Domain Services** | Node, Auth, AI, Storage, Job | Dart Domain Services | Hierarchical tree nodes (`ltree`), two-phase AI quota, S3 SigV4 presigned URLs, asynchronous `FutureCalls`. |
+| **4. Data & Storage Layer** | PostgreSQL, Redis, MinIO | Postgres 16 (`pgvector`, `ltree`), Redis 7, MinIO | Document trees, embeddings vector index (HNSW), session tokens, object buckets (`nodetask-uploads`). |
+| **5. AI & Governance Tier** | AI Providers & `.agents/` | Gemini, OpenAI, CodeGraph, `.agents` Engine | Semantic RAG search, automated rule verification (`verify.js --strict`), 16 domain skills, zero cloud lock-in. |
 
 ---
 
