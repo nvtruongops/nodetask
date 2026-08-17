@@ -29,4 +29,7 @@ config/passwords.yaml
 
 # CodeGraph & AI Index Caches
 .codegraph/
+.agents/.sentry-state.json
 
+# Documentation drafts & scratch text
+docs/text/

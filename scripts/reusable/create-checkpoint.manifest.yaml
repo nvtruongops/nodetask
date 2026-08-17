@@ -1,0 +1,48 @@
+id: script-create-checkpoint
+name: Governance Checkpoint & Version Bumper
+type: reusable
+purpose: >
+  Automatically bumps repository governance version, validates strict rule engine,
+  and compiles comprehensive markdown checkpoint evaluation reports.
+
+reuse:
+  expected: true
+  scope: repository
+  deterministic: true
+
+inputs:
+  - name: bump
+    source: cli
+    required: false
+    description: "Semver bump type: major, minor, or patch (default: minor)"
+  - name: version
+    source: cli
+    required: false
+    description: "Explicit semver version string (e.g. 1.6.0)"
+  - name: notes
+    source: cli
+    required: false
+    description: "Release or evaluation notes included in checkpoint"
+  - name: date
+    source: cli
+    required: false
+    description: "Evaluation date in YYYY-MM-DD format"
+
+secrets:
+  allowed: false
+
+filesystem:
+  absolute_paths_allowed: false
+
+network:
+  allowed: false
+
+destructive:
+  allowed: false
+
+lifecycle:
+  owner: checkpoint-governance
+  retention: permanent
+
+evidence:
+  required: false

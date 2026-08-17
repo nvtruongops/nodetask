@@ -16,10 +16,10 @@ module.exports = {
       return { passed: true };
     }
 
+    let violations = 0;
     try {
       const pkg = JSON.parse(ctx.fs.readFileSync(webPkgPath, 'utf8'));
       const allDeps = { ...(pkg.dependencies || {}), ...(pkg.devDependencies || {}) };
-      let violations = 0;
 
       const forbidden = policy.web?.forbiddenStateManagers || [];
       forbidden.forEach(dep => {
@@ -34,8 +34,9 @@ module.exports = {
       }
     } catch (err) {
       ctx.logger.error(`Không thể parse file apps/web/package.json: ${err.message}`);
+      violations++;
     }
 
-    return { passed: true };
+    return { passed: violations === 0 };
   }
 };

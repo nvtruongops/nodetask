@@ -1,0 +1,93 @@
+name: script-manifest-schema
+version: 1.0.0
+description: Schema definition for Reusable and Ephemeral Script Manifests
+
+requiredFields:
+  - id
+  - name
+  - type
+  - purpose
+  - reuse
+  - lifecycle
+
+fieldDefinitions:
+  id:
+    type: string
+    pattern: "^[a-z0-9-]+$"
+  name:
+    type: string
+  type:
+    type: enum
+    values:
+      - reusable
+      - ephemeral
+  purpose:
+    type: string
+  reuse:
+    type: object
+    properties:
+      expected:
+        type: boolean
+      scope:
+        type: enum
+        values:
+          - repository
+          - task
+          - module
+      deterministic:
+        type: boolean
+  inputs:
+    type: array
+    items:
+      type: object
+      properties:
+        name:
+          type: string
+        source:
+          type: enum
+          values:
+            - env
+            - cli
+            - file
+        required:
+          type: boolean
+        description:
+          type: string
+  secrets:
+    type: object
+    properties:
+      allowed:
+        type: boolean
+  filesystem:
+    type: object
+    properties:
+      absolute_paths_allowed:
+        type: boolean
+  network:
+    type: object
+    properties:
+      allowed:
+        type: boolean
+  destructive:
+    type: object
+    properties:
+      allowed:
+        type: boolean
+  lifecycle:
+    type: object
+    properties:
+      owner:
+        type: string
+      retention:
+        type: enum
+        values:
+          - permanent
+          - task
+          - session
+      delete_after:
+        type: string
+  evidence:
+    type: object
+    properties:
+      required:
+        type: boolean

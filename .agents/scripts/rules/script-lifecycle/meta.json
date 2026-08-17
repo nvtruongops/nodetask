@@ -1,0 +1,8 @@
+{
+  "id": "SCRIPT_LIFECYCLE",
+  "name": "Script Lifecycle & Ephemeral Governance Check",
+  "category": "GOVERNANCE",
+  "severity": "ERROR",
+  "dependsOn": [],
+  "description": "Enforces script classification (Reusable vs Ephemeral), absolute-path ban, secret avoidance, manifest requirements, and cleanup audit evidence."
+}

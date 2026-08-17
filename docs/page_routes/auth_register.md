@@ -36,7 +36,7 @@
 
 ---
 
-## 3. SEO & Social Meta Specification
+## 3. SEO & Social Share Metadata (SEO Meta Specification)
 - **Title Tag**: `<title>Create Account - nodetask</title>`
 - **Meta Description**: `Đăng ký tài khoản nodetask để trải nghiệm không gian quản lý tài liệu tối giản Monochrome.`
 - **Keywords**: `nodetask register, create account, sign up, zero-icon workspace`
@@ -62,7 +62,7 @@
 
 ---
 
-## 5. Permission Matrix & RBAC
+## 5. Permission Matrix & Access Control (Access Control & RBAC Permissions)
 | System Role | View Access | Form Submit Rights | Redirect Policy | Notes |
 | :--- | :--- | :--- | :--- | :--- |
 | `GUEST` | **Allowed** | Cho phép submit Form đăng ký | Giữ tại trang | Người dùng vãng lai |

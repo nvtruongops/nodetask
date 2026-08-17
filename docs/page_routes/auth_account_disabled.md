@@ -37,7 +37,7 @@
 
 ---
 
-## 3. SEO & Social Meta Specification
+## 3. SEO & Social Share Metadata (SEO Meta Specification)
 - **Title Tag**: `<title>Account Disabled - nodetask</title>`
 - **Meta Description**: `Thông báo trạng thái tài khoản nodetask bị tạm khóa hoặc vô hiệu hóa.`
 - **Keywords**: `nodetask account disabled, account suspended, support appeal`
@@ -63,7 +63,7 @@
 
 ---
 
-## 5. Permission Matrix & RBAC
+## 5. Permission Matrix & Access Control (Access Control & RBAC Permissions)
 | System Role | View Access | Form Submit Rights | Redirect Policy | Notes |
 | :--- | :--- | :--- | :--- | :--- |
 | `GUEST` | **Allowed** | Gửi form khiếu nại support | Giữ tại trang | Xem lý do tài khoản bị vô hiệu hóa |

@@ -1,13 +1,16 @@
 {
   "schemaVersion": 1,
-  "registryVersion": "1.4.0",
+  "registryVersion": "1.7.0",
   "skills": {
     "using-superpowers": {
       "type": "builtin",
       "provider": "ide-platform",
       "priority": 100,
       "executionMode": "exclusive",
-      "capabilities": ["meta:skill-invocation", "meta:workflow"],
+      "capabilities": [
+        "meta:skill-invocation",
+        "meta:workflow"
+      ],
       "description": "Establishes skill invocation workflows before any response."
     },
     "brainstorming": {
@@ -15,7 +18,10 @@
       "provider": "ide-platform",
       "priority": 90,
       "executionMode": "sequential",
-      "capabilities": ["meta:brainstorming", "meta:design-exploration"],
+      "capabilities": [
+        "meta:brainstorming",
+        "meta:design-exploration"
+      ],
       "description": "Explores user intent, requirements, and design options."
     },
     "writing-plans": {
@@ -23,7 +29,10 @@
       "provider": "ide-platform",
       "priority": 90,
       "executionMode": "sequential",
-      "capabilities": ["meta:planning", "meta:implementation-plan"],
+      "capabilities": [
+        "meta:planning",
+        "meta:implementation-plan"
+      ],
       "description": "Drafts multi-step execution plans."
     },
     "executing-plans": {
@@ -31,7 +40,10 @@
       "provider": "ide-platform",
       "priority": 85,
       "executionMode": "sequential",
-      "capabilities": ["meta:plan-execution", "meta:checkpoints"],
+      "capabilities": [
+        "meta:plan-execution",
+        "meta:checkpoints"
+      ],
       "description": "Executes written implementation plans with checkpoints."
     },
     "codegraph": {
@@ -40,7 +52,11 @@
       "priority": 90,
       "executionMode": "sequential",
       "manifestPath": ".agents/skills/codegraph/skill.yaml",
-      "capabilities": ["codegraph:ast", "codegraph:call-edges", "codegraph:impact-analysis"],
+      "capabilities": [
+        "codegraph:ast",
+        "codegraph:call-edges",
+        "codegraph:impact-analysis"
+      ],
       "description": "Queries monorepo AST dependency graph database (./.codegraph/graph.db)."
     },
     "ponytail": {
@@ -48,7 +64,11 @@
       "provider": "ide-platform",
       "priority": 80,
       "executionMode": "sequential",
-      "capabilities": ["meta:ponytail-mode", "meta:minimal-code", "meta:root-cause-debug"],
+      "capabilities": [
+        "meta:ponytail-mode",
+        "meta:minimal-code",
+        "meta:root-cause-debug"
+      ],
       "description": "Lazy senior developer mode for minimal code diffs and zero bloat."
     },
     "api-designer": {
@@ -58,7 +78,12 @@
       "version": "1.0.0",
       "priority": 80,
       "executionMode": "sequential",
-      "capabilities": ["api:rest", "api:websocket", "api:serverpod", "api:contract-spec"],
+      "capabilities": [
+        "api:rest",
+        "api:websocket",
+        "api:serverpod",
+        "api:contract-spec"
+      ],
       "description": "Serverpod REST/WebSocket API endpoints design contract."
     },
     "architecture-guardian": {
@@ -68,7 +93,11 @@
       "version": "1.0.0",
       "priority": 100,
       "executionMode": "exclusive",
-      "capabilities": ["arch:stack-lock", "arch:dependency-whitelist", "arch:folder-structure"],
+      "capabilities": [
+        "arch:stack-lock",
+        "arch:dependency-whitelist",
+        "arch:folder-structure"
+      ],
       "description": "Enforces master stack and folder structure protection."
     },
     "db-schema-reviewer": {
@@ -78,7 +107,12 @@
       "version": "1.0.0",
       "priority": 85,
       "executionMode": "sequential",
-      "capabilities": ["db:schema", "db:migration", "db:ltree", "db:occ-versioning"],
+      "capabilities": [
+        "db:schema",
+        "db:migration",
+        "db:ltree",
+        "db:occ-versioning"
+      ],
       "description": "Database schema, migrations, ltree, and OCC versioning check."
     },
     "flutter-ui": {
@@ -88,7 +122,11 @@
       "version": "1.0.0",
       "priority": 70,
       "executionMode": "sequential",
-      "capabilities": ["mobile:flutter", "mobile:dart", "mobile:serverpod-sdk"],
+      "capabilities": [
+        "mobile:flutter",
+        "mobile:dart",
+        "mobile:serverpod-sdk"
+      ],
       "description": "Flutter Mobile UI development synced with Serverpod SDK."
     },
     "frontend-ui": {
@@ -98,7 +136,14 @@
       "version": "1.0.0",
       "priority": 75,
       "executionMode": "sequential",
-      "capabilities": ["fe:react", "fe:vite", "fe:tailwind", "fe:tiptap", "fe:dnd-kit", "fe:shadcn-ui"],
+      "capabilities": [
+        "fe:react",
+        "fe:vite",
+        "fe:tailwind",
+        "fe:tiptap",
+        "fe:dnd-kit",
+        "fe:shadcn-ui"
+      ],
       "description": "React Frontend UI development with Tiptap and dnd-kit."
     },
     "git-pr": {
@@ -108,7 +153,11 @@
       "version": "1.0.0",
       "priority": 50,
       "executionMode": "sequential",
-      "capabilities": ["git:pr-review", "git:changelog", "git:diff-summary"],
+      "capabilities": [
+        "git:pr-review",
+        "git:changelog",
+        "git:diff-summary"
+      ],
       "description": "Pull Request code review, CHANGELOG generator, and summary."
     },
     "minimalist-no-icon-ui": {
@@ -118,7 +167,11 @@
       "version": "1.0.0",
       "priority": 95,
       "executionMode": "exclusive",
-      "capabilities": ["ui:zero-icon", "ui:monochrome", "ui:text-labels"],
+      "capabilities": [
+        "ui:zero-icon",
+        "ui:monochrome",
+        "ui:text-labels"
+      ],
       "description": "Zero-icon monochrome design rules."
     },
     "page-route-designer": {
@@ -128,7 +181,10 @@
       "version": "1.0.0",
       "priority": 80,
       "executionMode": "sequential",
-      "capabilities": ["doc:page-route-spec", "doc:schema-validation"],
+      "capabilities": [
+        "doc:page-route-spec",
+        "doc:schema-validation"
+      ],
       "description": "Page route document specification generator."
     },
     "performance": {
@@ -138,7 +194,11 @@
       "version": "1.0.0",
       "priority": 60,
       "executionMode": "sequential",
-      "capabilities": ["perf:frontend", "perf:api", "perf:db-query"],
+      "capabilities": [
+        "perf:frontend",
+        "perf:api",
+        "perf:db-query"
+      ],
       "description": "Frontend, API, and DB query performance optimization."
     },
     "security-review": {
@@ -148,7 +208,14 @@
       "version": "1.0.0",
       "priority": 100,
       "executionMode": "exclusive",
-      "capabilities": ["sec:token-auth", "sec:csrf", "sec:xss", "sec:sqli", "sec:rbac", "sec:audit-log"],
+      "capabilities": [
+        "sec:token-auth",
+        "sec:csrf",
+        "sec:xss",
+        "sec:sqli",
+        "sec:rbac",
+        "sec:audit-log"
+      ],
       "description": "Security audit, token lifecycle, CSRF, XSS, and RBAC review."
     },
     "service-designer": {
@@ -158,7 +225,10 @@
       "version": "1.0.0",
       "priority": 80,
       "executionMode": "sequential",
-      "capabilities": ["doc:service-spec", "doc:schema-validation"],
+      "capabilities": [
+        "doc:service-spec",
+        "doc:schema-validation"
+      ],
       "description": "Service document specification generator."
     },
     "testing": {
@@ -168,7 +238,11 @@
       "version": "1.0.0",
       "priority": 70,
       "executionMode": "sequential",
-      "capabilities": ["test:unit", "test:integration", "test:widget"],
+      "capabilities": [
+        "test:unit",
+        "test:integration",
+        "test:widget"
+      ],
       "description": "Automated unit, integration, and widget tests generator."
     },
     "verification-governance": {
@@ -178,8 +252,43 @@
       "version": "1.0.0",
       "priority": 100,
       "executionMode": "exclusive",
-      "capabilities": ["gov:verification", "gov:rule-engine", "gov:policies"],
+      "capabilities": [
+        "gov:verification",
+        "gov:rule-engine",
+        "gov:policies"
+      ],
       "description": "Verification Automated Governance Engine."
+    },
+    "script-governance": {
+      "type": "local",
+      "path": ".agents/skills/script-governance/SKILL.md",
+      "manifestPath": ".agents/skills/script-governance/skill.yaml",
+      "version": "1.0.0",
+      "priority": 95,
+      "executionMode": "exclusive",
+      "capabilities": [
+        "script:lifecycle",
+        "script:reusable",
+        "script:ephemeral",
+        "script:evidence",
+        "script:promotion"
+      ],
+      "description": "Quản trị vòng đời Reusable/Ephemeral scripts, ngăn chặn hardcode đường dẫn, secret và phụ thuộc môi trường."
+    },
+    "checkpoint": {
+      "type": "local",
+      "path": ".agents/skills/checkpoint/SKILL.md",
+      "manifestPath": ".agents/skills/checkpoint/skill.yaml",
+      "version": "1.0.0",
+      "priority": 95,
+      "executionMode": "exclusive",
+      "capabilities": [
+        "gov:checkpoint",
+        "gov:versioning",
+        "gov:audit-report",
+        "gov:snapshot"
+      ],
+      "description": "Skill tự động tạo checkpoint đánh giá hệ thống governance, nâng version (major/minor/patch), cập nhật manifest và đồng bộ trạng thái kiểm định."
     }
   }
 }

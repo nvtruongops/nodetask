@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "governanceVersion": "1.4.0",
+  "governanceVersion": "1.7.0",
   "pipelineName": "feature-development-pipeline",
   "description": "Standard multi-stage DAG workflow pipeline for AI Agent task orchestration",
   "workflowStages": [
@@ -13,7 +13,9 @@
       "priority": 100,
       "executionMode": "exclusive",
       "dependsOn": [],
-      "condition": ["always"],
+      "condition": [
+        "always"
+      ],
       "description": "Select appropriate approach (brainstorming for features, systematic-debugging for bugs)."
     },
     {
@@ -24,8 +26,14 @@
       "provider": "builtin",
       "priority": 90,
       "executionMode": "sequential",
-      "dependsOn": ["using_superpowers"],
-      "condition": ["new_feature", "architecture_change", "multi_step"],
+      "dependsOn": [
+        "using_superpowers"
+      ],
+      "condition": [
+        "new_feature",
+        "architecture_change",
+        "multi_step"
+      ],
       "description": "Draft implementation plan detailing technical design and verification steps."
     },
     {
@@ -36,8 +44,16 @@
       "provider": "mcp",
       "priority": 85,
       "executionMode": "sequential",
-      "dependsOn": ["planning"],
-      "condition": ["refactor", "rename", "move", "delete", "cross_file_impact"],
+      "dependsOn": [
+        "planning"
+      ],
+      "condition": [
+        "refactor",
+        "rename",
+        "move",
+        "delete",
+        "cross_file_impact"
+      ],
       "description": "Query ./.codegraph/graph.db to analyze cross-file call edges and impact scope."
     },
     {
@@ -48,8 +64,12 @@
       "provider": "builtin",
       "priority": 80,
       "executionMode": "sequential",
-      "dependsOn": ["planning"],
-      "condition": ["always"],
+      "dependsOn": [
+        "planning"
+      ],
+      "condition": [
+        "always"
+      ],
       "description": "Execute minimal working diff, fixing root cause with zero bloat and zero icons."
     },
     {
@@ -60,8 +80,12 @@
       "provider": "local",
       "priority": 100,
       "executionMode": "exclusive",
-      "dependsOn": ["implementation"],
-      "condition": ["always"],
+      "dependsOn": [
+        "implementation"
+      ],
+      "condition": [
+        "always"
+      ],
       "gate": "Exit code 0 required",
       "description": "Run strict rule engine verification script. Task passes only when 0 errors and 0 warnings are output."
     }

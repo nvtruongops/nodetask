@@ -64,6 +64,16 @@ function resolveIntent(requestText, registry) {
       intent: 'ARCHITECTURE_GUARD',
       keywords: ['architecture', 'dependency', 'package', 'refactor', 'kiến trúc', 'phụ thuộc'],
       capabilities: ['arch:stack-lock', 'arch:dependency-whitelist', 'codegraph:impact-analysis']
+    },
+    {
+      intent: 'SCRIPT_GOVERNANCE',
+      keywords: ['script', 'scripts', 'automation', 'tool', 'tự động', 'ephemeral', 'reusable', 'tạo script', 'chạy script', 'migration script'],
+      capabilities: ['script:lifecycle', 'script:reusable', 'script:ephemeral', 'script:evidence']
+    },
+    {
+      intent: 'CHECKPOINT_GOVERNANCE',
+      keywords: ['checkpoint', 'version', 'nâng version', 'đánh giá', 'snapshot', 'điểm kiểm toán', 'thẩm định', 'báo cáo đánh giá'],
+      capabilities: ['gov:checkpoint', 'gov:versioning', 'gov:audit-report', 'gov:snapshot']
     }
   ];
 

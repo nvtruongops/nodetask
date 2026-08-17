@@ -37,7 +37,7 @@
 
 ---
 
-## 3. SEO & Social Meta Specification
+## 3. SEO & Social Share Metadata (SEO Meta Specification)
 - **Title Tag**: `<title>Pricing Plans & Free Demo - nodetask</title>`
 - **Meta Description**: `Khám phá bảng giá các gói cước nodetask. Trải nghiệm không giới hạn tính năng quản lý tri thức hoàn toàn miễn phí trong bản Demo.`
 - **Keywords**: `nodetask pricing, free plan, pro plan, zero-icon pricing, SaaS plan demo`
@@ -63,7 +63,7 @@
 
 ---
 
-## 5. Permission Matrix & RBAC
+## 5. Permission Matrix & Access Control (Access Control & RBAC Permissions)
 | System Role | View Access | Form Submit Rights | Redirect Policy | Notes |
 | :--- | :--- | :--- | :--- | :--- |
 | `GUEST` | **Allowed** | Kích hoạt nút Demo CTA | Dẫn tới `/auth/register` hoặc `/demo` | Khách vãng lai xem bảng giá |

@@ -1,0 +1,19 @@
+name: script-governance
+version: 1.0.0
+description: Quản trị vòng đời Reusable/Ephemeral scripts, ngăn chặn hardcode đường dẫn, secret và phụ thuộc môi trường.
+minGovernanceVersion: 1.5.0
+priority: 95
+capabilities:
+  - script:lifecycle
+  - script:reusable
+  - script:ephemeral
+  - script:evidence
+  - script:promotion
+executionMode: exclusive
+parameters: {}
+input_schema:
+  script_path: string
+  classification: string
+output_schema:
+  is_valid: boolean
+  lifecycle_action: string

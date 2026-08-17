@@ -36,7 +36,7 @@
 
 ---
 
-## 3. SEO & Social Meta Specification
+## 3. SEO & Social Share Metadata (SEO Meta Specification)
 - **Title Tag**: `<title>Privacy Policy - nodetask</title>`
 - **Meta Description**: `Chính sách bảo mật và cam kết bảo vệ dữ liệu người dùng tại nền tảng nodetask.`
 - **Keywords**: `nodetask privacy, privacy policy, data security, encryption`
@@ -60,7 +60,7 @@
 
 ---
 
-## 5. Permission Matrix & RBAC
+## 5. Permission Matrix & Access Control (Access Control & RBAC Permissions)
 | System Role | View Access | Interaction Rights | Notes |
 | :--- | :--- | :--- | :--- |
 | `GUEST` | **Allowed** | Đọc nội dung văn bản pháp lý | Tất cả vai trò |

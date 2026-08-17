@@ -37,7 +37,7 @@
 
 ---
 
-## 3. SEO & Social Meta Specification
+## 3. SEO & Social Share Metadata (SEO Meta Specification)
 - **Title Tag**: `<title>Accept Organization Invitation - nodetask</title>`
 - **Meta Description**: `Chấp nhận lời mời tham gia không gian làm việc nodetask từ đồng nghiệp.`
 - **Keywords**: `nodetask invite, accept invitation, organization join, team workspace`
@@ -63,7 +63,7 @@
 
 ---
 
-## 5. Permission Matrix & RBAC
+## 5. Permission Matrix & Access Control (Access Control & RBAC Permissions)
 | System Role | View Access | Form Submit Rights | Redirect Policy | Notes |
 | :--- | :--- | :--- | :--- | :--- |
 | `GUEST` | **Allowed** | Tạo tài khoản & Chấp nhận lời mời | Redirect `/workspace` sau khi tạo thành công | Khách nhận được lời mời |

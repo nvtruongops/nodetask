@@ -1,0 +1,13 @@
+{
+  "scriptId": "ephemeral-test-lifecycle-runner-20260817",
+  "type": "ephemeral",
+  "purpose": "Negative testing validation for SCRIPT_LIFECYCLE governance rule",
+  "path": "scripts/tmp/test-lifecycle-runner.js",
+  "createdAt": "2026-08-17T21:10:00+07:00",
+  "deletedAt": "2026-08-17T21:10:30+07:00",
+  "executions": 2,
+  "result": "success",
+  "reusable": false,
+  "retention": "task",
+  "sourceRetained": false
+}

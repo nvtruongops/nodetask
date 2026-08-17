@@ -36,7 +36,7 @@
 
 ---
 
-## 3. SEO & Social Meta Specification
+## 3. SEO & Social Share Metadata (SEO Meta Specification)
 - **Title Tag**: `<title>Set New Password - nodetask</title>`
 - **Meta Description**: `Thiết lập mật khẩu mới cho tài khoản nodetask.`
 - **Keywords**: `nodetask reset password, confirm reset token`
@@ -60,7 +60,7 @@
 
 ---
 
-## 5. Permission Matrix & RBAC
+## 5. Permission Matrix & Access Control (Access Control & RBAC Permissions)
 | System Role | View Access | Form Submit Rights | Redirect Policy | Notes |
 | :--- | :--- | :--- | :--- | :--- |
 | `GUEST` | **Allowed** | Cho phép submit mật khẩu mới khi token hợp lệ | Giữ tại trang | Người dùng có token |

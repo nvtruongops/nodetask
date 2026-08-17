@@ -36,7 +36,7 @@
 
 ---
 
-## 3. SEO & Social Meta Specification
+## 3. SEO & Social Share Metadata (SEO Meta Specification)
 - **Title Tag**: `<title>Terms of Service - nodetask</title>`
 - **Meta Description**: `Điều khoản dịch vụ và quy định sử dụng nền tảng nodetask.`
 - **Keywords**: `nodetask terms, terms of service, user agreement`
@@ -60,7 +60,7 @@
 
 ---
 
-## 5. Permission Matrix & RBAC
+## 5. Permission Matrix & Access Control (Access Control & RBAC Permissions)
 | System Role | View Access | Interaction Rights | Notes |
 | :--- | :--- | :--- | :--- |
 | `GUEST` | **Allowed** | Đọc điều khoản dịch vụ | Tất cả vai trò |

@@ -1,0 +1,4 @@
+# Ignore all ephemeral scripts from Git
+*
+!.gitignore
+!.gitkeep

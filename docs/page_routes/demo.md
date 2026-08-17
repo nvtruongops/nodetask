@@ -36,7 +36,7 @@
 
 ---
 
-## 3. SEO & Social Meta Specification
+## 3. SEO & Social Share Metadata (SEO Meta Specification)
 - **Title Tag**: `<title>Interactive Demo - Try nodetask Sandbox</title>`
 - **Meta Description**: `Dùng thử môi trường quản lý cây tài liệu và trình soạn thảo Tiptap nodetask ngay trên trình duyệt.`
 - **Keywords**: `nodetask demo, interactive sandbox, zero-icon editor, tiptap demo`
@@ -60,7 +60,7 @@
 
 ---
 
-## 5. Permission Matrix & RBAC
+## 5. Permission Matrix & Access Control (Access Control & RBAC Permissions)
 | System Role | View Access | Sandbox Edit Rights | Notes |
 | :--- | :--- | :--- | :--- |
 | `GUEST` | **Allowed** | Cho phép tạo node tạm trong memory/IndexedDB | Khách vãng lai |

@@ -36,7 +36,7 @@
 
 ---
 
-## 3. SEO & Social Meta Specification
+## 3. SEO & Social Share Metadata (SEO Meta Specification)
 - **Title Tag**: `<title>Sign In - nodetask</title>`
 - **Meta Description**: `Đăng nhập vào nodetask để quản lý không gian tài liệu và tri thức cá nhân/tổ chức.`
 - **Keywords**: `nodetask login, sign in, authentication, zero-icon auth`
@@ -62,7 +62,7 @@
 
 ---
 
-## 5. Permission Matrix & RBAC
+## 5. Permission Matrix & Access Control (Access Control & RBAC Permissions)
 | System Role | View Access | Form Submit Rights | Redirect Policy | Notes |
 | :--- | :--- | :--- | :--- | :--- |
 | `GUEST` | **Allowed** | Cho phép submit Form đăng nhập | Giữ tại trang | Người dùng vãng lai |

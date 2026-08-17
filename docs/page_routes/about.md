@@ -36,7 +36,7 @@
 
 ---
 
-## 3. SEO & Social Meta Specification
+## 3. SEO & Social Share Metadata (SEO Meta Specification)
 - **Title Tag**: `<title>About nodetask - Architecture & Core Principles</title>`
 - **Meta Description**: `Tìm hiểu sứ mệnh, triết lý thiết kế Monochrome Zero-Icon và kiến trúc Monorepo nodetask.`
 - **Keywords**: `about nodetask, nodetask architecture, zero-icon design, ltree hierarchy`
@@ -61,7 +61,7 @@
 
 ---
 
-## 5. Permission Matrix & RBAC
+## 5. Permission Matrix & Access Control (Access Control & RBAC Permissions)
 | System Role | View Access | Interaction Rights | Notes |
 | :--- | :--- | :--- | :--- |
 | `GUEST` | **Allowed** | Xem nội dung public, chuyển hướng sang `/auth/register` | Khách vãng lai |

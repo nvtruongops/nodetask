@@ -1,0 +1,33 @@
+{
+  "id": "SCRIPT_LIFECYCLE",
+  "enabled": true,
+  "category": "governance",
+  "severity": "error",
+  "reusableDir": "scripts/reusable",
+  "ephemeralDir": "scripts/tmp",
+  "evidenceDir": ".agents/evidence/scripts",
+  "allowedScriptExtensions": [".js", ".ts", ".mjs", ".cjs", ".ps1", ".sh", ".py"],
+  "forbiddenAbsolutePatterns": [
+    "^[a-zA-Z]:\\\\",
+    "^/Users/",
+    "^/home/",
+    "^/root/",
+    "^/c/"
+  ],
+  "forbiddenEnvFallbacks": [
+    "process\\.env\\.[A-Z0-9_]+\\s*\\|\\|\\s*['\"][a-zA-Z]:",
+    "process\\.env\\.[A-Z0-9_]+\\s*\\|\\|\\s*['\"](/Users/|/home/|/root/|/c/)"
+  ],
+  "forbiddenSecretPatterns": [
+    { "regex": "(ghp_[a-zA-Z0-9]{36}|github_pat_[a-zA-Z0-9_]{50,})", "label": "GitHub Token" },
+    { "regex": "(sk-[a-zA-Z0-9]{20,}|AIza[0-9A-Za-z-_]{35})", "label": "OpenAI / Google API Key" },
+    { "regex": "(eyJ[a-zA-Z0-9-_]{10,}\\.eyJ[a-zA-Z0-9-_]{10,}\\.[a-zA-Z0-9-_]{10,})", "label": "Hardcoded JWT Token" },
+    { "regex": "(xox[baprs]-[0-9a-zA-Z]{10,48})", "label": "Slack API Token" },
+    { "regex": "AKIA[0-9A-Z]{16}", "label": "AWS Access Key ID" },
+    { "regex": "(postgres|mysql|mongodb):\\/\\/[a-zA-Z0-9_]+:[^@]+@", "label": "Database Connection Credentials" }
+  ],
+  "promotionThresholds": {
+    "executionCount": 3,
+    "taskCount": 2
+  }
+}

@@ -36,7 +36,7 @@
 
 ---
 
-## 3. SEO & Social Meta Specification
+## 3. SEO & Social Share Metadata (SEO Meta Specification)
 - **Title Tag**: `<title>Contact Us - nodetask Support & Feedback</title>`
 - **Meta Description**: `Gửi phản hồi, yêu cầu hỗ trợ hoặc câu hỏi hợp tác cho đội ngũ nodetask.`
 - **Keywords**: `nodetask contact, support, feedback, enquiry`
@@ -60,7 +60,7 @@
 
 ---
 
-## 5. Permission Matrix & RBAC
+## 5. Permission Matrix & Access Control (Access Control & RBAC Permissions)
 | System Role | View Access | Form Submit Rights | Notes |
 | :--- | :--- | :--- | :--- |
 | `GUEST` | **Allowed** | Gửi form liên hệ kèm captcha/rate-limit | Mọi đối tượng |

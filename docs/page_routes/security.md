@@ -37,7 +37,7 @@
 
 ---
 
-## 3. SEO & Social Meta Specification
+## 3. SEO & Social Share Metadata (SEO Meta Specification)
 - **Title Tag**: `<title>Security & Trust Center - nodetask</title>`
 - **Meta Description**: `Tìm hiểu cam kết bảo mật thông tin, mã hóa dữ liệu và trung tâm tin cậy nodetask.`
 - **Keywords**: `nodetask security, trust center, data encryption, compliance, vulnerability disclosure`
@@ -63,7 +63,7 @@
 
 ---
 
-## 5. Permission Matrix & RBAC
+## 5. Permission Matrix & Access Control (Access Control & RBAC Permissions)
 | System Role | View Access | Form Submit Rights | Redirect Policy | Notes |
 | :--- | :--- | :--- | :--- | :--- |
 | `GUEST` | **Allowed** | Gửi báo cáo lỗ hổng | Giữ tại trang | Xem thông tin bảo mật |

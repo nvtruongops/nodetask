@@ -1,0 +1,19 @@
+name: checkpoint
+version: 1.0.0
+description: Skill tự động tạo checkpoint đánh giá hệ thống governance, nâng version (major/minor/patch), cập nhật manifest và đồng bộ trạng thái kiểm định.
+minGovernanceVersion: 1.6.0
+priority: 95
+capabilities:
+  - gov:checkpoint
+  - gov:versioning
+  - gov:audit-report
+  - gov:snapshot
+executionMode: exclusive
+parameters: {}
+input_schema:
+  bump: string
+  notes: string
+output_schema:
+  new_version: string
+  checkpoint_path: string
+  is_verified: boolean

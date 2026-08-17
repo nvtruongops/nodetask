@@ -36,7 +36,7 @@
 
 ---
 
-## 3. SEO & Social Meta Specification
+## 3. SEO & Social Share Metadata (SEO Meta Specification)
 - **Title Tag**: `<title>nodetask - Unlimited Nested Notes & Instant AI Knowledge Search</title>`
 - **Meta Description**: `Quản lý cây tài liệu phân cấp không giới hạn và tìm kiếm AI ngữ nghĩa tức thì với giao diện Monochrome 100% Zero-Icon tập trung tuyệt đối.`
 - **Keywords**: `nodetask, knowledge management, document workspace, zero-icon, distraction-free notes, ai knowledge search`
@@ -64,7 +64,7 @@
 
 ---
 
-## 5. Permission Matrix & RBAC
+## 5. Permission Matrix & Access Control (Access Control & RBAC Permissions)
 | System Role | View Access | CTA Primary Behavior | Navigation Rights | Notes |
 | :--- | :--- | :--- | :--- | :--- |
 | `GUEST` | **Allowed** | Điều hướng `/auth/register` hoặc `/demo` | Đầy đủ Header/Footer public | Đối tượng phục vụ chính |

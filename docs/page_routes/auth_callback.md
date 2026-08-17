@@ -37,7 +37,7 @@
 
 ---
 
-## 3. SEO & Social Meta Specification
+## 3. SEO & Social Share Metadata (SEO Meta Specification)
 - **Title Tag**: `<title>Authenticating... - nodetask</title>`
 - **Meta Description**: `Đang xác thực và hoàn tất đăng nhập vào nodetask.`
 - **Keywords**: `nodetask oauth, oauth callback, authentication redirect`
@@ -63,7 +63,7 @@
 
 ---
 
-## 5. Permission Matrix & RBAC
+## 5. Permission Matrix & Access Control (Access Control & RBAC Permissions)
 | System Role | View Access | Form Submit Rights | Redirect Policy | Notes |
 | :--- | :--- | :--- | :--- | :--- |
 | `GUEST` | **Allowed** | Tự động trao đổi OAuth code | Chuyển hướng `/workspace` khi thành công | Trạng thái xử lý OAuth demo |

@@ -36,7 +36,7 @@
 
 ---
 
-## 3. SEO & Social Meta Specification
+## 3. SEO & Social Share Metadata (SEO Meta Specification)
 - **Title Tag**: `<title>Verify Email - nodetask</title>`
 - **Meta Description**: `Xác minh địa chỉ email của bạn để kích hoạt tài khoản nodetask.`
 - **Keywords**: `nodetask verify email, email confirmation, otp code`
@@ -60,7 +60,7 @@
 
 ---
 
-## 5. Permission Matrix & RBAC
+## 5. Permission Matrix & Access Control (Access Control & RBAC Permissions)
 | System Role | View Access | Form Submit Rights | Redirect Policy | Notes |
 | :--- | :--- | :--- | :--- | :--- |
 | `GUEST` | **Allowed** | Cho phép nhập OTP xác minh | Giữ tại trang | Người dùng mới đăng ký |
